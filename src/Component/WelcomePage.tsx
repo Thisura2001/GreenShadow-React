@@ -23,8 +23,6 @@ export default function WelcomePage() {
                 </header>
 
                 <main className="flex items-center justify-between w-11/12 max-w-7xl mt-6 mx-auto">
-                    <div className="fixed top-0 left-0 w-1/4 h-full bg-green-700"></div>
-
                     <div className="relative z-20">
                         <div className="w-72 h-72 bg-white/10 border-4 border-white rounded-full overflow-hidden flex items-center justify-center">
                             <img
@@ -38,12 +36,6 @@ export default function WelcomePage() {
                     <div className="mt-20 max-w-2xl ml-12 text-white text-4xl font-light">
                         <p id="swiping-text" className="leading-snug">
                             Welcome to the Crop Management System!{' '}
-                            <span
-                                id="next-arrow"
-                                className="ml-5 text-green-500 cursor-pointer text-6xl hover:scale-110 transition-transform"
-                            >
-                                ›
-                            </span>
                         </p>
                     </div>
 
