@@ -1,14 +1,11 @@
-import WelcomePage from "./Component/WelcomePage.tsx";
-import SignIn from "./Component/SignIn.tsx";
-import {Signup} from "./Component/Signup.tsx";
+import {NavBar} from "./Component/NavBar.tsx";
+
 
 function App() {
 
   return (
     <>
-        <WelcomePage/>
-        <SignIn/>
-        <Signup/>
+        <NavBar/>
     </>
   )
 }
