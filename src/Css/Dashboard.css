@@ -1,0 +1,292 @@
+/* Dashboard CSS */
+#dashboard {
+    padding-left: 260px; /* Adjust to avoid overlap with sidebar */
+    background-color: #f4f4f9;
+    min-height: 100vh;
+}
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+}
+
+.currentTimeWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #172851; /* Green background color */
+    color: #fff; /* White text color */
+    padding: 20px 40px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px auto;
+    width: fit-content;
+}
+
+#currentTime {
+    font-size: 2rem;
+    letter-spacing: 1px;
+}
+
+/* General Dashboard Cards Container */
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+/* Base Card Style */
+.staticCard {
+    background-color: #f4f4f4; /* Neutral background */
+    color: #000; /* Default text color */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 200px; /* Consistent card height */
+}
+
+.staticCard:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Individual Card Styles by ID */
+#staticCard-fields {
+    background: linear-gradient(135deg, #ae89e8, #814dd3); /* Purple gradient */
+    color: #fff; /* White text */
+}
+
+#staticCard-crops {
+    background: linear-gradient(135deg, #ff9800, #ffb74d); /* Orange gradient */
+    color: #fff;
+}
+
+#staticCard-staff {
+    background: linear-gradient(135deg, #2196f3, #64b5f6); /* Blue gradient */
+    color: #fff;
+}
+
+#staticCard-vehicles {
+    background: linear-gradient(135deg, #f44336, #e57373); /* Red gradient */
+    color: #fff;
+}
+
+/* Typography for Cards */
+.staticCard h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+}
+
+.staticCard p {
+    margin: 10px 0 0;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #111515; /* Highlighted numbers */
+}
+
+/* Enhanced styles for the weather container */
+.weather-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 1.5s ease-out;
+    font-family: 'Arial', sans-serif;
+}
+
+.weather-container h1 {
+    font-size: 2.0em;
+    margin-bottom: 15px;
+    animation: popUp 1s ease-out;
+    font-weight: bolder;
+}
+
+.weather-report p {
+    margin: 10px 0;
+    font-size: 1.0em;
+    animation: slideIn 1.2s ease-in-out;
+}
+
+.weather-report span {
+    font-weight: bold;
+    color: #ffdd57;
+}
+
+.weather-report strong {
+    font-size: 1.1em;
+    color: #ffdd57;
+}
+
+.weather-container::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: 15px;
+    z-index: -1;
+    opacity: 0.7;
+    filter: blur(10px);
+    animation: glow 3s infinite alternate;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes popUp {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(-20%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes glow {
+    from {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    /* Adjust dashboard main container */
+    #dashboard {
+        padding-left: 20px; /* Reduce padding for mobile */
+        padding-right: 20px;
+    }
+
+    /* Grid layout for dashboard cards */
+    .dashboard-cards {
+        grid-template-columns: 1fr; /* Single column layout */
+        gap: 15px;
+    }
+
+    .staticCard {
+        height: auto; /* Make cards height responsive */
+    }
+
+    /* Weather container style */
+    .weather-container {
+        max-width: 100%; /* Full width on smaller screens */
+        padding: 10px;
+        font-size: 1.2em; /* Adjust font size */
+    }
+
+    .currentTimeWrapper {
+        padding: 10px 20px; /* Reduce padding for smaller screens */
+        font-size: 18px;
+    }
+
+    .dashboard-stats {
+        grid-template-columns: 1fr; /* Single column for stats */
+    }
+
+    /* Charts grid */
+    .charts {
+        grid-template-columns: 1fr; /* Single column for charts */
+    }
+}
+
+/* Tablet (min-width: 768px to 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    /* Dashboard cards grid */
+    .dashboard-cards {
+        grid-template-columns: repeat(2, 1fr); /* Two columns */
+    }
+
+    .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr); /* Two columns */
+    }
+
+    /* Cards will automatically adjust */
+    .staticCard {
+        height: 220px; /* Adjust for better viewing */
+    }
+
+    .charts {
+        grid-template-columns: repeat(2, 1fr); /* Two columns for charts */
+    }
+
+    /* Weather container */
+    .weather-container {
+        padding: 15px;
+        font-size: 1.2em;
+    }
+
+    .currentTimeWrapper {
+        padding: 15px 30px;
+        font-size: 20px;
+    }
+}
+
+/* Desktop (min-width: 1024px) */
+@media (min-width: 1024px) {
+    /* Grid for dashboard stats and cards */
+    .dashboard-cards {
+        grid-template-columns: repeat(4, 1fr); /* Four columns */
+    }
+
+    .dashboard-stats {
+        grid-template-columns: repeat(3, 1fr); /* Three columns */
+    }
+
+    .charts {
+        grid-template-columns: repeat(3, 1fr); /* Three columns for charts */
+    }
+
+    .weather-container {
+        padding: 20px;
+        font-size: 1.2em;
+    }
+
+    .currentTimeWrapper {
+        padding: 20px 40px;
+        font-size: 24px;
+    }
+}
