@@ -14,43 +14,43 @@ export function NavBar(){
                     <li className="mb-6">
                         <Link to = "/"
                            className="custom-link">
-                           Dashboard  <MdDashboardCustomize className={"size-5"}/>
+                           Dashboard  <MdDashboardCustomize className={"custom-size"}/>
                         </Link>
                     </li>
                     <li className="mb-6">
                         <Link to = "/Field"
                            className="custom-link">
-                             Field<IoIosLeaf className={"size-5"} />
+                             Field<IoIosLeaf className={"custom-size"} />
                         </Link>
                     </li>
                     <li className="mb-6">
                         <Link to = "/Crop"
                            className="custom-link">
-                            Crop<GiJellyBeans className={"size-5"}/>
+                            Crop<GiJellyBeans className={"custom-size"}/>
                         </Link>
                     </li>
                     <li className="mb-6">
                         <Link to = "/Staff"
                            className="custom-link">
-                             Staff<RiGroupFill className={"size-5"}/>
+                             Staff<RiGroupFill className={"custom-size"}/>
                         </Link>
                     </li>
                     <li className="mb-6">
                         <Link to="/Vehicle"
                            className={" custom-link"}>
-                            Vehicle<ImTruck className={"size-5"}/>
+                            Vehicle<ImTruck className={"custom-size"}/>
                         </Link>
                     </li>
                     <li className="mb-6">
                         <Link to="/Equipment"
                            className="custom-link">
-                            Equipment <ImHammer className={"size-5"}/>
+                            Equipment <ImHammer className={"custom-size"}/>
                         </Link>
                     </li>
                     <li>
                         <Link to="/Log"
                            className="custom-link">
-                             Log Service<MdLibraryBooks className={"size-5"}/>
+                             Log Service<MdLibraryBooks className={"custom-size"}/>
                         </Link>
                     </li>
                 </ul>
