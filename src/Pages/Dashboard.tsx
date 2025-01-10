@@ -1,5 +1,7 @@
 import "../Css/Dashboard.css"
 import {useEffect, useState} from "react";
+import {FaCar, FaLeaf, FaTree, FaUsers} from "react-icons/fa";
+import {DashBoardCardComponent} from "../Component/DashBoardCardComponent.tsx";
 export default function Dashboard(){
     const [currentTime, setCurrentTime] = useState("");
 
@@ -27,30 +29,21 @@ export default function Dashboard(){
                     <div id="currentTime">{currentTime}</div>
                 </div>
                 <div className="dashboard-cards">
-                    <div id="staticCard-fields" className="staticCard">
-                        <h3>Total Fields
-                            <i className="fa-solid fa-tree"></i>
-                        </h3>
-                        <p id="fieldCount">10</p>
-                    </div>
-                    <div id="staticCard-crops" className="staticCard">
-                        <h3>Total Crops
-                            <i className="fa-solid fa-leaf"></i>
-                        </h3>
-                        <p id="cropCount">25</p>
-                    </div>
-                    <div id="staticCard-staff" className="staticCard">
-                        <h3>Total Staff
-                            <i className="fa-solid fa-users"></i>
-                        </h3>
-                        <p id="staffCount">15</p>
-                    </div>
-                    <div id="staticCard-vehicles" className="staticCard">
-                        <h3>Vehicles
-                            <i className="fa-solid fa-car"></i>
-                        </h3>
-                        <p id="vehicleCount">35</p>
-                    </div>
+                    <DashBoardCardComponent title="Total Fields" count={10}>
+                        <FaTree/>
+                    </DashBoardCardComponent>
+
+                    <DashBoardCardComponent title="Total Crops" count={25}>
+                        <FaLeaf/>
+                    </DashBoardCardComponent>
+
+                    <DashBoardCardComponent title="Total Staff" count={15}>
+                        <FaUsers/>
+                    </DashBoardCardComponent>
+
+                    <DashBoardCardComponent title="Vehicles" count={35}>
+                        <FaCar/>
+                    </DashBoardCardComponent>
                 </div>
 
 
