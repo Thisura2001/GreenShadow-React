@@ -3,7 +3,6 @@ export function NavBar(){
     return(
         <>
 
-
         </>
     )
 }
