@@ -1,8 +1,8 @@
 import "../Css/Dashboard.css"
 import {useEffect, useState} from "react";
 import {FaCar, FaLeaf, FaTree, FaUsers} from "react-icons/fa";
-import {DashBoardCardComponent} from "../Component/DashBoardCardComponent.tsx";
-import {WeatherContainerComponent} from "../Component/WeatherContainerComponent.tsx";
+import {DashBoardCardComponent} from "../Component/DashboardComponets/DashBoardCardComponent.tsx";
+import {WeatherContainerComponent} from "../Component/DashboardComponets/WeatherContainerComponent.tsx";
 export default function Dashboard(){
 
     const [currentTime, setCurrentTime] = useState("");
