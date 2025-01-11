@@ -2,9 +2,10 @@ import "../Css/Dashboard.css"
 import {useEffect, useState} from "react";
 import {FaCar, FaLeaf, FaTree, FaUsers} from "react-icons/fa";
 import {DashBoardCardComponent} from "../Component/DashBoardCardComponent.tsx";
+import {WeatherContainerComponent} from "../Component/WeatherContainerComponent.tsx";
 export default function Dashboard(){
-    const [currentTime, setCurrentTime] = useState("");
 
+    const [currentTime, setCurrentTime] = useState("");
     useEffect(() => {
         const updateCurrentTime = () => {
             const now = new Date();
@@ -22,6 +23,13 @@ export default function Dashboard(){
 
         return () => clearInterval(intervalId);
     }, []);
+
+    const [weather] = useState({
+        location:"Agalawatta",
+        temperature: "28",
+        humidity: "65",
+        recommendation: 'Paddy',
+    })
     return(
         <>
             <section id="dashboard">
@@ -45,18 +53,11 @@ export default function Dashboard(){
                         <FaCar/>
                     </DashBoardCardComponent>
                 </div>
-
-
-                <div className="weather-container">
-                    <h1>Crop Weather Report</h1>
-                    <div className="weather-report">
-                        <p><strong>Location:</strong> <span id="locations">-</span></p>
-                        <p><strong>Temperature:</strong> <span id="temperature">-</span> °C</p>
-                        <p><strong>Humidity:</strong> <span id="humidity">-</span>%</p>
-                        <p><strong>Crop Recommendation:</strong> <span id="crop-recommendation">-</span></p>
-                    </div>
-                </div>
-
+                <WeatherContainerComponent location={weather.location}
+                                           temperature={weather.temperature}
+                                           humidity={weather.humidity}
+                                           recommendation={weather.recommendation}>
+                </WeatherContainerComponent>
             </section>
         </>
     )

@@ -1,4 +1,4 @@
-import "../Component/NavBar.css"
+import "../Css/NavBar.css"
 import {MdDashboardCustomize, MdLibraryBooks} from "react-icons/md";
 import {GiJellyBeans} from "react-icons/gi";
 import {IoIosLeaf} from "react-icons/io";
