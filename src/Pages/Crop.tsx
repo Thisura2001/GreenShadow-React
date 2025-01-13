@@ -1,7 +1,17 @@
 import "../Css/Crop.css"
+import {useEffect} from "react";
 
 export default function Crop(){
+    useEffect(() => {
+        const addCropBtn = document.getElementById('addCropBtn') as HTMLButtonElement;
+        const cropCard = document.getElementById('cropFormCard') as HTMLElement;
 
+        if (addCropBtn){
+            addCropBtn.addEventListener('click',()=>{
+                cropCard.style.display = 'none';
+            })
+        }
+    }, []);
     return(
         <>
             <section id="corp">
