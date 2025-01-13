@@ -12,6 +12,7 @@ export default function Staff(){
         if (addStaffBtn) {
             addStaffBtn.addEventListener('click', () => {
                 staffFormCard.style.display = 'block';
+
             });
         }
     }, []);

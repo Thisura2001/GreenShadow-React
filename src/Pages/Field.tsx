@@ -1,5 +1,5 @@
 import "../Css/Field.css";
-import { useEffect } from "react";
+import {useEffect} from "react";
 
 export default function Field() {
     useEffect(() => {
@@ -20,14 +20,12 @@ export default function Field() {
                     <i className="fa-brands fa-pagelines"></i>
                 </h2>
                 <div className="d-flex justify-content-end mb-3">
-                    <button className="bg-blue-600 text-white" id="addFieldBtn">Add New Field
-                        <i className="fa-solid fa-plus"></i>
-                    </button>
+                    <button className="bg-blue-600 text-white" id="addFieldBtn" >Add New Field</button>
                 </div>
                 <div className="card mt-3" id="fieldFormCard" style={{ display: 'none' }}>
                     <div className="card-header">
                         <h4>Add Field Details</h4>
-                        <button className="btn-close" id="closeFieldForm" onClick={() => (fieldFormCard.style.display = 'none') }></button>
+                        <button className="btn-close" id="closeFieldForm" onClick={() => (fieldFormCard.style.display = 'none') } >X</button>
                     </div>
                     <div className="card-body">
                         <form id="FieldForm">
