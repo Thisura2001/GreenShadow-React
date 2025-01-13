@@ -1,5 +1,4 @@
 import "../Css/Staff.css"
-import {FaPlusCircle} from "react-icons/fa";
 import {useEffect} from "react";
 import Heading from "../Component/StaffComponents/Heading.tsx";
 import AddStaffCard from "../Component/StaffComponents/AddStaffCard.tsx";
@@ -19,8 +18,7 @@ export default function Staff(){
 
     return(
         <>
-            <section id="staff">
-               <Heading/>
+            <Heading/>
                 <div className="card mt-3" id="staffFormCard" style={{ display: 'none' }}>
                     <div className="card-header">
                         <h4>Add Staff Details</h4>
@@ -29,7 +27,6 @@ export default function Staff(){
                   <AddStaffCard/>
                 </div>
                 <StaffTable/>
-            </section>
         </>
     )
 }
