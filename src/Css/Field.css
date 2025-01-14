@@ -5,51 +5,101 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
 }
 
 /* Field Form Card Styling */
+/* Field Form Card Styling */
 #fieldFormCard {
-    width: 100%;
-    max-width: 800px;
-    background: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
+    width: 80%; /* Reduced width */
+    max-width: 600px; /* Optional: limit the maximum width */
+    margin: 100px auto 0 auto; /* Center horizontally and add top margin */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    margin:  auto;
-    top: -80px;
-
+    margin-left: 500px;
 }
-/* Title styling */
+
+/* Card Header */
+#fieldFormCard .card-header {
+    background-color: #4CAF50;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+#fieldFormCard .card-header h4 {
+    margin: 0;
+}
+
+#fieldFormCard .btn-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+}
+
+/* Card Body */
+#fieldFormCard .card-body {
+    padding: 20px;
+}
+
+/* Form Fields */
+#FieldForm .row .col-md-6 {
+    margin-bottom: 20px; /* Space between rows */
+}
+
+#FieldForm .form-label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px; /* Space between label and input */
+}
+
+#FieldForm .form-control,
+#FieldForm .form-select {
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%; /* Full width */
+    height: 45px; /* Consistent height */
+    box-sizing: border-box;
+}
+
+/* Field Title Styling */
 .field-title {
     text-align: center;
     font-weight: bolder;
     font-size: 60px;
-    margin: 0 auto; /* Remove unnecessary margins */
+    margin: 0 auto;
     animation: fadeIn 1s ease-in;
     color: #4CAF50;
     position: absolute;
-    top: 20px; /* Adjust as needed */
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
 }
 
-/* Button styling */
+/* Button Styling */
 #addFieldBtn {
-    position: absolute; /* Position it absolutely */
-    top: 120px; /* Align it with the title */
-    right: 100px; /* Set to right side */
+    position: absolute;
+    top: 120px;
+    right: 100px;
     font-size: 12px;
     padding: 10px 20px;
     font-weight: bold;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-
-/* Animation keyframes */
+/* Animation Keyframes */
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(-20px); /* Move up slightly */
+        transform: translateY(-20px);
     }
     to {
         opacity: 1;
@@ -57,36 +107,35 @@
     }
 }
 
-
-
+/* Field Cards Container */
 #fieldCardsContainer {
     margin-left: 300px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns on larger screens */
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
     gap: 70px;
-    margin-top: -100px;
+    margin-top: 100px;
 }
 
-/* For medium screens (e.g., tablets), reduce to 2 columns */
+/* Medium Screens */
 @media (max-width: 768px) {
     #fieldCardsContainer {
         grid-template-columns: repeat(2, 1fr);
-        margin-left: 0; /* Adjust the margin for smaller screens */
+        margin-left: 0;
     }
 }
 
-/* For small screens (e.g., phones), stack cards vertically in 1 column */
+/* Small Screens */
 @media (max-width: 576px) {
     #fieldCardsContainer {
         grid-template-columns: 1fr;
-        gap: 20px; /* Reduce gap for smaller screens */
+        gap: 20px;
         margin-left: 50px;
     }
 }
 
-/* Center the update modal */
+/* Update Modal */
 #updateFieldModal {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -100,10 +149,12 @@
     box-sizing: border-box;
     height: fit-content;
 }
-#updateFieldModal label{
+
+#updateFieldModal label {
     color: black;
-    font-weight:bold ;
+    font-weight: bold;
 }
+
 #updateFieldModal h3 {
     margin-top: 0;
     font-weight: bolder;
@@ -112,9 +163,9 @@
     text-align: center;
 }
 
-/* Overlay background for modal */
+/* Overlay Background for Modal */
 .modal-overlay {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -123,6 +174,8 @@
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
 }
+
+/* Button Group */
 .button-group {
     display: flex;
     justify-content: flex-end;
@@ -130,11 +183,9 @@
     padding: 10px;
 }
 
-/* Responsive adjustments */
+/* Responsive Adjustments for Modal */
 @media (max-width: 600px) {
     #updateFieldModal {
         width: 90%;
     }
 }
-
-
