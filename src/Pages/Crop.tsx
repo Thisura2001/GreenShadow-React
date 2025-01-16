@@ -72,7 +72,7 @@ export default function Crop(){
                                 </select>
                             </div>
                             <div className="md:col-span-2">
-                                <button type="submit" id="cropSaveBtn" className="btn-success w-full mt-4">Save
+                                <button type="submit" id="cropSaveBtn" className="btn-success w-full mt-4 bg-green-600 text-white p-1 rounded-lg">Save
                                     <i className="fa-regular fa-floppy-disk"></i>
                                 </button>
                             </div>
