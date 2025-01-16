@@ -71,9 +71,6 @@ export default function AddStaffCard(){
                         <button type="submit" className="bg-blue-600 mt-3 text-white p-3 rounded-md "
                                 id="btnStaffSave">Save
                         </button>
-                        <button type="submit" className="bg-amber-400 mt-3 text-white p-3 rounded-md "
-                                id="btnStaffUpdate">Update
-                        </button>
                     </div>
 
                 </form>

@@ -15,8 +15,7 @@ export default function StaffTable(){
                         <th>Email</th>
                         <th>Role</th>
                         <th>City</th>
-                        <th>Delete</th>
-                        <th>Update</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody id="staffTbody">
@@ -32,46 +31,8 @@ export default function StaffTable(){
                         <td>Admin</td>
                         <td>New York</td>
                         <td>
-                            <button className="btn btn-danger btn-sm">Delete</button>
-                        </td>
-                        <td>
-                            <button className="btn btn-warning btn-sm">Update</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>ST-002</td>
-                        <td>Jane</td>
-                        <td>Developer</td>
-                        <td>Female</td>
-                        <td>2021-08-12</td>
-                        <td>1990-07-22</td>
-                        <td>+1 987 654 321</td>
-                        <td>jane@example.com</td>
-                        <td>User</td>
-                        <td>Los Angeles</td>
-                        <td>
-                            <button className="btn btn-danger btn-sm">Delete</button>
-                        </td>
-                        <td>
-                            <button className="btn btn-warning btn-sm">Update</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>ST-003</td>
-                        <td>Mark</td>
-                        <td>Designer</td>
-                        <td>Male</td>
-                        <td>2019-11-23</td>
-                        <td>1988-11-02</td>
-                        <td>+1 555 666 777</td>
-                        <td>mark@example.com</td>
-                        <td>User</td>
-                        <td>Chicago</td>
-                        <td>
-                            <button className="btn btn-danger btn-sm">Delete</button>
-                        </td>
-                        <td>
-                            <button className="btn btn-warning btn-sm">Update</button>
+                            <button className="editStaffBtn text-blue-500 hover:underline mr-3">Edit</button>
+                            <button className="text-red-500 hover:underline">Delete</button>
                         </td>
                     </tr>
                     </tbody>
