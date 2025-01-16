@@ -1,6 +1,6 @@
 import "../Css/Staff.css"
 import {useEffect} from "react";
-import Heading from "../Component/StaffComponents/Heading.tsx";
+import StaffHeading from "../Component/StaffComponents/StaffHeading.tsx";
 import AddStaffCard from "../Component/StaffComponents/AddStaffCard.tsx";
 import StaffTable from "../Component/StaffComponents/StaffTable.tsx";
 import UpdateStaff from "../Component/StaffComponents/UpdateStaff.tsx";
@@ -63,7 +63,7 @@ export default function Staff(){
 
     return(
         <>
-            <Heading/>
+            <StaffHeading/>
                 <div className="card mt-3" id="staffFormCard" style={{ display: 'none' }}>
                     <div className="card-header">
                         <h4>Add Staff Details</h4>

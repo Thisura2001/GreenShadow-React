@@ -1,7 +1,4 @@
-
-
-export default function AddField(){
-
+export default function FieldHeader(){
     return(
         <>
 

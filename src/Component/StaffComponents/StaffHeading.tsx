@@ -1,6 +1,6 @@
 import {FaPlusCircle} from "react-icons/fa";
 
-export default function Heading(){
+export default function StaffHeading(){
     return(
         <>
             <h2 className="staff-title">Staff Management...</h2>
