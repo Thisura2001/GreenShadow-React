@@ -11,6 +11,8 @@ export default function Staff(){
         const staffFormCard = document.getElementById('staffFormCard') as HTMLElement;
         const updateStaffModel = document.getElementById("updateStaffModal") as HTMLElement;
         const closeUpdateStaffModalBtn = document.getElementById('closeUpdateStaffModalBtn') as HTMLButtonElement;
+        const closeAddStaffForm = document.getElementById('closeStaffForm') as HTMLButtonElement;
+
         if (addStaffBtn) {
             addStaffBtn.addEventListener('click', () => {
                 staffFormCard.style.display = 'block';
@@ -20,6 +22,11 @@ export default function Staff(){
         if (closeUpdateStaffModalBtn){
             closeUpdateStaffModalBtn.addEventListener('click',()=>{
                 updateStaffModel.style.display = 'none';
+            })
+        }
+        if (closeAddStaffForm){
+            closeAddStaffForm.addEventListener('click',()=>{
+                staffFormCard.style.display = 'none';
             })
         }
         // Add event listeners to "Edit" buttons
@@ -67,7 +74,7 @@ export default function Staff(){
                 <div className="card mt-3" id="staffFormCard" style={{ display: 'none' }}>
                     <div className="card-header">
                         <h4>Add Staff Details</h4>
-                        <button className="btn-close" id="closeStaffForm" onClick={()=>(staffFormCard.style.display = 'none')}>X</button>
+                        <button className="btn-close" id="closeStaffForm">X</button>
                     </div>
                   <AddStaffCard/>
                 </div>
