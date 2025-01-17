@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import FieldHeader from "../Component/FieldComponent/FieldHeader.tsx";
 import AddField from "../Component/FieldComponent/AddField.tsx";
-import DisplayCard from "../Component/FieldComponent/DisplayCard.tsx";
 import FieldUpdateCard from "../Component/FieldComponent/FieldUpdateCard.tsx";
 import FieldTable from "../Component/FieldComponent/FieldTable.tsx";
 
