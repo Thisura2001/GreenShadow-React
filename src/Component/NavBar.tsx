@@ -12,7 +12,7 @@ export function NavBar(){
                 <ul id="navBar"
                     className="fixed top-16 left-4 w-56 h-[80vh] p-5 bg-green-500 rounded-2xl shadow-lg transform transition-transform duration-300 ease-in-out translate-x-0 md:translate-x-0 md:flex md:flex-col hidden md:block">
                     <li className="mb-6">
-                        <Link to="/Dashbord"
+                        <Link to="/Dashboard"
                               className="custom-link">
                             Dashboard <MdDashboardCustomize className={"custom-size"}/>
                         </Link>
