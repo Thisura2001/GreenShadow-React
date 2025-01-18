@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 
 export default function SignIn() {
     return (
@@ -51,24 +52,25 @@ export default function SignIn() {
                             </div>
 
                             {/* Submit Button */}
-                            <button
-                                type="submit"
+                            <Link
+                                to="/Dashboard"
                                 id="btnlogin"
-                                className="w-full bg-green-500 text-white py-2 rounded-md font-semibold hover:bg-green-600 transition duration-300"
+                                className="w-full bg-green-500 text-white py-2 rounded-md font-semibold hover:bg-green-600 transition duration-300 flex items-center justify-center"
                             >
                                 Sign In
-                            </button>
+                            </Link>
+
                         </form>
 
                         <p className="signup-link text-gray-600 mt-4">
                             Don't have an account?
-                            <a
-                                href="#signup"
+                            <Link
+                                to="/signUp"
                                 id="text"
                                 className="text-green-500 font-medium hover:underline"
                             >
                                 Sign Up here...
-                            </a>
+                            </Link>
                         </p>
                     </div>
                 </div>

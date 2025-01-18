@@ -1,13 +1,24 @@
+import {FaBackward} from "react-icons/fa";
+import {Link} from "react-router";
 
 export function Signup() {
     return(
         <>
             <section id="signup"
                      className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700 p-5">
-                <button id="backBtn"
-                        className="absolute top-5 left-5 text-white bg-blue-800 p-2 rounded-full shadow hover:bg-blue-900">
-                    <i className="fa-solid fa-backward"></i>
+                <button
+                    id="backBtn"
+                    className="absolute top-5 left-5 text-white bg-blue-800 p-2 rounded-full shadow hover:bg-blue-900"
+                >
+                    <Link
+                        to="/"
+                        id="text"
+                        className="flex items-center space-x-2 text-white hover:underline"
+                    >
+                        <FaBackward/>
+                    </Link>
                 </button>
+
 
                 <div className="flex w-[900px] shadow-lg rounded-lg overflow-hidden">
                     <img src="../../assets/signupimg.jpg" alt="Side Image" className="w-1/2 object-cover"/>
