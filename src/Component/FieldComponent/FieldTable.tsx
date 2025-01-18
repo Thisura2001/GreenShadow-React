@@ -22,11 +22,11 @@ export default function FieldTable(){
                         <td className="py-3 px-6 border-b">California</td>
                         <td className="py-3 px-6 border-b">10 Acres</td>
                         <td className="py-3 px-6 border-b">
-                            <img src="https://via.placeholder.com/50" alt="Image 1"
+                            <img src="../assets/farmer.jpg" alt="Image 1"
                                  className="w-12 h-12 object-cover"/>
                         </td>
                         <td className="py-3 px-6 border-b">
-                            <img src="https://via.placeholder.com/50" alt="Image 2"
+                            <img src="../assets/farmer.jpg" alt="Image 2"
                                  className="w-12 h-12 object-cover"/>
                         </td>
                         <td className="py-3 px-6 border-b">
