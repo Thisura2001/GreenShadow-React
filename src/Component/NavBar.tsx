@@ -12,45 +12,45 @@ export function NavBar(){
                 <ul id="navBar"
                     className="fixed top-16 left-4 w-56 h-[80vh] p-5 bg-green-500 rounded-2xl shadow-lg transform transition-transform duration-300 ease-in-out translate-x-0 md:translate-x-0 md:flex md:flex-col hidden md:block">
                     <li className="mb-6">
-                        <Link to = "/"
-                           className="custom-link">
-                           Dashboard  <MdDashboardCustomize className={"custom-size"}/>
+                        <Link to="/Dashbord"
+                              className="custom-link">
+                            Dashboard <MdDashboardCustomize className={"custom-size"}/>
                         </Link>
                     </li>
                     <li className="mb-6">
-                        <Link to = "/Field"
-                           className="custom-link">
-                             Field<IoIosLeaf className={"custom-size"} />
+                        <Link to="/Field"
+                              className="custom-link">
+                            Field<IoIosLeaf className={"custom-size"}/>
                         </Link>
                     </li>
                     <li className="mb-6">
-                        <Link to = "/Crop"
-                           className="custom-link">
+                        <Link to="/Crop"
+                              className="custom-link">
                             Crop<GiJellyBeans className={"custom-size"}/>
                         </Link>
                     </li>
                     <li className="mb-6">
-                        <Link to = "/Staff"
-                           className="custom-link">
-                             Staff<RiGroupFill className={"custom-size"}/>
+                        <Link to="/Staff"
+                              className="custom-link">
+                            Staff<RiGroupFill className={"custom-size"}/>
                         </Link>
                     </li>
                     <li className="mb-6">
                         <Link to="/Vehicle"
-                           className={" custom-link"}>
+                              className={" custom-link"}>
                             Vehicle<ImTruck className={"custom-size"}/>
                         </Link>
                     </li>
                     <li className="mb-6">
                         <Link to="/Equipment"
-                           className="custom-link">
+                              className="custom-link">
                             Equipment <ImHammer className={"custom-size"}/>
                         </Link>
                     </li>
                     <li>
                         <Link to="/Log"
-                           className="custom-link">
-                             Log Service<MdLibraryBooks className={"custom-size"}/>
+                              className="custom-link">
+                            Log Service<MdLibraryBooks className={"custom-size"}/>
                         </Link>
                     </li>
                 </ul>
