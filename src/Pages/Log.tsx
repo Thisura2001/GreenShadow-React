@@ -1,29 +1,24 @@
+import { useState } from "react";
 import LogHeader from "../Component/MonitoringLogComponent/LogHeader.tsx";
 import LogAdd from "../Component/MonitoringLogComponent/LogAdd.tsx";
 import LogTable from "../Component/MonitoringLogComponent/LogTable.tsx";
 
-export default function Log(){
-    const addLogBtn = document.getElementById('addLogBtn')as HTMLButtonElement;
-    const addFormCloseBtn = document.getElementById('closeLogForm')as HTMLButtonElement;
-    const addLogForm = document.getElementById('logFormCard')as HTMLElement;
+export default function Log() {
+    const [isLogFormVisible, setLogFormVisible] = useState(false);
 
-    if (addLogBtn) {
-        addLogBtn.addEventListener('click', () => {
-            addLogForm.style.display = 'block';
-        })
-    }
-    if (addFormCloseBtn){
-        addFormCloseBtn.addEventListener('click', () => {
-            addLogForm.style.display = 'none';
-        })
-    }
-    return(
+    const showLogForm = () => setLogFormVisible(true);
+    const hideLogForm = () => setLogFormVisible(false);
+
+    return (
         <>
-            <section id="monitory" className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-               <LogHeader/>
-                <LogAdd/>
-                <LogTable/>
+            <section
+                id="monitory"
+                className="flex flex-col items-center justify-center min-h-screen bg-gray-100"
+            >
+                <LogHeader onAddLog={showLogForm} />
+                {isLogFormVisible && <LogAdd onClose={hideLogForm} />}
+                <LogTable />
             </section>
         </>
-    )
+    );
 }
