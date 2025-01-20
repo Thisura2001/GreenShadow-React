@@ -1,9 +1,9 @@
 import "../Css/Vehicle.css"
 import {useEffect} from "react";
 import VehicleHeader from "../Component/VehicleComponent/VehicleHeader.tsx";
-import VehicleAddCard from "../Component/VehicleComponent/VehicleAddCard.tsx";
-import VehicleTable from "../Component/VehicleComponent/VehicleTable.tsx";
-import VehicleUpdate from "../Component/VehicleComponent/VehicleUpdate.tsx";
+import VehicleAddCard from "../Component/AddCardComponent/VehicleAddCard.tsx";
+import VehicleUpdate from "../Component/UpdateCardComponent/VehicleUpdate.tsx";
+import HeaderComponent from "../Component/HeaderComponet.tsx";
 export default function Vehicle() {
     useEffect(() => {
         const addVehicleBtn = document.getElementById('addVehicleBtn') as HTMLButtonElement;
@@ -50,9 +50,44 @@ export default function Vehicle() {
     return(
         <>
             <section id="vehicle" className="min-h-screen bg-gray-100 p-6">
-                <VehicleHeader/>
+                <HeaderComponent title={"Vehicle Management"}>
+                    <button id="addVehicleBtn"
+                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex items-center space-x-2">
+                        Add New Vehicle
+                    </button>
+                </HeaderComponent>
                 <VehicleAddCard/>
-                <VehicleTable/>
+                <div className="flex items-center justify-center bg-gray-100">
+                    <div className="w-full max-w-4xl mt-8 overflow-x-auto">
+                        <table id="tblVehicle" className="min-w-full border-collapse border border-gray-300">
+                            <thead className="bg-teal-600 text-white">
+                            <tr>
+                                <th className="px-4 py-2 border border-gray-300">Vehicle Code</th>
+                                <th className="px-4 py-2 border border-gray-300">License Plate</th>
+                                <th className="px-4 py-2 border border-gray-300">Category</th>
+                                <th className="px-4 py-2 border border-gray-300">Fuel Type</th>
+                                <th className="px-4 py-2 border border-gray-300">Status</th>
+                                <th className="px-4 py-2 border border-gray-300">Staff ID</th>
+                                <th className="px-4 py-2 border border-gray-300">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbodyVehicle" className="text-center">
+                            <tr>
+                                <td className="px-4 py-2 border border-gray-300">V001</td>
+                                <td className="px-4 py-2 border border-gray-300">ABC-1234</td>
+                                <td className="px-4 py-2 border border-gray-300">SUV</td>
+                                <td className="px-4 py-2 border border-gray-300">Petrol</td>
+                                <td className="px-4 py-2 border border-gray-300">AVAILABLE</td>
+                                <td className="px-4 py-2 border border-gray-300">STF001</td>
+                                <td className="px-4 py-2 border border-gray-300">
+                                    <button className="editCropBtn text-blue-500 hover:underline mr-3">Edit</button>
+                                    <button className="text-red-500 hover:underline">Delete</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <VehicleUpdate/>
             </section>
         </>

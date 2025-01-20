@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import FieldHeader from "../Component/FieldComponent/FieldHeader.tsx";
-import AddField from "../Component/FieldComponent/AddField.tsx";
-import FieldUpdateCard from "../Component/FieldComponent/FieldUpdateCard.tsx";
-import FieldTable from "../Component/FieldComponent/FieldTable.tsx";
+import AddField from "../Component/AddCardComponent/AddField.tsx";
+import FieldUpdateCard from "../Component/UpdateCardComponent/FieldUpdateCard.tsx";
+import HeaderComponent from "../Component/HeaderComponet.tsx";
 
 export default function Field() {
     useEffect(() => {
@@ -57,10 +57,50 @@ export default function Field() {
 
     return (
         <>
-            <section id="field" className="p-8 min-h-screen flex flex-col items-center justify-center">
-               <FieldHeader/>
+            <section id="field" className="ml-60 p-20">
+                <HeaderComponent title={"Field Management"}>
+                    <button id="addFieldBtn"
+                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                        Add New Field
+                    </button>
+                </HeaderComponent>
                 <AddField/>
-                <FieldTable/>
+                <div className="mt-10 overflow-x-auto">
+                    <table className="min-w-full border border-gray-200 text-left">
+                    <thead className="bg-gray-200">
+                        <tr>
+                            <th className="py-3 px-6 border-b">Field ID</th>
+                            <th className="py-3 px-6 border-b">Field Name</th>
+                            <th className="py-3 px-6 border-b">Location</th>
+                            <th className="py-3 px-6 border-b">Extent</th>
+                            <th className="py-3 px-6 border-b">Image 1</th>
+                            <th className="py-3 px-6 border-b">Image 2</th>
+                            <th className="py-3 px-6 border-b">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="FieldTableBody" className="bg-white">
+                        {/* Example Row */}
+                        <tr>
+                            <td className="py-3 px-6 border-b">F001</td>
+                            <td className="py-3 px-6 border-b">Green Field</td>
+                            <td className="py-3 px-6 border-b">California</td>
+                            <td className="py-3 px-6 border-b">10 Acres</td>
+                            <td className="py-3 px-6 border-b">
+                                <img src="../assets/farmer.jpg" alt="Image 1"
+                                     className="w-12 h-12 object-cover"/>
+                            </td>
+                            <td className="py-3 px-6 border-b">
+                                <img src="../assets/farmer.jpg" alt="Image 2"
+                                     className="w-12 h-12 object-cover"/>
+                            </td>
+                            <td className="py-3 px-6 border-b">
+                                <button className="editFieldBtn text-blue-500 hover:underline mr-3">Edit</button>
+                                <button className="text-red-500 hover:underline">Delete</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <FieldUpdateCard/>
             </section>
         </>
