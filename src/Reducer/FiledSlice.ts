@@ -9,7 +9,7 @@ const api = axios.create({
 })
 export const saveField =createAsyncThunk(
     'field/saveField',
-    async (field:Field)=>{
+    async (field:FormData)=>{
         try {
             const response =await api.post('/add',field)
             return response.data;
