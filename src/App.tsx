@@ -11,6 +11,8 @@ import Vehicle from "./Pages/Vehicle.tsx";
 import SignIn from "./Pages/SignIn.tsx";
 import { Signup } from "./Pages/SignUp.tsx";
 import AuthLayout from "./Component/AuthLyout.tsx";
+import {Provider} from "react-redux";
+import {store} from "./Store/Store.ts";
 
 function App() {
     const routes = createBrowserRouter([
@@ -36,7 +38,9 @@ function App() {
             ],
         },
     ]);
-    return <RouterProvider router={routes} />;
+    return  <Provider store={store}>
+        <RouterProvider router={routes} />
+    </Provider>
 }
 
 export default App;
