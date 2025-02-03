@@ -1,7 +1,12 @@
 import "../Css/Vehicle.css"
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import HeaderComponent from "../Component/HeaderComponet.tsx";
-export default function Vehicle() {
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../Store/Store.ts";
+import Vehicle from "../Model/Vehicle.ts";
+import {Status} from "../Enum/Status.ts";
+import {saveVehicle} from "../Reducer/VehicleSlice.ts";
+export default function VehicleForm() {
     useEffect(() => {
         const addVehicleBtn = document.getElementById('addVehicleBtn') as HTMLButtonElement;
         const vehicleFormCard = document.getElementById('vehicleFormCard') as HTMLElement;
@@ -44,6 +49,34 @@ export default function Vehicle() {
             });
         }
     }, []);
+    const [id, setId] = useState('');
+    const [licensePlate, setLicensePlate] = useState('');
+    const [category, setCategory] = useState('');
+    const [fuelType, setFuelType] = useState('');
+    const [status, setStatus] = useState('');
+    const [staffId, setStaffId] = useState<string>('');
+
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    function handleSave(event: React.FormEvent) {
+        event.preventDefault(); // Prevent form submission from refreshing the page
+
+        const statusEnumValue = Status[status as keyof typeof Status]; // Convert string to enum
+        if (!statusEnumValue) {
+            console.error(`Invalid status: ${status}`);
+            return;
+        }
+
+        if (!staffId) {
+            console.error('Staff ID is required');
+            return;
+        }
+
+        const newVehicle = new Vehicle(Number(id), licensePlate, category, fuelType, statusEnumValue, staffId);
+        dispatch(saveVehicle(newVehicle));
+    }
+
     return(
         <>
             <section id="vehicle" className="min-h-screen bg-gray-100 p-6">
@@ -58,22 +91,34 @@ export default function Vehicle() {
                         <h4 className="text-xl font-bold text-gray-800">Add Vehicle Details</h4>
                         <button id="closeVehicleForm" className="text-gray-400 hover:text-red-500 text-xl">X</button>
                     </div>
-                    <form id="vehicleForm" className="space-y-4">
+                    <form id="vehicleForm" className="space-y-4" onSubmit={handleSave}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label htmlFor="licensePlate" className="block text-sm font-medium text-gray-700">License
-                                    Plate</label>
-                                <input type="text" id="licensePlate"
-                                       className="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                                       placeholder="Enter license plate" required/>
+                                <label htmlFor="licensePlate" className="block text-sm font-medium text-gray-700">
+                                    License Plate
+                                </label>
+                                <input
+                                    type="text"
+                                    id="licensePlate"
+                                    className="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                    placeholder="Enter license plate"
+                                    value={licensePlate}
+                                    onChange={(e) => setLicensePlate(e.target.value)}
+                                    required
+                                />
                             </div>
                             <div>
-                                <label htmlFor="category"
-                                       className="block text-sm font-medium text-gray-700">Category</label>
-                                <select id="category"
-                                        className="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                                        required>
-                                    <option value="" selected disabled>Choose category...</option>
+                                <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+                                    Category
+                                </label>
+                                <select
+                                    id="category"
+                                    className="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                    value={category}
+                                    onChange={(e) => setCategory(e.target.value)}
+                                    required
+                                >
+                                    <option value="" disabled>Choose category...</option>
                                     <option value="SUV">SUV</option>
                                     <option value="Sedan">Sedan</option>
                                     <option value="Truck">Truck</option>
@@ -81,12 +126,17 @@ export default function Vehicle() {
                                 </select>
                             </div>
                             <div>
-                                <label htmlFor="fuelType" className="block text-sm font-medium text-gray-700">Fuel
-                                    Type</label>
-                                <select id="fuelType"
-                                        className="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                                        required>
-                                    <option value="" selected disabled>Choose fuel type...</option>
+                                <label htmlFor="fuelType" className="block text-sm font-medium text-gray-700">
+                                    Fuel Type
+                                </label>
+                                <select
+                                    id="fuelType"
+                                    className="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                    value={fuelType}
+                                    onChange={(e) => setFuelType(e.target.value)}
+                                    required
+                                >
+                                    <option value="" disabled>Choose fuel type...</option>
                                     <option value="Petrol">Petrol</option>
                                     <option value="Diesel">Diesel</option>
                                     <option value="Electric">Electric</option>
@@ -94,29 +144,39 @@ export default function Vehicle() {
                                 </select>
                             </div>
                             <div>
-                                <label htmlFor="status"
-                                       className="block text-sm font-medium text-gray-700">Status</label>
-                                <select id="status"
-                                        className="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                                        required>
-                                    <option value="" selected disabled>Choose status...</option>
+                                <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+                                    Status
+                                </label>
+                                <select
+                                    id="status"
+                                    className="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                    value={status}
+                                    onChange={(e) => setStatus(e.target.value)}
+                                    required
+                                >
+                                    <option value="" disabled>Choose status...</option>
                                     <option value="AVAILABLE">AVAILABLE</option>
                                     <option value="UNAVAILABLE">UNAVAILABLE</option>
                                 </select>
                             </div>
                             <div>
-                                <label htmlFor="VehicleStaffId" className="block text-sm font-medium text-gray-700">Staff
-                                    ID</label>
-                                <select id="VehicleStaffId"
-                                        className="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                                        required>
-                                    <option value="" selected disabled>Select Staff...</option>
-                                </select>
+                                <label htmlFor="VehicleStaffId" className="block text-sm font-medium text-gray-700">
+                                    Staff ID
+                                </label>
+                                <input
+                                    type="text"
+                                    id="VehicleStaffId"
+                                    className="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                    value={staffId}
+                                    onChange={(e) => setStaffId(e.target.value)}
+                                    required
+                                />
                             </div>
                         </div>
                         <div className="flex justify-end space-x-4 mt-4">
                             <button id="btnVehicleSave" type="submit"
-                                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Save
+                                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                                Save
                             </button>
                         </div>
                     </form>

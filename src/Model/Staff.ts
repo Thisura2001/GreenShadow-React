@@ -2,9 +2,10 @@ import Field from "./Field.ts";
 import {Role} from "../Enum/Role.ts";
 import {Designation} from "../Enum/Designation.ts";
 import {Gender} from "../Enum/Gender.ts";
-import {Vehicle} from "./Vehicle.ts";
+import Vehicle from "./Vehicle.ts";
 
 export default class Staff {
+    id: number;
     firstName: string;
     designation: Designation;
     gender: Gender;
@@ -18,6 +19,7 @@ export default class Staff {
     vehicle: Vehicle[];
 
     constructor(
+        id: number,
         firstName: string,
         designation: Designation,
         gender: Gender,
@@ -30,6 +32,7 @@ export default class Staff {
         fields: Field[],
         vehicle: Vehicle[]
     ) {
+        this.id = id;
         this.firstName = firstName;
         this.designation = designation;
         this.gender = gender;
