@@ -1,5 +1,4 @@
 import {Status} from "../Enum/Status.ts";
-import Staff from "./Staff.ts";
 
 export default class Vehicle {
     vehicleCode:number
@@ -7,7 +6,7 @@ export default class Vehicle {
     vehicleCategory: string;
     fuelType: string;
     status: Status;
-    staff: Staff;
+    staff: string;
 
     constructor(
         vehicleCode:number,
@@ -15,7 +14,7 @@ export default class Vehicle {
         vehicleCategory: string,
         fuelType: string,
         status: Status,
-        staff: Staff
+        staff: string
     ) {
         this.vehicleCode = vehicleCode;
         this.licensePlateNumber = licensePlateNumber;

@@ -6,6 +6,8 @@ import {AppDispatch} from "../Store/Store.ts";
 import Vehicle from "../Model/Vehicle.ts";
 import {Status} from "../Enum/Status.ts";
 import {saveVehicle} from "../Reducer/VehicleSlice.ts";
+import Swal from 'sweetalert2';
+
 export default function VehicleForm() {
     useEffect(() => {
         const addVehicleBtn = document.getElementById('addVehicleBtn') as HTMLButtonElement;
@@ -55,9 +57,24 @@ export default function VehicleForm() {
     const [fuelType, setFuelType] = useState('');
     const [status, setStatus] = useState('');
     const [staffId, setStaffId] = useState<string>('');
-
+    const [staffList, setStaffList] = useState<any[]>([]);
 
     const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        // Fetch staff data from your backend API
+        async function fetchStaffData() {
+            try {
+                const response = await fetch('http://localhost:8080/staff/');
+                const data = await response.json();
+                setStaffList(data); // Set staff data to state
+            } catch (error) {
+                console.error('Error fetching staff data:', error);
+            }
+        }
+
+        fetchStaffData();
+    }, []); // Empty array to run only once on mount
 
     function handleSave(event: React.FormEvent) {
         event.preventDefault(); // Prevent form submission from refreshing the page
@@ -163,14 +180,20 @@ export default function VehicleForm() {
                                 <label htmlFor="VehicleStaffId" className="block text-sm font-medium text-gray-700">
                                     Staff ID
                                 </label>
-                                <input
-                                    type="text"
+                                <select
                                     id="VehicleStaffId"
-                                    className="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                    className="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                                     value={staffId}
                                     onChange={(e) => setStaffId(e.target.value)}
                                     required
-                                />
+                                >
+                                    <option value="" disabled>Choose staff...</option>
+                                    {staffList.map((staff) => (
+                                        <option key={staff.id} value={staff.id}>
+                                            {staff.name} {staff.id}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
                         <div className="flex justify-end space-x-4 mt-4">
