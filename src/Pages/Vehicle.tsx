@@ -80,18 +80,54 @@ export default function VehicleForm() {
 
         const statusEnumValue = Status[status as keyof typeof Status]; // Convert string to enum
         if (!statusEnumValue) {
-            console.error(`Invalid status: ${status}`);
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Status',
+                text: `Status "${status}" is not valid!`,
+            });
             return;
         }
 
         if (!staffId) {
-            console.error('Staff ID is required');
+            Swal.fire({
+                icon: 'error',
+                title: 'Missing Staff ID',
+                text: 'Please select a staff member.',
+            });
             return;
         }
 
         const newVehicle = new Vehicle(Number(id), licensePlate, category, fuelType, statusEnumValue, staffId);
-        dispatch(saveVehicle(newVehicle));
+
+        dispatch(saveVehicle(newVehicle))
+            .then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Vehicle Saved!',
+                    text: 'The vehicle has been successfully added.',
+                    confirmButtonColor: '#3085d6',
+                });
+                resetForm();
+            })
+            .catch((error) => {
+                console.error('Error saving vehicle:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Save Failed',
+                    text: 'An error occurred while saving the vehicle. Please try again.',
+                });
+            });
     }
+    const resetForm = ()=>{
+        setId('');
+        setLicensePlate('');
+        setCategory('');
+        setFuelType('');
+        setStatus('');
+        setStaffId('');
+    }
+
+
 
 
     return(
@@ -108,7 +144,7 @@ export default function VehicleForm() {
                         <h4 className="text-xl font-bold text-gray-800">Add Vehicle Details</h4>
                         <button id="closeVehicleForm" className="text-gray-400 hover:text-red-500 text-xl">X</button>
                     </div>
-                    <form id="vehicleForm" className="space-y-4" onSubmit={handleSave}>
+                    <form id="vehicleForm" className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label htmlFor="licensePlate" className="block text-sm font-medium text-gray-700">
@@ -197,7 +233,7 @@ export default function VehicleForm() {
                             </div>
                         </div>
                         <div className="flex justify-end space-x-4 mt-4">
-                            <button id="btnVehicleSave" type="submit"
+                            <button id="btnVehicleSave" type="submit" onClick={handleSave}
                                     className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
                                 Save
                             </button>
