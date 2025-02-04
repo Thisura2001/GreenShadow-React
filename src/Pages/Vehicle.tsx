@@ -62,22 +62,21 @@ export default function VehicleForm() {
     const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
-        // Fetch staff data from your backend API
         async function fetchStaffData() {
             try {
                 const response = await fetch('http://localhost:8080/staff/');
                 const data = await response.json();
-                setStaffList(data); // Set staff data to state
+                setStaffList(data);
             } catch (error) {
                 console.error('Error fetching staff data:', error);
             }
         }
 
         fetchStaffData();
-    }, []); // Empty array to run only once on mount
+    }, []);
 
     function handleSave(event: React.FormEvent) {
-        event.preventDefault(); // Prevent form submission from refreshing the page
+        event.preventDefault();
 
         const statusEnumValue = Status[status as keyof typeof Status]; // Convert string to enum
         if (!statusEnumValue) {
@@ -93,6 +92,7 @@ export default function VehicleForm() {
         const newVehicle = new Vehicle(Number(id), licensePlate, category, fuelType, statusEnumValue, staffId);
         dispatch(saveVehicle(newVehicle));
     }
+
 
     return(
         <>
