@@ -83,6 +83,7 @@ export default function FieldForm() {
         if (fieldImg1) formData.append("fieldImg1", fieldImg1);
         if (fieldImg2) formData.append("fieldImg2", fieldImg2);
 
+        console.log(formdata)
         dispatch(saveField(formData));
     }
         return (

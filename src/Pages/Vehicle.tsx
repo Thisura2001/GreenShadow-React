@@ -1,56 +1,14 @@
-import "../Css/Vehicle.css"
-import {useEffect, useState} from "react";
+import "../Css/Vehicle.css";
+import { useEffect, useState } from "react";
 import HeaderComponent from "../Component/HeaderComponet.tsx";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch} from "../Store/Store.ts";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../Store/Store.ts";
 import Vehicle from "../Model/Vehicle.ts";
-import {Status} from "../Enum/Status.ts";
-import {getAllVehicles, saveVehicle, updateVehicle} from "../Reducer/VehicleSlice.ts";
+import { Status } from "../Enum/Status.ts";
+import { getAllVehicles, saveVehicle, updateVehicle } from "../Reducer/VehicleSlice.ts";
 import Swal from 'sweetalert2';
 
 export default function VehicleForm() {
-    useEffect(() => {
-        const addVehicleBtn = document.getElementById('addVehicleBtn') as HTMLButtonElement;
-        const vehicleFormCard = document.getElementById('vehicleFormCard') as HTMLElement;
-        const closeVehicleFormBtn = document.getElementById('closeVehicleForm') as HTMLElement;
-        const updateVehicleModal = document.getElementById('updateVehicleModal') as HTMLElement;
-        const closeUpdateVehicleModalBtn = document.getElementById('closeUpdateVehicleModalBtn') as HTMLButtonElement;
-
-        if (addVehicleBtn){
-            addVehicleBtn.addEventListener("click",()=>{
-                vehicleFormCard.style.display = "block";
-            })
-        }
-        if (closeVehicleFormBtn){
-            closeVehicleFormBtn.addEventListener("click",()=>{
-                vehicleFormCard.style.display = "none";
-            })
-        }
-        const editVehicleBtns = document.querySelectorAll('.editVehicleBtn') as NodeListOf<HTMLButtonElement>;
-        editVehicleBtns.forEach((editBtn) => {
-            editBtn.addEventListener('click', (event) => {
-                const row = (event.target as HTMLElement).closest('tr')!;
-                const licensePlate = row.cells[1].textContent;
-                const category = row.cells[2].textContent;
-                const fuelType = row.cells[3].textContent;
-                const status = row.cells[4].textContent;
-                const staffId = row.cells[5].textContent;
-
-                (document.getElementById('updateVehicleLicensePlate') as HTMLInputElement).value = licensePlate!;
-                (document.getElementById('updateVehicleCategory') as HTMLSelectElement).value = category!;
-                (document.getElementById('updateVehicleFuelType') as HTMLSelectElement).value = fuelType!;
-                (document.getElementById('updateVehicleStatus') as HTMLSelectElement).value = status!;
-                (document.getElementById('updateVehicleStaffId') as HTMLSelectElement).value = staffId!;
-
-                updateVehicleModal.style.display = 'flex';
-            });
-        });
-        if (closeUpdateVehicleModalBtn) {
-            closeUpdateVehicleModalBtn.addEventListener('click', () => {
-                updateVehicleModal.style.display = 'none';
-            });
-        }
-    }, []);
     const [id, setId] = useState('');
     const [licensePlate, setLicensePlate] = useState('');
     const [category, setCategory] = useState('');
@@ -75,7 +33,59 @@ export default function VehicleForm() {
         fetchStaffData();
     }, []);
 
-    const statusEnumValue = Status[status as keyof typeof Status]
+    useEffect(() => {
+        const addVehicleBtn = document.getElementById('addVehicleBtn') as HTMLButtonElement;
+        const vehicleFormCard = document.getElementById('vehicleFormCard') as HTMLElement;
+        const closeVehicleFormBtn = document.getElementById('closeVehicleForm') as HTMLElement;
+        const updateVehicleModal = document.getElementById('updateVehicleModal') as HTMLElement;
+        const closeUpdateVehicleModalBtn = document.getElementById('closeUpdateVehicleModalBtn') as HTMLButtonElement;
+
+        if (addVehicleBtn) {
+            addVehicleBtn.addEventListener("click", () => {
+                vehicleFormCard.style.display = "block";
+            });
+        }
+        if (closeVehicleFormBtn) {
+            closeVehicleFormBtn.addEventListener("click", () => {
+                vehicleFormCard.style.display = "none";
+            });
+        }
+        const editVehicleBtns = document.querySelectorAll('.editVehicleBtn') as NodeListOf<HTMLButtonElement>;
+        editVehicleBtns.forEach((editBtn) => {
+            editBtn.addEventListener('click', (event) => {
+                const row = (event.target as HTMLElement).closest('tr')!;
+                const vehicle_code = row.cells[0].innerText;
+                const licensePlate = row.cells[1].textContent;
+                const category = row.cells[2].textContent;
+                const fuelType = row.cells[3].textContent;
+                const status = row.cells[4].textContent;
+                const staffId = row.cells[5].textContent;
+
+                setId(vehicle_code);
+                setLicensePlate(licensePlate!);
+                setCategory(category!);
+                setFuelType(fuelType!);
+                setStatus(status!);
+                setStaffId(staffId!);
+
+                (document.getElementById('updateVehicleLicensePlate') as HTMLInputElement).value = licensePlate!;
+                (document.getElementById('updateVehicleCategory') as HTMLSelectElement).value = category!;
+                (document.getElementById('updateVehicleFuelType') as HTMLSelectElement).value = fuelType!;
+                (document.getElementById('updateVehicleStatus') as HTMLSelectElement).value = status!;
+                (document.getElementById('updateVehicleStaffId') as HTMLSelectElement).value = staffId!;
+
+                updateVehicleModal.style.display = 'flex';
+            });
+        });
+        if (closeUpdateVehicleModalBtn) {
+            closeUpdateVehicleModalBtn.addEventListener('click', () => {
+                updateVehicleModal.style.display = 'none';
+            });
+        }
+    }, []);
+
+    const statusEnumValue = Status[status as keyof typeof Status];
+
     function handleSave(event: React.FormEvent) {
         event.preventDefault();
         if (!statusEnumValue) {
@@ -97,7 +107,7 @@ export default function VehicleForm() {
         }
 
         const newVehicle = new Vehicle(Number(id), licensePlate, category, fuelType, statusEnumValue, Number(staffId));
-        console.log(newVehicle)
+        console.log(newVehicle);
 
         dispatch(saveVehicle(newVehicle))
             .then(() => {
@@ -118,23 +128,25 @@ export default function VehicleForm() {
                 });
             });
     }
-    const resetForm = ()=>{
+
+    const resetForm = () => {
         setId('');
         setLicensePlate('');
         setCategory('');
         setFuelType('');
         setStatus('');
         setStaffId('');
-    }
-    const vehicles =useSelector(state => state.vehicles)
+    };
+
+    const vehicles = useSelector(state => state.vehicles);
+
     useEffect(() => {
-        if (vehicles.length === 0){
+        if (vehicles.length === 0) {
             dispatch(getAllVehicles());
         }
-    }, [dispatch,vehicles.length]);
+    }, [dispatch, vehicles.length]);
 
-
-    function handleUpdate(id) {
+    function handleUpdate() {
         console.log("Vehicle ID before update:", id); // Debugging log
 
         if (!id || isNaN(Number(id))) {
@@ -145,9 +157,11 @@ export default function VehicleForm() {
             });
             return;
         }
-        const update =  new Vehicle(Number(id), licensePlate, category, fuelType, statusEnumValue, staffId);
+        console.log('update');
+        console.log(new Vehicle(Number(id), licensePlate, category, fuelType, statusEnumValue, Number(staffId)));
+        const update = new Vehicle(Number(id), licensePlate, category, fuelType, statusEnumValue, Number(staffId));
         dispatch(updateVehicle(update))
-            .then(()=>{
+            .then(() => {
                 Swal.fire({
                     icon: 'success',
                     title: 'Vehicle updated!',
@@ -161,12 +175,12 @@ export default function VehicleForm() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Update Failed',
-                    text: 'An error occurred while update the vehicle. Please try again.',
+                    text: 'An error occurred while updating the vehicle. Please try again.',
                 });
             });
     }
 
-    return(
+    return (
         <>
             <section id="vehicle" className="min-h-screen bg-gray-100 p-6">
                 <HeaderComponent title={"Vehicle Management"}>
@@ -291,7 +305,7 @@ export default function VehicleForm() {
                             </tr>
                             </thead>
                             <tbody id="tbodyVehicle" className="text-center">
-                            {vehicles.map((vehicle:Vehicle) => (
+                            {vehicles.map((vehicle: Vehicle) => (
                                 <tr key={vehicle.vehicle_code} className="border border-gray-300">
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.vehicle_code}</td>
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.licensePlateNumber}</td>
@@ -300,13 +314,12 @@ export default function VehicleForm() {
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.status}</td>
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.staffId}</td>
                                     <td className="px-4 py-2 border border-gray-300">
-                                        <button className=" editVehicleBtn bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
+                                        <button className="editVehicleBtn bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
                                         <button className="bg-red-500 text-white px-2 py-1 rounded ml-2">Delete</button>
                                     </td>
                                 </tr>
                             ))}
                             </tbody>
-
                         </table>
                     </div>
                 </div>
@@ -329,6 +342,8 @@ export default function VehicleForm() {
                                     id="updateVehicleLicensePlate"
                                     className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                                     placeholder="Enter license plate"
+                                    value={licensePlate}
+                                    onChange={(e) => setLicensePlate(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -339,10 +354,10 @@ export default function VehicleForm() {
                                 <select
                                     id="updateVehicleCategory"
                                     className="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    value={category}
+                                    onChange={(e) => setCategory(e.target.value)}
                                 >
-                                    <option value="" selected disabled>
-                                        Choose category...
-                                    </option>
+                                    <option value="" disabled>Choose category...</option>
                                     <option value="SUV">SUV</option>
                                     <option value="Sedan">Sedan</option>
                                     <option value="Truck">Truck</option>
@@ -357,10 +372,10 @@ export default function VehicleForm() {
                                 <select
                                     id="updateVehicleFuelType"
                                     className="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    value={fuelType}
+                                    onChange={(e) => setFuelType(e.target.value)}
                                 >
-                                    <option value="" selected disabled>
-                                        Choose fuel type...
-                                    </option>
+                                    <option value="" disabled>Choose fuel type...</option>
                                     <option value="Petrol">Petrol</option>
                                     <option value="Diesel">Diesel</option>
                                     <option value="Electric">Electric</option>
@@ -375,10 +390,10 @@ export default function VehicleForm() {
                                 <select
                                     id="updateVehicleStatus"
                                     className="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    value={status}
+                                    onChange={(e) => setStatus(e.target.value)}
                                 >
-                                    <option value="" selected disabled>
-                                        Choose status...
-                                    </option>
+                                    <option value="" disabled>Choose status...</option>
                                     <option value="AVAILABLE">AVAILABLE</option>
                                     <option value="UNAVAILABLE">UNAVAILABLE</option>
                                 </select>
@@ -407,7 +422,7 @@ export default function VehicleForm() {
                                 <button
                                     id="saveUpdatedVehicle"
                                     className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition duration-200"
-                                    onClick={handleUpdate()}
+                                    onClick={handleUpdate}
                                 >
                                     Update
                                 </button>
