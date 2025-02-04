@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../Store/Store.ts";
 import Vehicle from "../Model/Vehicle.ts";
 import {Status} from "../Enum/Status.ts";
-import {getAllVehicles, saveVehicle} from "../Reducer/VehicleSlice.ts";
+import {getAllVehicles, saveVehicle, updateVehicle} from "../Reducer/VehicleSlice.ts";
 import Swal from 'sweetalert2';
 
 export default function VehicleForm() {
@@ -26,7 +26,7 @@ export default function VehicleForm() {
                 vehicleFormCard.style.display = "none";
             })
         }
-        const editVehicleBtns = document.querySelectorAll('.editCropBtn') as NodeListOf<HTMLButtonElement>;
+        const editVehicleBtns = document.querySelectorAll('.editVehicleBtn') as NodeListOf<HTMLButtonElement>;
         editVehicleBtns.forEach((editBtn) => {
             editBtn.addEventListener('click', (event) => {
                 const row = (event.target as HTMLElement).closest('tr')!;
@@ -75,10 +75,9 @@ export default function VehicleForm() {
         fetchStaffData();
     }, []);
 
+    const statusEnumValue = Status[status as keyof typeof Status]
     function handleSave(event: React.FormEvent) {
         event.preventDefault();
-
-        const statusEnumValue = Status[status as keyof typeof Status]; // Convert string to enum
         if (!statusEnumValue) {
             Swal.fire({
                 icon: 'error',
@@ -97,7 +96,8 @@ export default function VehicleForm() {
             return;
         }
 
-        const newVehicle = new Vehicle(Number(id), licensePlate, category, fuelType, statusEnumValue, staffId);
+        const newVehicle = new Vehicle(Number(id), licensePlate, category, fuelType, statusEnumValue, Number(staffId));
+        console.log(newVehicle)
 
         dispatch(saveVehicle(newVehicle))
             .then(() => {
@@ -134,6 +134,37 @@ export default function VehicleForm() {
     }, [dispatch,vehicles.length]);
 
 
+    function handleUpdate(id) {
+        console.log("Vehicle ID before update:", id); // Debugging log
+
+        if (!id || isNaN(Number(id))) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Vehicle ID',
+                text: 'Vehicle ID is missing or invalid.',
+            });
+            return;
+        }
+        const update =  new Vehicle(Number(id), licensePlate, category, fuelType, statusEnumValue, staffId);
+        dispatch(updateVehicle(update))
+            .then(()=>{
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Vehicle updated!',
+                    text: 'The vehicle has been successfully updated.',
+                    confirmButtonColor: '#3085d6',
+                });
+                resetForm();
+            })
+            .catch((error) => {
+                console.error('Error updating vehicle:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Update Failed',
+                    text: 'An error occurred while update the vehicle. Please try again.',
+                });
+            });
+    }
 
     return(
         <>
@@ -267,9 +298,9 @@ export default function VehicleForm() {
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.vehicleCategory}</td>
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.fuelType}</td>
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.status}</td>
-                                    <td className="px-4 py-2 border border-gray-300">{vehicle.staff}</td>
+                                    <td className="px-4 py-2 border border-gray-300">{vehicle.staffId}</td>
                                     <td className="px-4 py-2 border border-gray-300">
-                                        <button className="bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
+                                        <button className=" editVehicleBtn bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
                                         <button className="bg-red-500 text-white px-2 py-1 rounded ml-2">Delete</button>
                                     </td>
                                 </tr>
@@ -359,17 +390,24 @@ export default function VehicleForm() {
                                 </label>
                                 <select
                                     id="updateVehicleStaffId"
-                                    className="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    className="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                                    value={staffId}
+                                    onChange={(e) => setStaffId(e.target.value)}
+                                    required
                                 >
-                                    <option value="" selected disabled>
-                                        Select Staff...
-                                    </option>
+                                    <option value="" disabled>Choose staff...</option>
+                                    {staffList.map((staff) => (
+                                        <option key={staff.id} value={staff.id}>
+                                            {staff.name} {staff.id}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="flex justify-end gap-4">
                                 <button
                                     id="saveUpdatedVehicle"
                                     className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition duration-200"
+                                    onClick={handleUpdate()}
                                 >
                                     Update
                                 </button>

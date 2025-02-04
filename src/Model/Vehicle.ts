@@ -6,7 +6,7 @@ export default class Vehicle {
     vehicleCategory: string;
     fuelType: string;
     status: Status;
-    staff: string;
+    staffId: number;
 
     constructor(
         vehicle_code:number,
@@ -14,13 +14,13 @@ export default class Vehicle {
         vehicleCategory: string,
         fuelType: string,
         status: Status,
-        staff: string
+        staffId: number
     ) {
         this.vehicle_code = vehicle_code;
         this.licensePlateNumber = licensePlateNumber;
         this.vehicleCategory = vehicleCategory;
         this.fuelType = fuelType;
         this.status = status;
-        this.staff = staff;
+        this.staffId = staffId;
     }
 }
