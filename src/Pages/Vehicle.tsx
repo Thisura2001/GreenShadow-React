@@ -261,8 +261,8 @@ export default function VehicleForm() {
                             </thead>
                             <tbody id="tbodyVehicle" className="text-center">
                             {vehicles.map((vehicle:Vehicle) => (
-                                <tr key={vehicle.vehicleCode} className="border border-gray-300">
-                                    <td className="px-4 py-2 border border-gray-300">{vehicle.vehicleCode}</td>
+                                <tr key={vehicle.vehicle_code} className="border border-gray-300">
+                                    <td className="px-4 py-2 border border-gray-300">{vehicle.vehicle_code}</td>
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.licensePlateNumber}</td>
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.vehicleCategory}</td>
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.fuelType}</td>
