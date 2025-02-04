@@ -1,11 +1,11 @@
 import "../Css/Vehicle.css"
 import {useEffect, useState} from "react";
 import HeaderComponent from "../Component/HeaderComponet.tsx";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../Store/Store.ts";
 import Vehicle from "../Model/Vehicle.ts";
 import {Status} from "../Enum/Status.ts";
-import {saveVehicle} from "../Reducer/VehicleSlice.ts";
+import {getAllVehicles, saveVehicle} from "../Reducer/VehicleSlice.ts";
 import Swal from 'sweetalert2';
 
 export default function VehicleForm() {
@@ -126,7 +126,12 @@ export default function VehicleForm() {
         setStatus('');
         setStaffId('');
     }
-
+    const vehicles =useSelector(state => state.vehicles)
+    useEffect(() => {
+        if (vehicles.length === 0){
+            dispatch(getAllVehicles());
+        }
+    }, [dispatch,vehicles.length]);
 
 
 
@@ -255,19 +260,22 @@ export default function VehicleForm() {
                             </tr>
                             </thead>
                             <tbody id="tbodyVehicle" className="text-center">
-                            <tr>
-                                <td className="px-4 py-2 border border-gray-300">V001</td>
-                                <td className="px-4 py-2 border border-gray-300">ABC-1234</td>
-                                <td className="px-4 py-2 border border-gray-300">SUV</td>
-                                <td className="px-4 py-2 border border-gray-300">Petrol</td>
-                                <td className="px-4 py-2 border border-gray-300">AVAILABLE</td>
-                                <td className="px-4 py-2 border border-gray-300">STF001</td>
-                                <td className="px-4 py-2 border border-gray-300">
-                                    <button className="editCropBtn text-blue-500 hover:underline mr-3">Edit</button>
-                                    <button className="text-red-500 hover:underline">Delete</button>
-                                </td>
-                            </tr>
+                            {vehicles.map((vehicle:Vehicle) => (
+                                <tr key={vehicle.vehicleCode} className="border border-gray-300">
+                                    <td className="px-4 py-2 border border-gray-300">{vehicle.vehicleCode}</td>
+                                    <td className="px-4 py-2 border border-gray-300">{vehicle.licensePlateNumber}</td>
+                                    <td className="px-4 py-2 border border-gray-300">{vehicle.vehicleCategory}</td>
+                                    <td className="px-4 py-2 border border-gray-300">{vehicle.fuelType}</td>
+                                    <td className="px-4 py-2 border border-gray-300">{vehicle.status}</td>
+                                    <td className="px-4 py-2 border border-gray-300">{vehicle.staff}</td>
+                                    <td className="px-4 py-2 border border-gray-300">
+                                        <button className="bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
+                                        <button className="bg-red-500 text-white px-2 py-1 rounded ml-2">Delete</button>
+                                    </td>
+                                </tr>
+                            ))}
                             </tbody>
+
                         </table>
                     </div>
                 </div>
