@@ -3,15 +3,15 @@ import HeaderComponent from "../Component/HeaderComponet.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import { AppDispatch } from "../Store/Store.ts";
 import Field from "../Model/Field.ts";
-import {getAllFields, saveField} from "../Reducer/FiledSlice.ts";
+import {getAllFields, saveField, toBase64} from "../Reducer/FiledSlice.ts";
 
 export default function FieldForm() {
     const [fieldId, setFieldId] = useState('');
     const [fieldName, setFieldName] = useState('');
     const [location, setLocation] = useState('');
     const [extend, setExtend] = useState('');
-    const [fieldImg1, setFieldImg1] = useState('');
-    const [fieldImg2, setFieldImg2] = useState('');
+    const [fieldImg1, setFieldImg1] = useState<string | null>(null);
+    const [fieldImg2, setFieldImg2] = useState<string | null>(null);
 
     useEffect(() => {
         const fieldFormCard = document.getElementById("fieldFormCard") as HTMLElement;
@@ -63,6 +63,42 @@ export default function FieldForm() {
         });
 
     }, []);
+    const handleImageChange1 = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const file = e.target.files[0];
+            try {
+                const base64Image = await toBase64(file); // Convert image to base64
+                setFieldImg1(base64Image); // Set the base64 string in state
+
+                // Optionally show the preview of the image
+                const previewElement = document.getElementById("fieldImgPreview01");
+                if (previewElement) {
+                    previewElement.innerHTML = `<img src="${base64Image}" alt="Field Image 01" class="w-full h-auto mt-2" />`;
+                }
+            } catch (error) {
+                console.error("Error converting image to base64: ", error);
+            }
+        }
+    };
+
+    // Handle Image 2 Change
+    const handleImageChange2 = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const file = e.target.files[0];
+            try {
+                const base64Image = await toBase64(file); // Convert image to base64
+                setFieldImg2(base64Image); // Set the base64 string in state
+
+                // Optionally show the preview of the image
+                const previewElement = document.getElementById("fieldImgPreview02");
+                if (previewElement) {
+                    previewElement.innerHTML = `<img src="${base64Image}" alt="Field Image 02" class="w-full h-auto mt-2" />`;
+                }
+            } catch (error) {
+                console.error("Error converting image to base64: ", error);
+            }
+        }
+    };
 
     const dispatch = useDispatch<AppDispatch>();
     const fields = useSelector(state => state.fields)
@@ -74,7 +110,7 @@ export default function FieldForm() {
         console.log(getAllFields)
     }, [dispatch, fields.length]);
     function handleAdd() {
-        const field = new Field(Number(fieldId),fieldName,location,extend,fieldImg1,fieldImg2)
+        const field = new Field(Number(fieldId),fieldName,location,extend,String(fieldImg1),String(fieldImg2)   )
         dispatch(saveField(field))
     }
 
@@ -125,7 +161,7 @@ export default function FieldForm() {
                             <div>
                                 <label htmlFor="fieldImg01" className="block text-sm font-medium text-gray-700">Field
                                     Image 01</label>
-                                <input type="file" onChange={(e) => setFieldImg1(e.target.value)} id="fieldImg01"
+                                <input type="file" onChange={handleImageChange1} id="fieldImg01"
                                        className="mt-1 block w-full border rounded-md p-2"
                                        accept="image/*"/>
                                 <div id="fieldImgPreview01" className="mt-2"></div>
@@ -133,7 +169,7 @@ export default function FieldForm() {
                             <div>
                                 <label htmlFor="fieldImg02" className="block text-sm font-medium text-gray-700">Field
                                     Image 02</label>
-                                <input type="file" onChange={(e) => setFieldImg2(e.target.value)} id="fieldImg02"
+                                <input type="file" onChange={handleImageChange2} id="fieldImg02"
                                        className="mt-1 block w-full border rounded-md p-2"
                                        accept="image/*"/>
                                 <div id="fieldImgPreview02" className="mt-2"></div>
@@ -159,14 +195,24 @@ export default function FieldForm() {
                         </tr>
                         </thead>
                         <tbody id="FieldTableBody" className="bg-white">
-                        {fields.map((field:Field) => (
+                        {fields.map((field: Field) => (
                             <tr key={field.fieldId}>
                                 <td className="py-3 px-6 border-b">{field.fieldId}</td>
                                 <td className="py-3 px-6 border-b">{field.fieldName}</td>
                                 <td className="py-3 px-6 border-b">{field.location}</td>
                                 <td className="py-3 px-6 border-b">{field.extend}</td>
-                                <td className="py-3 px-6 border-b">{field.fieldImg1}</td>
-                                <td className="py-3 px-6 border-b">{field.fieldImg2}</td>
+                                <td className="py-3 px-6 border-b">
+                                    {field.fieldImg1 && (
+                                        <img src={field.fieldImg1} alt="Field Image 1"
+                                             className="w-16 h-16 object-cover"/>
+                                    )}
+                                </td>
+                                <td className="py-3 px-6 border-b">
+                                    {field.fieldImg2 && (
+                                        <img src={field.fieldImg2} alt="Field Image 2"
+                                             className="w-16 h-16 object-cover"/>
+                                    )}
+                                </td>
                                 <td className="py-3 px-6 border-b">
                                     <button className="editFieldBtn text-blue-500 hover:underline mr-3">Edit</button>
                                     <button className="text-red-500 hover:underline">Delete</button>
