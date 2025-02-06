@@ -69,7 +69,7 @@ export default function FieldForm() {
 
     useEffect(() => {
         if (fields.length === 0){
-            dispatch(getAllFields)
+            dispatch(getAllFields())
         }
         console.log(getAllFields)
     }, [dispatch, fields.length]);

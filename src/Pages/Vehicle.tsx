@@ -17,7 +17,7 @@ export default function VehicleForm() {
     const [staffId, setStaffId] = useState<string>('');
     const [staffList, setStaffList] = useState<any[]>([]);
 
-    const dispatch = useDispatch<AppDispatch>();
+
 
     useEffect(() => {
         async function fetchStaffData() {
@@ -139,6 +139,7 @@ export default function VehicleForm() {
     };
 
     const vehicles = useSelector(state => state.vehicles);
+    const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
         if (vehicles.length === 0) {
