@@ -3,7 +3,7 @@ import HeaderComponent from "../Component/HeaderComponet.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../Store/Store.ts";
 import Field from "../Model/Field.ts";
-import { getAllFields, saveField, toBase64, updateField } from "../Reducer/FiledSlice.ts";
+import {deleteField, getAllFields, saveField, toBase64, updateField} from "../Reducer/FiledSlice.ts";
 
 export default function FieldForm() {
     const [fieldId, setFieldId] = useState('');
@@ -120,6 +120,10 @@ export default function FieldForm() {
         dispatch(updateField(fieldUpdate))
     }
 
+    function handleDelete(fieldId: number) {
+        dispatch(deleteField(fieldId));
+    }
+
     return (
         <>
             <section id="field" className="ml-60 p-20">
@@ -221,7 +225,7 @@ export default function FieldForm() {
                                 </td>
                                 <td className="py-3 px-6 border-b">
                                     <button className="editFieldBtn text-blue-500 hover:underline mr-3">Edit</button>
-                                    <button className="text-red-500 hover:underline">Delete</button>
+                                    <button className="text-red-500 hover:underline"   onClick={() => handleDelete(field.fieldId)}>Delete</button>
                                 </td>
                             </tr>
                         ))}
