@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import HeaderComponent from "../Component/HeaderComponet.tsx";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../Store/Store.ts";
 import Field from "../Model/Field.ts";
-import {getAllFields, saveField, toBase64} from "../Reducer/FiledSlice.ts";
+import { getAllFields, saveField, toBase64, updateField } from "../Reducer/FiledSlice.ts";
 
 export default function FieldForm() {
     const [fieldId, setFieldId] = useState('');
@@ -19,7 +19,6 @@ export default function FieldForm() {
         const closeAddFieldBtn = document.getElementById('closeFieldForm') as HTMLButtonElement;
         const fieldUpdateFormCard = document.getElementById("updateFieldModal") as HTMLElement;
         const closeUpdateField = document.getElementById("closeUpdateModalBtn") as HTMLButtonElement;
-
 
         if (addFieldBtn) {
             addFieldBtn.addEventListener('click', () => {
@@ -50,11 +49,15 @@ export default function FieldForm() {
                     const fieldName = row.cells[1].innerText;
                     const fieldLocation = row.cells[2].innerText;
                     const fieldExtent = row.cells[3].innerText;
+                    const fieldImg1 = row.cells[4].querySelector('img')?.src || null;
+                    const fieldImg2 = row.cells[5].querySelector('img')?.src || null;
 
-                    // Set the values in the update form
-                    (document.getElementById('updateName') as HTMLInputElement).value = fieldName;
-                    (document.getElementById('updateLocation') as HTMLInputElement).value = fieldLocation;
-                    (document.getElementById('updateExtent') as HTMLInputElement).value = fieldExtent;
+                    setFieldId(fieldId);
+                    setFieldName(fieldName);
+                    setLocation(fieldLocation);
+                    setExtend(fieldExtent);
+                    setFieldImg1(fieldImg1);
+                    setFieldImg2(fieldImg2);
 
                     // Open the update modal
                     fieldUpdateFormCard.style.display = 'block';
@@ -63,14 +66,14 @@ export default function FieldForm() {
         });
 
     }, []);
+
     const handleImageChange1 = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const file = e.target.files[0];
             try {
-                const base64Image = await toBase64(file); // Convert image to base64
-                setFieldImg1(base64Image); // Set the base64 string in state
+                const base64Image = await toBase64(file);
+                setFieldImg1(base64Image);
 
-                // Optionally show the preview of the image
                 const previewElement = document.getElementById("fieldImgPreview01");
                 if (previewElement) {
                     previewElement.innerHTML = `<img src="${base64Image}" alt="Field Image 01" class="w-full h-auto mt-2" />`;
@@ -81,15 +84,13 @@ export default function FieldForm() {
         }
     };
 
-    // Handle Image 2 Change
     const handleImageChange2 = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const file = e.target.files[0];
             try {
-                const base64Image = await toBase64(file); // Convert image to base64
-                setFieldImg2(base64Image); // Set the base64 string in state
+                const base64Image = await toBase64(file);
+                setFieldImg2(base64Image);
 
-                // Optionally show the preview of the image
                 const previewElement = document.getElementById("fieldImgPreview02");
                 if (previewElement) {
                     previewElement.innerHTML = `<img src="${base64Image}" alt="Field Image 02" class="w-full h-auto mt-2" />`;
@@ -104,14 +105,19 @@ export default function FieldForm() {
     const fields = useSelector(state => state.fields)
 
     useEffect(() => {
-        if (fields.length === 0){
+        if (fields.length === 0) {
             dispatch(getAllFields())
         }
-        console.log(getAllFields)
     }, [dispatch, fields.length]);
+
     function handleAdd() {
-        const field = new Field(Number(fieldId),fieldName,location,extend,String(fieldImg1),String(fieldImg2)   )
+        const field = new Field(Number(fieldId), fieldName, location, extend, String(fieldImg1), String(fieldImg2))
         dispatch(saveField(field))
+    }
+
+    function handleUpdate() {
+        const fieldUpdate = new Field(Number(fieldId), fieldName, location, extend, String(fieldImg1), String(fieldImg2))
+        dispatch(updateField(fieldUpdate))
     }
 
     return (
@@ -231,37 +237,50 @@ export default function FieldForm() {
                                 <label htmlFor="updateName"
                                        className="block text-sm font-medium text-gray-700">Name:</label>
                                 <input type="text" id="updateName"
-                                       className="mt-1 block w-full border rounded-md p-2"/>
+                                       className="mt-1 block w-full border rounded-md p-2"
+                                       value={fieldName}
+                                       onChange={(e) => setFieldName(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateLocation"
                                        className="block text-sm font-medium text-gray-700">Location:</label>
                                 <input type="text" id="updateLocation"
-                                       className="mt-1 block w-full border rounded-md p-2"/>
+                                       className="mt-1 block w-full border rounded-md p-2"
+                                       value={location}
+                                       onChange={(e) => setLocation(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateExtent" className="block text-sm font-medium text-gray-700">Extent
                                     Size:</label>
                                 <input type="text" id="updateExtent"
-                                       className="mt-1 block w-full border rounded-md p-2"/>
+                                       className="mt-1 block w-full border rounded-md p-2"
+                                       value={extend}
+                                       onChange={(e) => setExtend(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateFieldImg1"
                                        className="block text-sm font-medium text-gray-700">Field
                                     Image 1:</label>
                                 <input type="file" id="updateFieldImg1"
-                                       className="mt-1 block w-full border rounded-md p-2"/>
+                                       className="mt-1 block w-full border rounded-md p-2"
+                                       onChange={handleImageChange1}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateFieldImg2"
                                        className="block text-sm font-medium text-gray-700">Field
                                     Image 2:</label>
                                 <input type="file" id="updateFieldImg2"
-                                       className="mt-1 block w-full border rounded-md p-2"/>
+                                       className="mt-1 block w-full border rounded-md p-2"
+                                       onChange={handleImageChange2}
+                                />
                             </div>
                             <div className="flex justify-end space-x-4">
                                 <button type="button" id="saveUpdatedField"
-                                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Update
+                                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded" onClick={handleUpdate}>Update
                                 </button>
                                 <button type="button" id="closeUpdateModalBtn"
                                         className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded">Cancel

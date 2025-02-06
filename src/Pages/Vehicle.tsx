@@ -68,12 +68,6 @@ export default function VehicleForm() {
                 setStatus(status!);
                 setStaffId(staffId!);
 
-                (document.getElementById('updateVehicleLicensePlate') as HTMLInputElement).value = licensePlate!;
-                (document.getElementById('updateVehicleCategory') as HTMLSelectElement).value = category!;
-                (document.getElementById('updateVehicleFuelType') as HTMLSelectElement).value = fuelType!;
-                (document.getElementById('updateVehicleStatus') as HTMLSelectElement).value = status!;
-                (document.getElementById('updateVehicleStaffId') as HTMLSelectElement).value = staffId!;
-
                 updateVehicleModal.style.display = 'flex';
             });
         });
