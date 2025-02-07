@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../Store/Store.ts";
 import Vehicle from "../Model/Vehicle.ts";
 import { Status } from "../Enum/Status.ts";
-import { getAllVehicles, saveVehicle, updateVehicle } from "../Reducer/VehicleSlice.ts";
+import {deleteVehicle, getAllVehicles, saveVehicle, updateVehicle} from "../Reducer/VehicleSlice.ts";
 import Swal from 'sweetalert2';
+import {deleteField} from "../Reducer/FiledSlice.ts";
 
 export default function VehicleForm() {
     const [id, setId] = useState('');
@@ -175,6 +176,38 @@ export default function VehicleForm() {
             });
     }
 
+    function handleDelete(vehicle_code: number) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                dispatch(deleteVehicle(vehicle_code))
+                    .then(() => {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Field Deleted!",
+                            text: "The Vehicle has been successfully deleted.",
+                            confirmButtonColor: "#3085d6",
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting field: ", error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Delete Failed",
+                            text: "An error occurred while deleting the Vehicle. Please try again.",
+                        });
+                    });
+            }
+        });
+    }
+
     return (
         <>
             <section id="vehicle" className="min-h-screen bg-gray-100 p-6">
@@ -310,7 +343,7 @@ export default function VehicleForm() {
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.staffId}</td>
                                     <td className="px-4 py-2 border border-gray-300">
                                         <button className="editVehicleBtn bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
-                                        <button className="bg-red-500 text-white px-2 py-1 rounded ml-2">Delete</button>
+                                        <button className="bg-red-500 text-white px-2 py-1 rounded ml-2" onClick={()=>{handleDelete(vehicle.vehicle_code)}}>Delete</button>
                                     </td>
                                 </tr>
                             ))}
