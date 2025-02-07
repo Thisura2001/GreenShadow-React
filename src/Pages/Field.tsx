@@ -3,6 +3,7 @@ import HeaderComponent from "../Component/HeaderComponet.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../Store/Store.ts";
 import Field from "../Model/Field.ts";
+import Swal from 'sweetalert2';
 import {deleteField, getAllFields, saveField, toBase64, updateField} from "../Reducer/FiledSlice.ts";
 
 export default function FieldForm() {
@@ -112,16 +113,84 @@ export default function FieldForm() {
 
     function handleAdd() {
         const field = new Field(Number(fieldId), fieldName, location, extend, String(fieldImg1), String(fieldImg2))
-        dispatch(saveField(field))
+        dispatch(saveField(field)).then(()=>{
+            Swal.fire({
+                icon: 'success',
+                title: 'Field Saved!',
+                text: 'The Field has been successfully added.',
+                confirmButtonColor: '#3085d6',
+            });
+            ResetForm();
+        }).catch((error) => {
+            console.error('Error adding field: ', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Save Failed',
+                text: 'An error occurred while saving the Field. Please try again.',
+            });
+        })
     }
 
     function handleUpdate() {
         const fieldUpdate = new Field(Number(fieldId), fieldName, location, extend, String(fieldImg1), String(fieldImg2))
-        dispatch(updateField(fieldUpdate))
+        dispatch(updateField(fieldUpdate)).then(()=>{
+            Swal.fire({
+                icon: 'success',
+                title: 'Field updated!',
+                text: 'The Field has been successfully updated.',
+                confirmButtonColor: '#3085d6',
+            });
+            ResetForm()
+        }).catch((error) => {
+            console.error('Error updating field: ', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Update Failed',
+                text: 'An error occurred while updating the Field. Please try again.',
+            });
+        })
     }
 
     function handleDelete(fieldId: number) {
-        dispatch(deleteField(fieldId));
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                dispatch(deleteField(fieldId))
+                    .then(() => {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Field Deleted!",
+                            text: "The field has been successfully deleted.",
+                            confirmButtonColor: "#3085d6",
+                        });
+                        ResetForm();
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting field: ", error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Delete Failed",
+                            text: "An error occurred while deleting the field. Please try again.",
+                        });
+                    });
+            }
+        });
+    }
+
+    function ResetForm(){
+        setFieldId('')
+        setFieldName('')
+        setLocation('')
+        setExtend('')
+        setFieldImg1('')
+        setFieldImg2('')
     }
 
     return (
