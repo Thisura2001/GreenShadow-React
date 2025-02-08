@@ -32,50 +32,57 @@ export default function VehicleForm() {
         fetchStaffData();
     }, []);
 
-    useEffect(() => {
-        const addVehicleBtn = document.getElementById('addVehicleBtn') as HTMLButtonElement;
-        const vehicleFormCard = document.getElementById('vehicleFormCard') as HTMLElement;
-        const closeVehicleFormBtn = document.getElementById('closeVehicleForm') as HTMLElement;
-        const updateVehicleModal = document.getElementById('updateVehicleModal') as HTMLElement;
-        const closeUpdateVehicleModalBtn = document.getElementById('closeUpdateVehicleModalBtn') as HTMLButtonElement;
-
-        if (addVehicleBtn) {
-            addVehicleBtn.addEventListener("click", () => {
-                vehicleFormCard.style.display = "block";
-            });
+    // Show vehicle form
+    const showVehicleForm = () => {
+        const vehicleFormCard = document.getElementById("vehicleFormCard") as HTMLElement;
+        if (vehicleFormCard) {
+            vehicleFormCard.style.display = "block";
         }
-        if (closeVehicleFormBtn) {
-            closeVehicleFormBtn.addEventListener("click", () => {
-                vehicleFormCard.style.display = "none";
-            });
-        }
-        const editVehicleBtns = document.querySelectorAll('.editVehicleBtn') as NodeListOf<HTMLButtonElement>;
-        editVehicleBtns.forEach((editBtn) => {
-            editBtn.addEventListener('click', (event) => {
-                const row = (event.target as HTMLElement).closest('tr')!;
-                const vehicle_code = row.cells[0].innerText;
-                const licensePlate = row.cells[1].textContent;
-                const category = row.cells[2].textContent;
-                const fuelType = row.cells[3].textContent;
-                const status = row.cells[4].textContent;
-                const staffId = row.cells[5].textContent;
+    };
 
-                setId(vehicle_code);
-                setLicensePlate(licensePlate!);
-                setCategory(category!);
-                setFuelType(fuelType!);
-                setStatus(status!);
-                setStaffId(staffId!);
-
-                updateVehicleModal.style.display = 'flex';
-            });
-        });
-        if (closeUpdateVehicleModalBtn) {
-            closeUpdateVehicleModalBtn.addEventListener('click', () => {
-                updateVehicleModal.style.display = 'none';
-            });
+// Hide vehicle form
+    const hideVehicleForm = () => {
+        const vehicleFormCard = document.getElementById("vehicleFormCard") as HTMLElement;
+        if (vehicleFormCard) {
+            vehicleFormCard.style.display = "none";
         }
-    }, []);
+    };
+
+// Show update vehicle modal
+    const showUpdateVehicleModal = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const target = event.target as HTMLButtonElement;
+        const row = target.closest("tr") as HTMLTableRowElement;
+
+        if (row) {
+            const vehicle_code = row.cells[0].innerText;
+            const licensePlate = row.cells[1].textContent;
+            const category = row.cells[2].textContent;
+            const fuelType = row.cells[3].textContent;
+            const status = row.cells[4].textContent;
+            const staffId = row.cells[5].textContent;
+
+            setId(vehicle_code);
+            setLicensePlate(licensePlate!);
+            setCategory(category!);
+            setFuelType(fuelType!);
+            setStatus(status!);
+            setStaffId(staffId!);
+
+            const updateVehicleModal = document.getElementById("updateVehicleModal") as HTMLElement;
+            if (updateVehicleModal) {
+                updateVehicleModal.style.display = "flex";
+            }
+        }
+    };
+
+// Hide update vehicle modal
+    const hideUpdateVehicleModal = () => {
+        const updateVehicleModal = document.getElementById("updateVehicleModal") as HTMLElement;
+        if (updateVehicleModal) {
+            updateVehicleModal.style.display = "none";
+        }
+    };
+
 
     const statusEnumValue = Status[status as keyof typeof Status];
 
@@ -211,14 +218,14 @@ export default function VehicleForm() {
             <section id="vehicle" className="min-h-screen bg-gray-100 p-6">
                 <HeaderComponent title={"Vehicle Management"}>
                     <button id="addVehicleBtn"
-                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex items-center space-x-2">
+                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex items-center space-x-2" onClick={showVehicleForm}>
                         Add New Vehicle
                     </button>
                 </HeaderComponent>
                 <div id="vehicleFormCard" className="hidden max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
                     <div className="flex justify-between items-center border-b pb-3 mb-4">
                         <h4 className="text-xl font-bold text-gray-800">Add Vehicle Details</h4>
-                        <button id="closeVehicleForm" className="text-gray-400 hover:text-red-500 text-xl">X</button>
+                        <button id="closeVehicleForm" className="text-gray-400 hover:text-red-500 text-xl" onClick={hideVehicleForm}>X</button>
                     </div>
                     <form id="vehicleForm" className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -340,7 +347,7 @@ export default function VehicleForm() {
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.status}</td>
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.staffId}</td>
                                     <td className="px-4 py-2 border border-gray-300">
-                                        <button className="editVehicleBtn bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
+                                        <button className="editVehicleBtn bg-blue-500 text-white px-2 py-1 rounded" onClick={showUpdateVehicleModal}>Edit</button>
                                         <button className="bg-red-500 text-white px-2 py-1 rounded ml-2" onClick={()=>{handleDelete(vehicle.vehicle_code)}}>Delete</button>
                                     </td>
                                 </tr>
@@ -455,6 +462,7 @@ export default function VehicleForm() {
                                 <button
                                     id="closeUpdateVehicleModalBtn"
                                     className="bg-gray-300 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-400 transition duration-200"
+                                    onClick={hideUpdateVehicleModal}
                                 >
                                     Cancel
                                 </button>
