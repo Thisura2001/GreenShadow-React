@@ -7,8 +7,6 @@ import Vehicle from "../Model/Vehicle.ts";
 import { Status } from "../Enum/Status.ts";
 import {deleteVehicle, getAllVehicles, saveVehicle, updateVehicle} from "../Reducer/VehicleSlice.ts";
 import Swal from 'sweetalert2';
-import {deleteField} from "../Reducer/FiledSlice.ts";
-
 export default function VehicleForm() {
     const [id, setId] = useState('');
     const [licensePlate, setLicensePlate] = useState('');

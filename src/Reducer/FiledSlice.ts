@@ -2,7 +2,7 @@ import axios from "axios";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import Field from "../Model/Field.ts";
 
-const initialState = [];
+const initialState:Field[] = [];
 
 const api = axios.create({
     baseURL: "http://localhost:8080/field",

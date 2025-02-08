@@ -241,17 +241,13 @@ export default function FieldForm() {
                                 <label htmlFor="fieldImg01" className="block text-sm font-medium text-gray-700">Field
                                     Image 01</label>
                                 <input type="file" onChange={handleImageChange1} id="fieldImg01"
-                                       className="mt-1 block w-full border rounded-md p-2"
-                                       accept="image/*"/>
-                                <div id="fieldImgPreview01" className="mt-2"></div>
+                                       className="mt-1 block w-full border rounded-md p-2"/>
                             </div>
                             <div>
                                 <label htmlFor="fieldImg02" className="block text-sm font-medium text-gray-700">Field
                                     Image 02</label>
                                 <input type="file" onChange={handleImageChange2} id="fieldImg02"
-                                       className="mt-1 block w-full border rounded-md p-2"
-                                       accept="image/*"/>
-                                <div id="fieldImgPreview02" className="mt-2"></div>
+                                       className="mt-1 block w-full border rounded-md p-2"/>
                             </div>
                         </div>
                         <button type="submit" id="fieldSaveBtn"

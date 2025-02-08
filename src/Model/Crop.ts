@@ -1,26 +1,28 @@
-import Field from "./Field.ts";
 
 export default class Crop {
+    cropId:number
     commonName: string;
     scientificName: string;
     cropImg: string;
     category: string;
     season: string;
-    field: Field;
+    fieldId: number;
 
     constructor(
+        cropId:number,
         commonName: string,
         scientificName: string,
         cropImg: string,
         category: string,
         season: string,
-        field: Field
+        fieldId: number
     ) {
+        this.cropId = cropId;
         this.commonName = commonName;
         this.scientificName = scientificName;
         this.cropImg = cropImg;
         this.category = category;
         this.season = season;
-        this.field = field;
+        this.fieldId = fieldId;
     }
 }

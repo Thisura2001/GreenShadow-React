@@ -1,8 +1,35 @@
 import "../Css/Crop.css"
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import HeaderComponent from "../Component/HeaderComponet.tsx";
+import {toBase64} from "../Reducer/FiledSlice.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch} from "../Store/Store.ts";
+import Crop from "../Model/Crop.ts";
+import {saveCrop} from "../Reducer/CropSlice.ts";
 
-export default function Crop(){
+export default function CropForm(){
+    const [cropId,setCropId] = useState("");
+    const [commonName,setCommonName] = useState("");
+    const [scientificName,setScientificName] = useState("");
+    const [cropImg,setCropImg] = useState("");
+    const [category,setCategory] = useState("");
+    const [season,setSeason] = useState("");
+    const [field,setField] = useState("");
+    const [fieldList, setFieldList] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function fetchFieldData() {
+            try {
+                const response = await fetch('http://localhost:8080/field/');
+                const data = await response.json();
+                setFieldList(data);
+            } catch (error) {
+                console.error('Error fetching staff data:', error);
+            }
+        }
+
+        fetchFieldData();
+    }, []);
     useEffect(() => {
         const addCropBtn = document.getElementById("addCropBtn") as HTMLButtonElement;
         const cropCard = document.getElementById("cropFormCard") as HTMLElement;
@@ -39,24 +66,54 @@ export default function Crop(){
                 const row = target.closest("tr") as HTMLTableRowElement;
 
                 // Get crop data from the table row
-                const commonName = row.cells[2].innerText;
-                const scientificName = row.cells[3].innerText;
+                const cropId = row.cells[0].innerText;
+                const commonName = row.cells[1].innerText;
+                const scientificName = row.cells[2].innerText;
+                const cropImg = row.cells[3].innerText;
                 const category = row.cells[4].innerText;
                 const season = row.cells[5].innerText;
                 const fieldId = row.cells[6].innerText;
 
-                // Prefill the modal form fields
-                (document.getElementById("updateCropCommonName") as HTMLInputElement).value = commonName;
-                (document.getElementById("updateCropScientificName") as HTMLInputElement).value = scientificName;
-                (document.getElementById("updateCropCategory") as HTMLInputElement).value = category;
-                (document.getElementById("updateCropSeason") as HTMLInputElement).value = season;
-                (document.getElementById("updateFieldId") as HTMLInputElement).value = fieldId;
+                setCropId(cropId);
+                setCommonName(commonName)
+                setScientificName(scientificName)
+                setCropImg(cropImg)
+                setCategory(category)
+                setSeason(season)
+                setField(fieldId)
 
                 // Show the modal
                 updateCropModal.style.display = "flex";
             });
         });
     }, []);
+    const dispatch = useDispatch<AppDispatch>();
+    const crops = useSelector(state => state.crops)
+    const handleImageChange1 = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const file = e.target.files[0];
+            try {
+                const base64Image = await toBase64(file);
+                setCropImg(base64Image);
+
+                const previewElement = document.getElementById("fieldImgPreview01");
+                if (previewElement) {
+                    previewElement.innerHTML = `<img src="${base64Image}" alt="Field Image 01" class="w-full h-auto mt-2" />`;
+                }
+            } catch (error) {
+                console.error("Error converting image to base64: ", error);
+            }
+        }
+    }
+    function handleSave() {
+        const newCrop = new Crop(Number(cropId),commonName,scientificName,cropImg,category,season,Number(field))
+        dispatch(saveCrop(newCrop))
+    }
+
+    function handleUpdate() {
+
+    }
+
 
     return(
         <>
@@ -79,43 +136,72 @@ export default function Crop(){
                             <div>
                                 <label htmlFor="cropCommonName" className="block text-sm font-medium text-purple-700">Crop
                                     Common Name</label>
-                                <input type="text" id="cropCommonName" className="form-input"
-                                       placeholder="Enter common name" required/>
+                                <input type="text" id="cropCommonName"
+                                       className="form-input"
+                                       placeholder="Enter common name" required
+                                       value={commonName}
+                                       onChange={(e) => setCommonName(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="cropScientificName"
                                        className="block text-sm font-medium text-purple-700">Crop Scientific
                                     Name</label>
-                                <input type="text" id="cropScientificName" className="form-input"
-                                       placeholder="Enter scientific name" required/>
+                                <input type="text" id="cropScientificName"
+                                       className="form-input"
+                                       placeholder="Enter scientific name"
+                                       value={scientificName}
+                                       onChange={(e) => setScientificName(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="cropImageFile" className="block text-sm font-medium text-purple-700">Upload
                                     Crop Image</label>
-                                <input type="file" id="cropImageFile" className="form-input" accept="image/*"/>
+                                <input type="file" id="cropImageFile"
+                                       className="form-input"
+                                       onChange={handleImageChange1}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="cropCategory"
                                        className="block text-sm font-medium text-purple-700">Category</label>
-                                <input type="text" id="cropCategory" className="form-input" placeholder="Enter category"
-                                       required/>
+                                <input type="text" id="cropCategory"
+                                       className="form-input" placeholder="Enter category"
+                                       required
+                                       value={category}
+                                       onChange={(e) => setCategory(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="cropSeason" className="block text-sm font-medium text-purple-700">Crop
                                     Season</label>
-                                <input type="text" id="cropSeason" className="form-input" placeholder="Enter season"
-                                       required/>
+                                <input type="text" id="cropSeason"
+                                       className="form-input" placeholder="Enter season"
+                                       required
+                                       value={season}
+                                       onChange={(e) => setSeason(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="fieldIdInCrop" className="block text-sm font-medium text-purple-700">Field
                                     ID</label>
-                                <select id="fieldIdInCrop" className="form-select" required>
+                                <select id="fieldIdInCrop"
+                                        className="form-select"
+                                        required
+                                        value={field}
+                                        onChange={(e)=>setField(e.target.value)}
+                                >
                                     <option selected disabled value="">Select Field...</option>
+                                    {fieldList.map((field)=>(
+                                        <option key={field.fieldId} value={field.fieldId}>
+                                            {field.fieldId}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="md:col-span-2">
                                 <button type="submit" id="cropSaveBtn"
-                                        className="btn-success w-full mt-4 bg-green-600 text-white p-1 rounded-lg">Save
+                                        className="btn-success w-full mt-4 bg-green-600 text-white p-1 rounded-lg" onClick={handleSave}>Save
                                     <i className="fa-regular fa-floppy-disk"></i>
                                 </button>
                             </div>
@@ -136,26 +222,9 @@ export default function Crop(){
                             <th className="py-3 px-6 border-b">Actions</th>
                         </tr>
                         </thead>
-                        <tbody id="cropTableBody" className="bg-white"></tbody>
-                        <tr>
-                            <td className="py-3 px-6 border-b">C-101</td>
-                            <td className="py-3 px-6 border-b">
-                                <img
-                                    src="../assets/farmer.jpg"
-                                    alt="Crop"
-                                    className="w-12 h-12 object-cover rounded"
-                                />
-                            </td>
-                            <td className="py-3 px-6 border-b">Wheat</td>
-                            <td className="py-3 px-6 border-b">Triticum aestivum</td>
-                            <td className="py-3 px-6 border-b">Cereal</td>
-                            <td className="py-3 px-6 border-b">Winter</td>
-                            <td className="py-3 px-6 border-b">F-201</td>
-                            <td className="py-3 px-6 border-b">
-                                <button className="editCropBtn text-blue-500 hover:underline mr-3">Edit</button>
-                                <button className="text-red-500 hover:underline">Delete</button>
-                            </td>
-                        </tr>
+                        <tbody id="cropTableBody" className="bg-white">
+
+                        </tbody>
                     </table>
                 </div>
                 <div id="updateCropModal"
@@ -200,7 +269,8 @@ export default function Crop(){
                                        placeholder="Enter season"/>
                             </div>
                             <div>
-                                <label htmlFor="updateFieldId" className="block text-lg font-medium text-gray-700">
+                                <label htmlFor="updateFieldId"
+                                       className="block text-lg font-medium text-gray-700">
                                     Field ID
                                 </label>
                                 <input type="text" id="updateFieldId"
@@ -217,7 +287,7 @@ export default function Crop(){
                             </div>
                             <div className="flex justify-end gap-4">
                                 <button id="saveUpdatedCrop"
-                                        className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition duration-200">
+                                        className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition duration-200" onClick={handleUpdate}>
                                     Update
                                 </button>
                                 <button id="closeUpdateCropModalBtn"
