@@ -1,5 +1,4 @@
 import { useState } from "react";
-import LogHeader from "../Component/MonitoringLogComponent/LogHeader.tsx";
 
 export default function Log() {
     const [isLogFormVisible, setLogFormVisible] = useState(false);
@@ -7,13 +6,37 @@ export default function Log() {
     const showLogForm = () => setLogFormVisible(true);
     const hideLogForm = () => setLogFormVisible(false);
 
+    const [logId, setLogId] = useState('')
+    const [date, setDate] = useState('')
+    const [logImg, setLogImg] = useState('')
+    const [logDetails, setLogDetails] = useState('')
+
+    function handleImageChange1() {
+
+    }
+
+    function handleSave() {
+
+    }
+
     return (
         <>
             <section
                 id="monitory"
                 className="flex flex-col items-center justify-center min-h-screen bg-gray-100"
             >
-                <LogHeader onAddLog={showLogForm} />
+                <h2 className="text-center text-4xl lg:text-5xl font-extrabold mt-[-300px] text-green-600 animate-fade-in">
+                    Log Management
+                    <i className="fa-solid fa-folder ml-2"></i>
+                </h2>
+                <div className="w-full flex justify-end mb-3">
+                    <button
+                        className="btn-primary font-bold text-base px-5 py-2 mr-5 bg-blue-600 text-white rounded-lg"
+                        onClick={showLogForm}
+                    >
+                        Add New Log <i className="fa-solid fa-plus ml-2"></i>
+                    </button>
+                </div>
 
                 {isLogFormVisible && (
                     <div className="bg-white shadow-lg rounded-lg w-full max-w-xl mt-20" id="logFormCard">
@@ -37,6 +60,7 @@ export default function Log() {
                                         type="date"
                                         id="logDate"
                                         className="w-full border rounded-lg p-2"
+                                        onChange={(e) => setDate(e.target.value)}
                                         required
                                     />
                                 </div>
@@ -48,6 +72,7 @@ export default function Log() {
                                         id="logDetails"
                                         className="w-full border rounded-lg p-2"
                                         placeholder="Enter observations"
+                                        onChange={(e) => setLogDetails(e.target.value)}
                                         required
                                     ></textarea>
                                 </div>
@@ -59,12 +84,14 @@ export default function Log() {
                                         type="file"
                                         id="observedImage"
                                         className="w-full border rounded-lg p-2"
+                                        onChange={handleImageChange1}
                                         accept="image/*"
                                     />
                                 </div>
                                 <button
                                     type="submit"
                                     className="btn btn-success bg-green-500 text-white px-4 py-2 rounded-lg"
+                                    onClick={handleSave}
                                 >
                                     Save <i className="fa-regular fa-floppy-disk ml-2"></i>
                                 </button>
@@ -76,6 +103,7 @@ export default function Log() {
                 <table className="table-auto border-collapse border border-gray-300 w-full max-w-3xl mt-6 text-center">
                     <thead className="bg-teal-600 text-white">
                     <tr>
+                        <th className="border border-gray-300 px-4 py-2">Log Id</th>
                         <th className="border border-gray-300 px-4 py-2">Date</th>
                         <th className="border border-gray-300 px-4 py-2">Image</th>
                         <th className="border border-gray-300 px-4 py-2">Details</th>
@@ -83,24 +111,7 @@ export default function Log() {
                     </tr>
                     </thead>
                     <tbody id="logTableBody">
-                    <tr>
-                        <td className="border border-gray-300 px-4 py-2">2025-01-01</td>
-                        <td className="py-3 px-6 border-b">
-                            <img
-                                src="../assets/farmer.jpg"
-                                alt="Log"
-                                className="w-12 h-12 object-cover rounded"
-                            />
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">Lorem ipsum dolor sit amet, consectetur
-                            adipisicing elit. Asperiores beatae commodi doloremque incidunt minima modi quia,
-                            repellendus. Asperiores, atque iste nobis officia praesentium quae quaerat, quas sequi unde,
-                            veritatis vero?
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                            <button className="text-red-500">Delete</button>
-                        </td>
-                    </tr>
+
                     </tbody>
                 </table>
             </section>
