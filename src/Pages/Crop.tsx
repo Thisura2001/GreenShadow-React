@@ -1,20 +1,21 @@
-import "../Css/Crop.css"
-import {useEffect, useState} from "react";
+import "../Css/Crop.css";
+import { useEffect, useState } from "react";
 import HeaderComponent from "../Component/HeaderComponet.tsx";
-import {toBase64} from "../Reducer/FiledSlice.ts";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch} from "../Store/Store.ts";
+import { deleteField, toBase64 } from "../Reducer/FiledSlice.ts";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../Store/Store.ts";
 import Crop from "../Model/Crop.ts";
-import {getAllCrops, saveCrop} from "../Reducer/CropSlice.ts";
+import { deleteCrop, getAllCrops, saveCrop, updateCrop } from "../Reducer/CropSlice.ts";
+import Swal from "sweetalert2";
 
-export default function CropForm(){
-    const [cropId,setCropId] = useState("");
-    const [commonName,setCommonName] = useState("");
-    const [scientificName,setScientificName] = useState("");
-    const [cropImg,setCropImg] = useState("");
-    const [category,setCategory] = useState("");
-    const [season,setSeason] = useState("");
-    const [field,setField] = useState("");
+export default function CropForm() {
+    const [cropId, setCropId] = useState("");
+    const [commonName, setCommonName] = useState("");
+    const [scientificName, setScientificName] = useState("");
+    const [cropImg, setCropImg] = useState("");
+    const [category, setCategory] = useState("");
+    const [season, setSeason] = useState("");
+    const [field, setField] = useState("");
     const [fieldList, setFieldList] = useState<any[]>([]);
 
     useEffect(() => {
@@ -30,65 +31,62 @@ export default function CropForm(){
 
         fetchFieldData();
     }, []);
-    useEffect(() => {
-        const addCropBtn = document.getElementById("addCropBtn") as HTMLButtonElement;
+
+// Show crop form card
+    const showCropForm = () => {
         const cropCard = document.getElementById("cropFormCard") as HTMLElement;
+        if (cropCard) {
+            cropCard.style.display = "block";
+        }
+    };
+
+    // Hide crop form card
+    const hideCropForm = () => {
+        const cropCard = document.getElementById("cropFormCard") as HTMLElement;
+        if (cropCard) {
+            cropCard.style.display = "none";
+        }
+    };
+
+    // Hide update crop modal
+    const hideUpdateModal = () => {
         const updateCropModal = document.getElementById("updateCropModal") as HTMLElement;
-        const closeCropFormBtn = document.getElementById("closeCropForm") as HTMLButtonElement;
-        const closeUpdateCropModalBtn = document.getElementById("closeUpdateCropModalBtn") as HTMLButtonElement;
-
-        // Show crop form card
-        if (addCropBtn) {
-            addCropBtn.addEventListener("click", () => {
-                cropCard.style.display = "block";
-            });
+        if (updateCropModal) {
+            updateCropModal.style.display = "none";
         }
+    };
 
-        // Hide crop form card
-        if (closeCropFormBtn) {
-            closeCropFormBtn.addEventListener("click", () => {
-                cropCard.style.display = "none";
-            });
+    // Handle edit crop button click
+    const handleEditClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const target = e.target as HTMLButtonElement;
+        const row = target.closest("tr") as HTMLTableRowElement;
+
+        const cropId = row.cells[0].innerText;
+        const commonName = row.cells[1].innerText;
+        const scientificName = row.cells[2].innerText;
+        const cropImg = row.cells[3].querySelector("img")?.src || "";
+        const category = row.cells[4].innerText;
+        const season = row.cells[5].innerText;
+        const fieldId = row.cells[6].innerText;
+
+        setCropId(cropId);
+        setCommonName(commonName);
+        setScientificName(scientificName);
+        setCropImg(cropImg);
+        setCategory(category);
+        setSeason(season);
+        setField(fieldId);
+
+        // Show the modal
+        const updateCropModal = document.getElementById("updateCropModal") as HTMLElement;
+        if (updateCropModal) {
+            updateCropModal.style.display = "flex";
         }
+    };
 
-        // Hide update crop modal
-        if (closeUpdateCropModalBtn) {
-            closeUpdateCropModalBtn.addEventListener("click", () => {
-                updateCropModal.style.display = "none";
-            });
-        }
-
-        // Add event listeners to "Edit" buttons
-        const editButtons = document.querySelectorAll(".editCropBtn");
-        editButtons.forEach((button) => {
-            button.addEventListener("click", (e) => {
-                const target = e.target as HTMLButtonElement;
-                const row = target.closest("tr") as HTMLTableRowElement;
-
-                // Get crop data from the table row
-                const cropId = row.cells[0].innerText;
-                const commonName = row.cells[1].innerText;
-                const scientificName = row.cells[2].innerText;
-                const cropImg = row.cells[3].innerText;
-                const category = row.cells[4].innerText;
-                const season = row.cells[5].innerText;
-                const fieldId = row.cells[6].innerText;
-
-                setCropId(cropId);
-                setCommonName(commonName)
-                setScientificName(scientificName)
-                setCropImg(cropImg)
-                setCategory(category)
-                setSeason(season)
-                setField(fieldId)
-
-                // Show the modal
-                updateCropModal.style.display = "flex";
-            });
-        });
-    }, []);
     const dispatch = useDispatch<AppDispatch>();
-    const crops = useSelector(state => state.crops)
+    const crops = useSelector(state => state.crops);
+
     const handleImageChange1 = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const file = e.target.files[0];
@@ -104,34 +102,103 @@ export default function CropForm(){
                 console.error("Error converting image to base64: ", error);
             }
         }
-    }
+    };
+
     useEffect(() => {
-        if (crops.length === 0){
-            dispatch(getAllCrops())
+        if (crops.length === 0) {
+            dispatch(getAllCrops());
         }
-    }, [dispatch,crops.length]);
+    }, [dispatch, crops.length]);
 
     function handleSave() {
-        const newCrop = new Crop(Number(cropId),commonName,scientificName,cropImg,category,season,Number(field))
-        dispatch(saveCrop(newCrop))
+        const newCrop = new Crop(Number(cropId), commonName, scientificName, cropImg, category, season, Number(field));
+        dispatch(saveCrop(newCrop)).then(() => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Crop Saved!',
+                text: 'The Crop has been successfully added.',
+                confirmButtonColor: '#3085d6',
+            });
+            resetForm();
+        }).catch((error) => {
+            console.error('Error adding field: ', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Save Failed',
+                text: 'An error occurred while saving the Crop. Please try again.',
+            });
+        });
     }
 
     function handleUpdate() {
-
+        const crop = new Crop(Number(cropId), commonName, scientificName, cropImg, category, season, Number(field));
+        dispatch(updateCrop(crop)).then(() => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Crop updated!',
+                text: 'The Crop has been successfully updated.',
+                confirmButtonColor: '#3085d6',
+            });
+            resetForm();
+        }).catch((error) => {
+            console.error('Error updating Crop: ', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Update Failed',
+                text: 'An error occurred while updating the Crop. Please try again.',
+            });
+        });
     }
-
 
     function handleDelete(cropId: number) {
-        
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                dispatch(deleteCrop(cropId))
+                    .then(() => {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Crop Deleted!",
+                            text: "The Crop has been successfully deleted.",
+                            confirmButtonColor: "#3085d6",
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting Crop: ", error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Delete Failed",
+                            text: "An error occurred while deleting the Crop. Please try again.",
+                        });
+                    });
+            }
+        });
+    }
+    const resetForm = ()=>{
+        setCropId('')
+        setCommonName('')
+        setCategory('')
+        setField('')
+        setScientificName('')
+        setCropImg('')
+        setSeason('')
     }
 
-    return(
+    return (
         <>
             <section id="corp" className="ml-60 p-10">
                 <HeaderComponent title={"Crop Management"}>
                     <button
                         id="addCropBtn"
                         className="btn-primary font-bold text-base px-5 py-2 mr-5 bg-blue-600 text-white rounded-lg"
+                        onClick={showCropForm}
                     >
                         Add New Crop
                     </button>
@@ -139,7 +206,7 @@ export default function CropForm(){
                 <div id="cropFormCard" className="hidden max-w-3xl mx-auto rounded-lg shadow-lg mt-3 bg-white">
                     <div className="flex justify-between items-center p-4 bg-green-600 text-white rounded-t-lg">
                         <h4 id="cropFormTitle">Crop Details</h4>
-                        <button id="closeCropForm" className="text-white">X</button>
+                        <button id="closeCropForm" className="text-white" onClick={hideCropForm}>X</button>
                     </div>
                     <div className="p-6">
                         <form id="cropForm" className="grid gap-6 md:grid-cols-2">
@@ -199,10 +266,10 @@ export default function CropForm(){
                                         className="form-select"
                                         required
                                         value={field}
-                                        onChange={(e)=>setField(e.target.value)}
+                                        onChange={(e) => setField(e.target.value)}
                                 >
                                     <option selected disabled value="">Select Field...</option>
-                                    {fieldList.map((field)=>(
+                                    {fieldList.map((field) => (
                                         <option key={field.fieldId} value={field.fieldId}>
                                             {field.fieldId}
                                         </option>
@@ -211,7 +278,8 @@ export default function CropForm(){
                             </div>
                             <div className="md:col-span-2">
                                 <button type="submit" id="cropSaveBtn"
-                                        className="btn-success w-full mt-4 bg-green-600 text-white p-1 rounded-lg" onClick={handleSave}>Save
+                                        className="btn-success w-full mt-4 bg-green-600 text-white p-1 rounded-lg"
+                                        onClick={handleSave}>Save
                                     <i className="fa-regular fa-floppy-disk"></i>
                                 </button>
                             </div>
@@ -223,9 +291,9 @@ export default function CropForm(){
                         <thead className="bg-gray-200">
                         <tr>
                             <th className="py-3 px-6 border-b">Crop ID</th>
-                            <th className="py-3 px-6 border-b">Crop Img</th>
                             <th className="py-3 px-6 border-b">Common Name</th>
                             <th className="py-3 px-6 border-b">Scientific Name</th>
+                            <th className="py-3 px-6 border-b">Crop Img</th>
                             <th className="py-3 px-6 border-b">Category</th>
                             <th className="py-3 px-6 border-b">Season</th>
                             <th className="py-3 px-6 border-b">Field ID</th>
@@ -233,17 +301,19 @@ export default function CropForm(){
                         </tr>
                         </thead>
                         <tbody id="cropTableBody" className="bg-white">
-                        {crops.map((crop:Crop)=>(
+                        {crops.map((crop: Crop) => (
                             <tr key={crop.cropId} className="border border-gray-300">
                                 <td className="px-4 py-2 border border-gray-300">{crop.cropId}</td>
-                                <td className="px-4 py-2 border border-gray-300">{crop.cropImg && (<img src={crop.cropImg} alt={"crop img"} className="w-16 h-16 object-cover"/> )}</td>
                                 <td className="px-4 py-2 border border-gray-300">{crop.commonName}</td>
                                 <td className="px-4 py-2 border border-gray-300">{crop.scientificName}</td>
+                                <td className="px-4 py-2 border border-gray-300">{crop.cropImg && (
+                                    <img src={crop.cropImg} alt={"crop img"} className="w-16 h-16 object-cover"/>)}</td>
                                 <td className="px-4 py-2 border border-gray-300">{crop.category}</td>
                                 <td className="px-4 py-2 border border-gray-300">{crop.season}</td>
                                 <td className="px-4 py-2 border border-gray-300">{crop.fieldId}</td>
                                 <td className="px-4 py-2 border border-gray-300">
-                                    <button className="editCropBtn bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
+                                    <button className="editCropBtn bg-blue-500 text-white px-2 py-1 rounded" onClick={handleEditClick}>Edit
+                                    </button>
                                     <button className="bg-red-500 text-white px-2 py-1 rounded ml-2" onClick={() => {
                                         handleDelete(crop.cropId)
                                     }}>Delete
@@ -268,7 +338,10 @@ export default function CropForm(){
                                 </label>
                                 <input type="text" id="updateCropCommonName"
                                        className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                                       placeholder="Enter common name"/>
+                                       placeholder="Enter commonName"
+                                       value={commonName}
+                                       onChange={(e) => setCommonName(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateCropScientificName"
@@ -277,7 +350,10 @@ export default function CropForm(){
                                 </label>
                                 <input type="text" id="updateCropScientificName"
                                        className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                                       placeholder="Enter scientific name"/>
+                                       placeholder="Enter scientific name"
+                                       value={scientificName}
+                                       onChange={(e) => setScientificName(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateCropCategory" className="block text-lg font-medium text-gray-700">
@@ -285,7 +361,10 @@ export default function CropForm(){
                                 </label>
                                 <input type="text" id="updateCropCategory"
                                        className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                                       placeholder="Enter category"/>
+                                       placeholder="Enter category"
+                                       value={category}
+                                       onChange={(e) => setCategory(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateCropSeason" className="block text-lg font-medium text-gray-700">
@@ -293,16 +372,28 @@ export default function CropForm(){
                                 </label>
                                 <input type="text" id="updateCropSeason"
                                        className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                                       placeholder="Enter season"/>
+                                       placeholder="Enter season"
+                                       value={season}
+                                       onChange={(e) => setSeason(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateFieldId"
                                        className="block text-lg font-medium text-gray-700">
                                     Field ID
                                 </label>
-                                <input type="text" id="updateFieldId"
-                                       className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                                       placeholder="Enter field ID"/>
+                                <select id="updateFieldId"
+                                        className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                        value={field}
+                                        onChange={(e) => setField(e.target.value)}
+                                >
+                                    <option selected disabled value="">Select Field...</option>
+                                    {fieldList.map((field) => (
+                                        <option key={field.fieldId} value={field.fieldId}>
+                                            {field.fieldId}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                             <div>
                                 <label htmlFor="updateCropImg1" className="block text-lg font-medium text-gray-700">
@@ -310,16 +401,20 @@ export default function CropForm(){
                                 </label>
                                 <input type="file" id="updateCropImg1"
                                        className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                                       accept="image/*"/>
+                                       accept="image/*"
+                                       onChange={handleImageChange1}
+                                />
                             </div>
                             <div className="flex justify-end gap-4">
                                 <button id="saveUpdatedCrop"
-                                        className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition duration-200" onClick={handleUpdate}>
+                                        className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition duration-200"
+                                        onClick={handleUpdate}>
                                     Update
                                 </button>
                                 <button id="closeUpdateCropModalBtn"
-                                        className="bg-gray-300 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-400 transition duration-200">
+                                        className="bg-gray-300 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-400 transition duration-200" onClick={hideUpdateModal}>
                                     Cancel
+
                                 </button>
                             </div>
                         </div>
@@ -327,5 +422,5 @@ export default function CropForm(){
                 </div>
             </section>
         </>
-    )
+    );
 }
