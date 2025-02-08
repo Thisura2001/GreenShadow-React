@@ -14,59 +14,57 @@ export default function FieldForm() {
     const [fieldImg1, setFieldImg1] = useState<string | null>(null);
     const [fieldImg2, setFieldImg2] = useState<string | null>(null);
 
-    useEffect(() => {
+    // Show field form card
+    const showFieldForm = () => {
         const fieldFormCard = document.getElementById("fieldFormCard") as HTMLElement;
-        const addFieldBtn = document.getElementById('addFieldBtn') as HTMLButtonElement;
-        const closeAddFieldBtn = document.getElementById('closeFieldForm') as HTMLButtonElement;
+        if (fieldFormCard) {
+            fieldFormCard.style.display = "block";
+        }
+    };
+
+// Hide field form card
+    const hideFieldForm = () => {
+        const fieldFormCard = document.getElementById("fieldFormCard") as HTMLElement;
+        if (fieldFormCard) {
+            fieldFormCard.style.display = "none";
+        }
+    };
+
+// Hide update field modal
+    const hideUpdateFieldModal = () => {
         const fieldUpdateFormCard = document.getElementById("updateFieldModal") as HTMLElement;
-        const closeUpdateField = document.getElementById("closeUpdateModalBtn") as HTMLButtonElement;
-
-        if (addFieldBtn) {
-            addFieldBtn.addEventListener('click', () => {
-                fieldFormCard.style.display = 'block';
-            });
+        if (fieldUpdateFormCard) {
+            fieldUpdateFormCard.style.display = "none";
         }
+    };
 
-        if (closeAddFieldBtn) {
-            closeAddFieldBtn.addEventListener('click', () => {
-                fieldFormCard.style.display = 'none';
-            });
+// Handle edit button click in the table
+    const handleFieldEditClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const target = e.target as HTMLButtonElement;
+        const row = target.closest("tr") as HTMLTableRowElement;
+
+        if (row) {
+            const fieldId = row.cells[0].innerText;
+            const fieldName = row.cells[1].innerText;
+            const fieldLocation = row.cells[2].innerText;
+            const fieldExtent = row.cells[3].innerText;
+            const fieldImg1 = row.cells[4].querySelector("img")?.src || "";
+            const fieldImg2 = row.cells[5].querySelector("img")?.src || "";
+
+            setFieldId(fieldId);
+            setFieldName(fieldName);
+            setLocation(fieldLocation);
+            setExtend(fieldExtent);
+            setFieldImg1(fieldImg1);
+            setFieldImg2(fieldImg2);
+
+            // Show the modal
+            const fieldUpdateFormCard = document.getElementById("updateFieldModal") as HTMLElement;
+            if (fieldUpdateFormCard) {
+                fieldUpdateFormCard.style.display = "block";
+            }
         }
-
-        if (closeUpdateField) {
-            closeUpdateField.addEventListener('click', () => {
-                fieldUpdateFormCard.style.display = 'none';
-            });
-        }
-
-        // Handle Edit button click in the table
-        const editFieldBtns = document.querySelectorAll('.editFieldBtn');
-        editFieldBtns.forEach((btn) => {
-            btn.addEventListener('click', (e) => {
-                const row = (e.target as HTMLElement).closest('tr');
-                if (row) {
-                    // Populate the form with the selected field data
-                    const fieldId = row.cells[0].innerText;
-                    const fieldName = row.cells[1].innerText;
-                    const fieldLocation = row.cells[2].innerText;
-                    const fieldExtent = row.cells[3].innerText;
-                    const fieldImg1 = row.cells[4].querySelector('img')?.src || null;
-                    const fieldImg2 = row.cells[5].querySelector('img')?.src || null;
-
-                    setFieldId(fieldId);
-                    setFieldName(fieldName);
-                    setLocation(fieldLocation);
-                    setExtend(fieldExtent);
-                    setFieldImg1(fieldImg1);
-                    setFieldImg2(fieldImg2);
-
-                    // Open the update modal
-                    fieldUpdateFormCard.style.display = 'block';
-                }
-            });
-        });
-
-    }, []);
+    };
 
     const handleImageChange1 = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -198,14 +196,16 @@ export default function FieldForm() {
             <section id="field" className="ml-60 p-20">
                 <HeaderComponent title={"Field Management"}>
                     <button id="addFieldBtn"
-                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                            onClick={showFieldForm}
+                    >
                         Add New Field
                     </button>
                 </HeaderComponent>
                 <div id="fieldFormCard" className="hidden max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
                     <div className="flex justify-between items-center border-b pb-3 mb-4">
                         <h4 className="text-lg font-bold">Add Field Details</h4>
-                        <button id="closeFieldForm" className="text-gray-500 hover:text-gray-700 text-xl">X</button>
+                        <button id="closeFieldForm" className="text-gray-500 hover:text-gray-700 text-xl" onClick={hideFieldForm}>X</button>
                     </div>
                     <form id="FieldFormCard" className="space-y-4" onSubmit={handleAdd}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -289,7 +289,7 @@ export default function FieldForm() {
                                     )}
                                 </td>
                                 <td className="py-3 px-6 border-b">
-                                    <button className="editFieldBtn text-blue-500 hover:underline mr-3">Edit</button>
+                                    <button className="editFieldBtn text-blue-500 hover:underline mr-3" onClick={handleFieldEditClick}>Edit</button>
                                     <button className="text-red-500 hover:underline"   onClick={() => handleDelete(field.fieldId)}>Delete</button>
                                 </td>
                             </tr>
@@ -352,7 +352,7 @@ export default function FieldForm() {
                                         className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded" onClick={handleUpdate}>Update
                                 </button>
                                 <button type="button" id="closeUpdateModalBtn"
-                                        className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded">Cancel
+                                        className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded" onClick={hideUpdateFieldModal}>Cancel
                                 </button>
                             </div>
                         </form>
