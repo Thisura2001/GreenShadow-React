@@ -5,7 +5,7 @@ import {toBase64} from "../Reducer/FiledSlice.ts";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../Store/Store.ts";
 import Crop from "../Model/Crop.ts";
-import {saveCrop} from "../Reducer/CropSlice.ts";
+import {getAllCrops, saveCrop} from "../Reducer/CropSlice.ts";
 
 export default function CropForm(){
     const [cropId,setCropId] = useState("");
@@ -105,6 +105,12 @@ export default function CropForm(){
             }
         }
     }
+    useEffect(() => {
+        if (crops.length === 0){
+            dispatch(getAllCrops())
+        }
+    }, [dispatch,crops.length]);
+
     function handleSave() {
         const newCrop = new Crop(Number(cropId),commonName,scientificName,cropImg,category,season,Number(field))
         dispatch(saveCrop(newCrop))
@@ -114,6 +120,10 @@ export default function CropForm(){
 
     }
 
+
+    function handleDelete(cropId: number) {
+        
+    }
 
     return(
         <>
@@ -223,7 +233,24 @@ export default function CropForm(){
                         </tr>
                         </thead>
                         <tbody id="cropTableBody" className="bg-white">
-
+                        {crops.map((crop:Crop)=>(
+                            <tr key={crop.cropId} className="border border-gray-300">
+                                <td className="px-4 py-2 border border-gray-300">{crop.cropId}</td>
+                                <td className="px-4 py-2 border border-gray-300">{crop.cropImg && (<img src={crop.cropImg} alt={"crop img"} className="w-16 h-16 object-cover"/> )}</td>
+                                <td className="px-4 py-2 border border-gray-300">{crop.commonName}</td>
+                                <td className="px-4 py-2 border border-gray-300">{crop.scientificName}</td>
+                                <td className="px-4 py-2 border border-gray-300">{crop.category}</td>
+                                <td className="px-4 py-2 border border-gray-300">{crop.season}</td>
+                                <td className="px-4 py-2 border border-gray-300">{crop.fieldId}</td>
+                                <td className="px-4 py-2 border border-gray-300">
+                                    <button className="editCropBtn bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
+                                    <button className="bg-red-500 text-white px-2 py-1 rounded ml-2" onClick={() => {
+                                        handleDelete(crop.cropId)
+                                    }}>Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </table>
                 </div>
