@@ -29,16 +29,22 @@ export const toBase64 = (file: File): Promise<string> => {
 };
 export const deleteLog = createAsyncThunk(
     'log/deleteLog',
-    async (logId:number)=>{
+    async (id:number)=>{
         try {
-            const response = await api.delete(`/delete/${logId}`)
+            const response = await api.delete(`/delete/${id}`)
             return response.data;
         }catch (e){
             console.log(e)
         }
     }
 )
-
+export const getAllLogs = createAsyncThunk(
+    'log/getAllLogs',
+    async ()=>{
+        const response = await api.get('/');
+        return response.data;
+    }
+)
 const LogSlice = createSlice({
     name:'log',
     initialState:initialState,
@@ -49,7 +55,12 @@ const LogSlice = createSlice({
             state.push(action.payload)
         })
         builder.addCase(deleteLog.fulfilled,(state,action)=>{
-            state.filter((log:Log)=>log.logId !== action.payload.logId)
+            state.filter((log:Log)=>log.id !== action.payload.id)
+        })
+        builder.addCase(getAllLogs.fulfilled,(state,action)=>{
+            action.payload.map((log:Log)=>{
+                state.push(log)
+            })
         })
     }
 })
