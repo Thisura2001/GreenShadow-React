@@ -1,13 +1,19 @@
 import HeaderComponent from "../Component/HeaderComponet.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import Equipment from "../Model/Equipment.ts";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../Store/Store.ts";
+import {saveEquipment} from "../Reducer/EquipmentSlice.ts";
 
-export default function Equipment() {
+export default function EquipmentForm() {
     const [eqId,setEquipmentId] = useState('')
     const [name,setEquipmentName] = useState('')
     const [equipmentType,setEquipmentType] = useState('')
     const [status,setStatus] = useState('')
     const [staff,setStaff] = useState('')
+    const [staffList,setStaffList] = useState<any[]>([]);
     const [field,setField] = useState('')
+    const [fieldList,setFieldList] = useState<any[]>([]);
 
     const showEquipmentForm = () => {
         const equipmentCard = document.getElementById("equipmentFormCard") as HTMLElement;
@@ -54,6 +60,34 @@ export default function Equipment() {
         }
     };
 
+    useEffect(() => {
+        async function fetchStaffData() {
+            try {
+                const response = await fetch('http://localhost:8080/staff/');
+                const data = await response.json();
+                setStaffList(data);
+            } catch (error) {
+                console.error('Error fetching staff data:', error);
+            }
+        }
+        async function fetchFieldData() {
+            try {
+                const response = await fetch('http://localhost:8080/field/');
+                const data = await response.json();
+                setFieldList(data);
+            } catch (error) {
+                console.error('Error fetching staff data:', error);
+            }
+        }
+        fetchFieldData();
+        fetchStaffData();
+    }, []);
+
+    const dispatch = useDispatch<AppDispatch>();
+    function handleSave() {
+        const equipment = new Equipment(Number(eqId),name,equipmentType,status,Number(staff),Number(field));
+        dispatch(saveEquipment(equipment))
+    }
 
     return (
         <>
@@ -64,7 +98,7 @@ export default function Equipment() {
                         className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                         onClick={showEquipmentForm}
                     >
-                        Add New Crop
+                        Add New Equipment
                     </button>
                 </HeaderComponent>
                 <div id="equipmentFormCard" className="hidden max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
@@ -79,14 +113,18 @@ export default function Equipment() {
                                     Name</label>
                                 <input type="text" id="equipmentName"
                                        className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
-                                       placeholder="Enter equipment name" required/>
+                                       placeholder="Enter equipment name" required
+                                       onChange={(e) => setEquipmentName(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="equipmentType"
                                        className="block text-sm font-medium text-gray-700">Type</label>
                                 <select id="equipmentType"
                                         className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
-                                        required>
+                                        required
+                                        onChange={(e) => setEquipmentType(e.target.value)}
+                                >
                                     <option selected disabled value="">Choose type...</option>
                                     <option value="ELECTRICAL">ELECTRICAL</option>
                                     <option value="MECHANICAL">MECHANICAL</option>
@@ -97,7 +135,9 @@ export default function Equipment() {
                                        className="block text-sm font-medium text-gray-700">Status</label>
                                 <select id="equipmentStatus"
                                         className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
-                                        required>
+                                        required
+                                        onChange={(e) => setStatus(e.target.value)}
+                                >
                                     <option selected disabled value="">Choose status...</option>
                                     <option value="AVAILABLE">AVAILABLE</option>
                                     <option value="UNAVAILABLE">UNAVAILABLE</option>
@@ -107,22 +147,38 @@ export default function Equipment() {
                                 <label htmlFor="assignedStaff" className="block text-sm font-medium text-gray-700">Assigned
                                     Staff</label>
                                 <select id="assignedStaff"
-                                        className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500">
-                                    <option selected value="N/A">N/A</option>
+                                        className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                        onChange={(e) => setStaff(e.target.value)}
+                                >
+                                    <option value="" disabled>Choose staff...</option>
+                                    {staffList.map((staff) => (
+                                        <option key={staff.id} value={staff.id}>
+                                            {staff.name} {staff.id}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <div>
                                 <label htmlFor="assignedField" className="block text-sm font-medium text-gray-700">Assigned
                                     Field</label>
                                 <select id="assignedField"
-                                        className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500">
-                                    <option selected value="N/A">N/A</option>
+                                        className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                        onChange={(e) => setField(e.target.value)}
+                                >
+                                        <option selected disabled value="">Select Field...</option>
+                                        {fieldList.map((field) => (
+                                            <option key={field.fieldId} value={field.fieldId}>
+                                                {field.fieldId}
+                                            </option>
+                                    ))}
                                 </select>
                             </div>
                         </div>
                         <div className="flex space-x-4">
                             <button type="submit" id="btnEquipmentSave"
-                                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md flex items-center">
+                                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md flex items-center"
+                                    onClick={handleSave}
+                            >
                                 Save <i className="fa-regular fa-floppy-disk ml-2"></i>
                             </button>
                         </div>
