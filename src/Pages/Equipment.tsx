@@ -1,9 +1,11 @@
 import HeaderComponent from "../Component/HeaderComponet.tsx";
 import {useEffect, useState} from "react";
 import Equipment from "../Model/Equipment.ts";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../Store/Store.ts";
-import {saveEquipment} from "../Reducer/EquipmentSlice.ts";
+import {deleteEquipment, getAllEquipment, saveEquipment, updateEquipment} from "../Reducer/EquipmentSlice.ts";
+import Swal from "sweetalert2";
+import {deleteField} from "../Reducer/FiledSlice.ts";
 
 export default function EquipmentForm() {
     const [eqId,setEquipmentId] = useState('')
@@ -84,9 +86,93 @@ export default function EquipmentForm() {
     }, []);
 
     const dispatch = useDispatch<AppDispatch>();
+    const Equipments = useSelector(state => state.equipments)
+
+    useEffect(() => {
+        if (Equipments.length === 0){
+            dispatch(getAllEquipment())
+        }
+    }, [dispatch, Equipments.length]);
+
     function handleSave() {
         const equipment = new Equipment(Number(eqId),name,equipmentType,status,Number(staff),Number(field));
-        dispatch(saveEquipment(equipment))
+        dispatch(saveEquipment(equipment)).then(()=>{
+            Swal.fire({
+                icon: 'success',
+                title: 'Equipment Saved!',
+                text: 'The Equipment has been successfully added.',
+                confirmButtonColor: '#3085d6',
+            });
+            ResetForm();
+        }).catch((error) => {
+            console.error('Error adding field: ', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Save Failed',
+                text: 'An error occurred while saving the Equipment. Please try again.',
+            });
+        })
+    }
+    function ResetForm() {
+        setEquipmentId("");
+        setEquipmentName('')
+        setEquipmentType('')
+        setStatus("");
+        setStaff("");
+        setField("");
+    }
+
+    function handleDelete(eqId: number) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                dispatch(deleteEquipment(eqId))
+                    .then(() => {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Equipment Deleted!",
+                            text: "The Equipment has been successfully deleted.",
+                            confirmButtonColor: "#3085d6",
+                        });
+                        ResetForm();
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting field: ", error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Delete Failed",
+                            text: "An error occurred while deleting the Equipment. Please try again.",
+                        });
+                    });
+            }
+        });
+    }
+
+    function handleUpdate() {
+        const updatedEq = new Equipment(Number(eqId),name,equipmentType,status,Number(staff),Number(field));
+        dispatch(updateEquipment(updatedEq)).then(()=>{
+            Swal.fire({
+                icon: 'success',
+                title: 'Equipment updated!',
+                text: 'The Equipment has been successfully updated.',
+                confirmButtonColor: '#3085d6',
+            });
+            ResetForm()
+        }).catch((error) => {
+            console.error('Error updating Equipment: ', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Update Failed',
+                text: 'An error occurred while updating the Equipment. Please try again.',
+            });
+        })
     }
 
     return (
@@ -198,14 +284,31 @@ export default function EquipmentForm() {
                         </tr>
                         </thead>
                         <tbody id="EquipmentTableBody" className="bg-white">
-
+                        {Equipments.map((equipment:Equipment) => (
+                            <tr key={equipment.eqId}>
+                                <td className="py-3 px-6 border-b">{equipment.eqId}</td>
+                                <td className="py-3 px-6 border-b">{equipment.name}</td>
+                                <td className="py-3 px-6 border-b">{equipment.equipmentType}</td>
+                                <td className="py-3 px-6 border-b">{equipment.status}</td>
+                                <td className="py-3 px-6 border-b">{equipment.staffId}</td>
+                                <td className="py-3 px-6 border-b">{equipment.fieldId}</td>
+                                <td className="py-3 px-6 border-b">
+                                    <button className="editFieldBtn text-blue-500 hover:underline mr-3"
+                                            onClick={handleEditEquipmentClick}>Edit
+                                    </button>
+                                    <button className="text-red-500 hover:underline"
+                                            onClick={() => handleDelete(equipment.eqId)}>Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </table>
                 </div>
                 <div id="updateEquipmentModal"
                      className="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full">
-                        <h3 className="text-3xl font-bold text-center text-gray-800 mb-6">
+                    <h3 className="text-3xl font-bold text-center text-gray-800 mb-6">
                             Update Equipment Details
                         </h3>
                         <div className="space-y-6">
@@ -275,6 +378,7 @@ export default function EquipmentForm() {
                                 <button
                                     id="saveUpdatedEquipment"
                                     className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition duration-200"
+                                    onClick={handleUpdate}
                                 >
                                     Update
                                 </button>

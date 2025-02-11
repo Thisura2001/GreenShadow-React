@@ -14,7 +14,6 @@ export default function FieldForm() {
     const [fieldImg1, setFieldImg1] = useState<string | null>(null);
     const [fieldImg2, setFieldImg2] = useState<string | null>(null);
 
-    // Show field form card
     const showFieldForm = () => {
         const fieldFormCard = document.getElementById("fieldFormCard") as HTMLElement;
         if (fieldFormCard) {
@@ -22,7 +21,6 @@ export default function FieldForm() {
         }
     };
 
-// Hide field form card
     const hideFieldForm = () => {
         const fieldFormCard = document.getElementById("fieldFormCard") as HTMLElement;
         if (fieldFormCard) {
@@ -30,7 +28,6 @@ export default function FieldForm() {
         }
     };
 
-// Hide update field modal
     const hideUpdateFieldModal = () => {
         const fieldUpdateFormCard = document.getElementById("updateFieldModal") as HTMLElement;
         if (fieldUpdateFormCard) {
@@ -38,7 +35,6 @@ export default function FieldForm() {
         }
     };
 
-// Handle edit button click in the table
     const handleFieldEditClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         const target = e.target as HTMLButtonElement;
         const row = target.closest("tr") as HTMLTableRowElement;
@@ -58,7 +54,6 @@ export default function FieldForm() {
             setFieldImg1(fieldImg1);
             setFieldImg2(fieldImg2);
 
-            // Show the modal
             const fieldUpdateFormCard = document.getElementById("updateFieldModal") as HTMLElement;
             if (fieldUpdateFormCard) {
                 fieldUpdateFormCard.style.display = "block";
