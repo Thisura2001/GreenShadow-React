@@ -322,6 +322,8 @@ export default function EquipmentForm() {
                                     id="updateEquipmentName"
                                     className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                                     placeholder="Enter equipment name"
+                                    value={name}
+                                    onChange={(e) => setEquipmentName(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -332,6 +334,8 @@ export default function EquipmentForm() {
                                 <select
                                     id="updateEquipmentType"
                                     className="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    value={equipmentType}
+                                    onChange={(e) => setEquipmentType(e.target.value)}
                                 >
                                     <option value="ELECTRICAL">ELECTRICAL</option>
                                     <option value="MECHANICAL">MECHANICAL</option>
@@ -345,6 +349,8 @@ export default function EquipmentForm() {
                                 <select
                                     id="updateEquipmentStatus"
                                     className="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    value={status}
+                                    onChange={(e) => setStatus(e.target.value)}
                                 >
                                     <option value="AVAILABLE">AVAILABLE</option>
                                     <option value="UNAVAILABLE">UNAVAILABLE</option>
@@ -358,8 +364,15 @@ export default function EquipmentForm() {
                                 <select
                                     id="updateAssignedStaff"
                                     className="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    value={staff}
+                                    onChange={(e) => setStaff(e.target.value)}
                                 >
-                                    <option value="N/A">N/A</option>
+                                    <option value="" disabled>Choose staff...</option>
+                                    {staffList.map((staff) => (
+                                        <option key={staff.id} value={staff.id}>
+                                            {staff.name} {staff.id}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <div>
@@ -370,8 +383,15 @@ export default function EquipmentForm() {
                                 <select
                                     id="updateAssignedField"
                                     className="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    value={field}
+                                    onChange={(e) => setField(e.target.value)}
                                 >
-                                    <option value="N/A">N/A</option>
+                                    <option selected disabled value="">Select Field...</option>
+                                    {fieldList.map((field) => (
+                                        <option key={field.fieldId} value={field.fieldId}>
+                                            {field.fieldId}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="flex justify-end gap-4">
