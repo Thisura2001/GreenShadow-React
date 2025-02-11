@@ -1,52 +1,59 @@
-import { useEffect } from "react";
 import HeaderComponent from "../Component/HeaderComponet.tsx";
+import {useState} from "react";
 
 export default function Equipment() {
-    useEffect(() => {
-        const equipmentFormCard = document.getElementById("equipmentFormCard") as HTMLElement;
-        const addEquipmentBtn = document.getElementById('addEquipmentBtn') as HTMLButtonElement;
-        const closeEquipmentBtn = document.getElementById('closeEquipmentForm') as HTMLButtonElement;
-        const closeUpdateEquipmentModalBtn = document.getElementById('closeUpdateEquipmentModalBtn') as HTMLButtonElement;
+    const [eqId,setEquipmentId] = useState('')
+    const [name,setEquipmentName] = useState('')
+    const [equipmentType,setEquipmentType] = useState('')
+    const [status,setStatus] = useState('')
+    const [staff,setStaff] = useState('')
+    const [field,setField] = useState('')
 
-        // Add Equipment Form Card Show/Hide Logic
-        if (addEquipmentBtn) {
-            addEquipmentBtn.addEventListener('click', () => {
-                equipmentFormCard.style.display = 'block';
-            });
+    const showEquipmentForm = () => {
+        const equipmentCard = document.getElementById("equipmentFormCard") as HTMLElement;
+        if (equipmentCard) {
+            equipmentCard.style.display = "block";
         }
+    };
 
-        if (closeEquipmentBtn) {
-            closeEquipmentBtn.addEventListener('click', () => {
-                equipmentFormCard.style.display = 'none';
-            });
+    const hideEquipmentForm = () => {
+        const equipmentCard = document.getElementById("equipmentFormCard") as HTMLElement;
+        if (equipmentCard) {
+            equipmentCard.style.display = "none";
         }
-        if (closeUpdateEquipmentModalBtn) {
-            closeUpdateEquipmentModalBtn.addEventListener('click', () => {
-                document.getElementById('updateEquipmentModal')!.style.display = 'none';
-            });
+    };
+
+    const hideUpdateEquipmentModal = () => {
+        const updateEquipmentModal = document.getElementById("updateEquipmentModal") as HTMLElement;
+        if (updateEquipmentModal) {
+            updateEquipmentModal.style.display = "none";
         }
+    };
 
-        // Edit Equipment Button Logic
-        const editEquipmentBtns = document.querySelectorAll('.editEquipmentBtn');
-        editEquipmentBtns.forEach((btn) => {
-            btn.addEventListener('click', (e) => {
-                const row = (e.target as HTMLElement).closest('tr');
-                if (row) {
-                    const equipmentId = row.cells[0].innerText;
-                    const equipmentName = row.cells[1].innerText;
-                    const equipmentType = row.cells[2].innerText;
-                    const equipmentStatus = row.cells[3].innerText;
+    const handleEditEquipmentClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const target = e.target as HTMLButtonElement;
+        const row = target.closest("tr") as HTMLTableRowElement;
 
-                    document.getElementById('updateEquipmentName')!.value = equipmentName;
-                    document.getElementById('updateEquipmentType')!.value = equipmentType;
-                    document.getElementById('updateEquipmentStatus')!.value = equipmentStatus;
+        const equipmentId = row.cells[0].innerText;
+        const equipmentName = row.cells[1].innerText;
+        const equipmentType = row.cells[2].innerText;
+        const equipmentStatus = row.cells[3].innerText;
+        const staff = row.cells[4].innerText;
+        const field = row.cells[5].innerText;
 
-                    // Show the Update Modal
-                    document.getElementById('updateEquipmentModal')!.style.display = 'flex';
-                }
-            });
-        });
-    }, []);
+        setEquipmentId(equipmentId);
+        setEquipmentName(equipmentName);
+        setEquipmentType(equipmentType);
+        setStatus(equipmentStatus);
+        setStaff(staff);
+        setField(field);
+
+        const updateEquipmentModal = document.getElementById("updateEquipmentModal") as HTMLElement;
+        if (updateEquipmentModal) {
+            updateEquipmentModal.style.display = "flex";
+        }
+    };
+
 
     return (
         <>
@@ -55,6 +62,7 @@ export default function Equipment() {
                     <button
                         id="addEquipmentBtn"
                         className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                        onClick={showEquipmentForm}
                     >
                         Add New Crop
                     </button>
@@ -62,7 +70,7 @@ export default function Equipment() {
                 <div id="equipmentFormCard" className="hidden max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
                     <div className="flex justify-between items-center border-b pb-3 mb-4">
                         <h4 className="text-lg font-bold">Add Equipment Details</h4>
-                        <button id="closeEquipmentForm" className="text-gray-500 hover:text-gray-700 text-xl">X</button>
+                        <button id="closeEquipmentForm" className="text-gray-500 hover:text-gray-700 text-xl" onClick={hideEquipmentForm}>X</button>
                     </div>
                     <form id="equipmentForm" className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -134,20 +142,7 @@ export default function Equipment() {
                         </tr>
                         </thead>
                         <tbody id="EquipmentTableBody" className="bg-white">
-                        {/* Example Row */}
-                        <tr>
-                            <td className="py-3 px-6 border-b">E001</td>
-                            <td className="py-3 px-6 border-b">Tractor</td>
-                            <td className="py-3 px-6 border-b">Heavy Machinery</td>
-                            <td className="py-3 px-6 border-b">Available</td>
-                            <td className="py-3 px-6 border-b">S001</td>
-                            <td className="py-3 px-6 border-b">F001</td>
 
-                            <td className="py-3 px-6 border-b">
-                                <button className="editEquipmentBtn text-blue-500 hover:underline mr-3">Edit</button>
-                                <button className="text-red-500 hover:underline">Delete</button>
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -230,6 +225,7 @@ export default function Equipment() {
                                 <button
                                     id="closeUpdateEquipmentModalBtn"
                                     className="bg-gray-300 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-400 transition duration-200"
+                                    onClick={hideUpdateEquipmentModal}
                                 >
                                     Cancel
                                 </button>

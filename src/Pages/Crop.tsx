@@ -32,7 +32,6 @@ export default function CropForm() {
         fetchFieldData();
     }, []);
 
-// Show crop form card
     const showCropForm = () => {
         const cropCard = document.getElementById("cropFormCard") as HTMLElement;
         if (cropCard) {
@@ -40,7 +39,6 @@ export default function CropForm() {
         }
     };
 
-    // Hide crop form card
     const hideCropForm = () => {
         const cropCard = document.getElementById("cropFormCard") as HTMLElement;
         if (cropCard) {
@@ -48,7 +46,6 @@ export default function CropForm() {
         }
     };
 
-    // Hide update crop modal
     const hideUpdateModal = () => {
         const updateCropModal = document.getElementById("updateCropModal") as HTMLElement;
         if (updateCropModal) {
@@ -56,7 +53,6 @@ export default function CropForm() {
         }
     };
 
-    // Handle edit crop button click
     const handleEditClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         const target = e.target as HTMLButtonElement;
         const row = target.closest("tr") as HTMLTableRowElement;
@@ -77,7 +73,6 @@ export default function CropForm() {
         setSeason(season);
         setField(fieldId);
 
-        // Show the modal
         const updateCropModal = document.getElementById("updateCropModal") as HTMLElement;
         if (updateCropModal) {
             updateCropModal.style.display = "flex";

@@ -1,22 +1,23 @@
 import {EquipmentType} from "../Enum/EquipmentType.ts";
 import {Status} from "../Enum/Status.ts";
-import Staff from "./Staff.ts";
-import Field from "./Field.ts";
 
 export default class Equipment {
+    eqId:number;
     name: string;
     equipmentType: EquipmentType;
     status: Status;
-    staffId: Staff;
-    field: Field;
+    staffId: number;
+    field: number;
 
     constructor(
+        eqId:number,
         name: string,
         equipmentType: EquipmentType,
         status: Status,
-        staffId: Staff,
-        field: Field
+        staffId: number,
+        field: number
     ) {
+        this.eqId = eqId;
         this.name = name;
         this.equipmentType = equipmentType;
         this.status = status;
