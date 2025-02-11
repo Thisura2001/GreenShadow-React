@@ -36,7 +36,7 @@ export const updateVehicle = createAsyncThunk(
     'vehicle/updateVehicle',
     async (vehicle: Vehicle) => {
         try {
-            const response = await api.put(`/update/${vehicle.vehicleCode}`, vehicle);
+            const response = await api.put(`/update/${vehicle.vehicle_code}`, vehicle);
             return response.data;
         } catch (e) {
             console.log("Error updating vehicle", e);
@@ -69,20 +69,20 @@ const VehicleSlice = createSlice({
             state.push(action.payload);
         });
         builder.addCase(updateVehicle.fulfilled, (state, action) => {
-            const index = state.findIndex((vehicle: Vehicle) => vehicle.vehicleCode === action.payload.vehicleCode);
+            const index = state.findIndex((vehicle: Vehicle) => vehicle.vehicle_code === action.payload.vehicleCode);
             if (index !== -1) {
                 state[index] = action.payload;
             }
         });
         builder.addCase(deleteVehicle.fulfilled, (state, action) => {
-            return state.filter((vehicle: Vehicle) => vehicle.vehicleCode !== action.payload.vehicleCode);
+            return state.filter((vehicle: Vehicle) => vehicle.vehicle_code !== action.payload.vehicleCode);
         });
         builder.addCase(getAllVehicles.fulfilled, (state, action) => {
             return [...action.payload];
         });
         builder.addCase(getOneVehicle.fulfilled, (state, action) => {
             const vehicle = action.payload;
-            const index = state.findIndex((v: Vehicle) => v.vehicleCode === vehicle.vehicleCode);
+            const index = state.findIndex((v: Vehicle) => v.vehicle_code === vehicle.vehicleCode);
             if (index === -1) {
                 state.push(vehicle);
             } else {
