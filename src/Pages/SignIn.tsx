@@ -3,7 +3,7 @@ import { Link } from "react-router";
 export default function SignIn() {
     return (
         <>
-            <section id="signin" className="min-h-screen flex items-center justify-center bg-gray-100">
+            <section id="signin" className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-400 to-yellow-300">
                 <div className="signin-wrapper grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-white shadow-lg rounded-lg p-6 max-w-4xl">
                     <img
                         src="../../assets/loggingimg.jpg"
