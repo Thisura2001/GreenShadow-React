@@ -307,7 +307,7 @@ export default function CropForm() {
                                 <td className="px-4 py-2 border border-gray-300">{crop.season}</td>
                                 <td className="px-4 py-2 border border-gray-300">{crop.fieldId}</td>
                                 <td className="px-4 py-2 border border-gray-300">
-                                    <button className="editCropBtn bg-blue-500 text-white px-2 py-1 rounded" onClick={handleEditClick}>Edit
+                                    <button className="editCropBtn text-blue-500 hover:underline mr-3" onClick={handleEditClick}>Edit
                                     </button>
                                     <button className="bg-red-500 text-white px-2 py-1 rounded ml-2" onClick={() => {
                                         handleDelete(crop.cropId)

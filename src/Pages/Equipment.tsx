@@ -296,7 +296,7 @@ export default function EquipmentForm() {
                                     <button className="editFieldBtn text-blue-500 hover:underline mr-3"
                                             onClick={handleEditEquipmentClick}>Edit
                                     </button>
-                                    <button className="text-red-500 hover:underline"
+                                    <button className="bg-red-500 text-white px-2 py-1 rounded ml-2"
                                             onClick={() => handleDelete(equipment.eqId)}>Delete
                                     </button>
                                 </td>

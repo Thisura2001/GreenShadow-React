@@ -343,7 +343,7 @@ export default function VehicleForm() {
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.status}</td>
                                     <td className="px-4 py-2 border border-gray-300">{vehicle.staffId}</td>
                                     <td className="px-4 py-2 border border-gray-300">
-                                        <button className="editVehicleBtn bg-blue-500 text-white px-2 py-1 rounded" onClick={showUpdateVehicleModal}>Edit</button>
+                                        <button className="editVehicleBtn text-blue-500 hover:underline mr-3" onClick={showUpdateVehicleModal}>Edit</button>
                                         <button className="bg-red-500 text-white px-2 py-1 rounded ml-2" onClick={()=>{handleDelete(vehicle.vehicle_code)}}>Delete</button>
                                     </td>
                                 </tr>

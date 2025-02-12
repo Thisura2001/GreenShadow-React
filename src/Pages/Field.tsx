@@ -285,7 +285,7 @@ export default function FieldForm() {
                                 </td>
                                 <td className="py-3 px-6 border-b">
                                     <button className="editFieldBtn text-blue-500 hover:underline mr-3" onClick={handleFieldEditClick}>Edit</button>
-                                    <button className="text-red-500 hover:underline"   onClick={() => handleDelete(field.fieldId)}>Delete</button>
+                                    <button className="bg-red-500 text-white px-2 py-1 rounded ml-2"  onClick={() => handleDelete(field.fieldId)}>Delete</button>
                                 </td>
                             </tr>
                         ))}

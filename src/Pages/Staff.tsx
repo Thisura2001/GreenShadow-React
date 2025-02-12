@@ -1,10 +1,11 @@
 import "../Css/Staff.css"
 import {FaPlusCircle} from "react-icons/fa";
 import {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../Store/Store.ts";
 import Staff from "../Model/Staff.ts";
-import {saveStaff} from "../Reducer/StaffSlice.ts";
+import {getAllStaff, saveStaff} from "../Reducer/StaffSlice.ts";
+import Swal from "sweetalert2";
 
 export default function StaffForm(){
     const [id,setId] = useState("");
@@ -39,7 +40,6 @@ export default function StaffForm(){
         const row = target.closest("tr") as HTMLTableRowElement;
 
         if (row) {
-            const staffId = row.cells[0].innerText;
             const firstName = row.cells[1].innerText;
             const designation = row.cells[2].innerText;
             const gender = row.cells[3].innerText;
@@ -50,7 +50,6 @@ export default function StaffForm(){
             const role = row.cells[8].innerText;
             const city = row.cells[9].innerText;
 
-            (document.getElementById("updateStaffId") as HTMLInputElement).value = staffId;
             (document.getElementById("updateFirstName") as HTMLInputElement).value = firstName;
             (document.getElementById("updateDesignation") as HTMLInputElement).value = designation;
             (document.getElementById("updateGender") as HTMLSelectElement).value = gender;
@@ -89,15 +88,53 @@ export default function StaffForm(){
     }, []);
 
     const dispatch = useDispatch<AppDispatch>();
+    const staffs = useSelector(state => state.staffs);
 
 
+    function resetForm() {
+        setStaffFirstName('')
+        setStaffField('')
+        setGender('')
+        setJoinedDate('')
+        setDob('')
+        setContactNo('')
+        setStaffEmail('')
+        setCity('')
+        setDesignation('')
+        setGender('')
+    }
+
+    useEffect(() => {
+        if (staffs.length === 0){
+            dispatch(getAllStaff())
+        }
+    }, [dispatch,staffs.length]);
     function handleSave() {
         const newStaff = new Staff(Number(id),staffFirstName,designation,gender,joinedDate,dob,city,contactNo,staffEmail,role,Number(staffField));
-        dispatch(saveStaff(newStaff))
+        dispatch(saveStaff(newStaff)).then(() => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Staff Saved!',
+                text: 'The Staff has been successfully added.',
+                confirmButtonColor: '#3085d6',
+            });
+            resetForm();
+        }).catch((error) => {
+            console.error('Error adding Staff: ', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Save Failed',
+                text: 'An error occurred while saving the Staff. Please try again.',
+            });
+        });
     }
 
     function handleUpdate() {
 
+    }
+
+    function handleDelete(id: number) {
+        
     }
 
     return(
@@ -277,7 +314,29 @@ export default function StaffForm(){
                     </tr>
                     </thead>
                     <tbody id="staffTbody">
-
+                    {staffs.map((staff:Staff)=>(
+                        <tr key={staff.id} className="border border-gray-300">
+                            <td className="px-4 py-2 border border-gray-300">{staff.id}</td>
+                            <td className="px-4 py-2 border border-gray-300">{staff.firstName}</td>
+                            <td className="px-4 py-2 border border-gray-300">{staff.designation}</td>
+                            <td className="px-4 py-2 border border-gray-300">{staff.gender}</td>
+                            <td className="px-4 py-2 border border-gray-300">{staff.joined_date}</td>
+                            <td className="px-4 py-2 border border-gray-300">{staff.dob}</td>
+                            <td className="px-4 py-2 border border-gray-300">{staff.contact_no}</td>
+                            <td className="px-4 py-2 border border-gray-300">{staff.email}</td>
+                            <td className="px-4 py-2 border border-gray-300">{staff.role}</td>
+                            <td className="px-4 py-2 border border-gray-300">{staff.address}</td>
+                            <td className="px-4 py-2 border border-gray-300">
+                                <button className="editCropBtn text-blue-500 hover:underline mr-3"
+                                        onClick={showUpdateStaffModal}>Edit
+                                </button>
+                                <button className="bg-red-500 text-white px-2 py-1 rounded ml-2" onClick={() => {
+                                    handleDelete(staff.id)
+                                }}>Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
                     </tbody>
                 </table>
             </div>
@@ -318,6 +377,7 @@ export default function StaffForm(){
                                 <select id="updateGender"
                                         className="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         onChange={(e) => setGender(e.target.value)}
+                                        value={gender}
                                 >
                                     <option value="" disabled>Select gender</option>
                                     <option value="Male">Male</option>
