@@ -1,8 +1,13 @@
 import "../Css/Staff.css"
 import {FaPlusCircle} from "react-icons/fa";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../Store/Store.ts";
+import Staff from "../Model/Staff.ts";
+import {saveStaff} from "../Reducer/StaffSlice.ts";
 
-export default function Staff(){
+export default function StaffForm(){
+    const [id,setId] = useState("");
     const [staffFirstName, setStaffFirstName] = useState("");
     const [designation, setDesignation] = useState("");
     const [staffField, setStaffField] = useState("");
@@ -13,8 +18,8 @@ export default function Staff(){
     const [staffEmail, setStaffEmail] = useState("");
     const [role, setRole] = useState("");
     const [city, setCity] = useState("")
-    const [field,setField] = useState("");
     const [fieldList, setFieldList] = useState<any[]>([]);
+
     const showStaffForm = () => {
         const staffFormCard = document.getElementById("staffFormCard") as HTMLElement;
         if (staffFormCard) {
@@ -69,6 +74,31 @@ export default function Staff(){
             updateStaffModal.style.display = "none";
         }
     };
+    useEffect(() => {
+        async function fetchFieldData() {
+            try {
+                const response = await fetch('http://localhost:8080/field/');
+                const data = await response.json();
+                setFieldList(data);
+            } catch (error) {
+                console.error('Error fetching staff data:', error);
+            }
+        }
+
+        fetchFieldData();
+    }, []);
+
+    const dispatch = useDispatch<AppDispatch>();
+
+
+    function handleSave() {
+        const newStaff = new Staff(Number(id),staffFirstName,designation,gender,joinedDate,dob,city,contactNo,staffEmail,role,Number(staffField));
+        dispatch(saveStaff(newStaff))
+    }
+
+    function handleUpdate() {
+
+    }
 
     return(
         <>
@@ -222,6 +252,7 @@ export default function Staff(){
                             type="submit"
                             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                             id="btnStaffSave"
+                            onClick={handleSave}
                         >
                             Save
                         </button>
@@ -261,20 +292,14 @@ export default function Staff(){
                             className="space-y-4 overflow-y-auto max-h-[70vh] px-2"
                         >
                             <div>
-                                <label htmlFor="updateStaffId" className="block text-sm font-medium text-gray-700">
-                                    Staff ID
-                                </label>
-                                <input type="text" id="updateStaffId"
-                                       className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="Enter staff ID"/>
-                            </div>
-                            <div>
                                 <label htmlFor="updateFirstName" className="block text-sm font-medium text-gray-700">
                                     First Name
                                 </label>
                                 <input type="text" id="updateFirstName"
                                        className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="Enter first name"/>
+                                       placeholder="Enter first name"
+                                       onChange={(e) => setStaffFirstName(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateDesignation" className="block text-sm font-medium text-gray-700">
@@ -282,14 +307,18 @@ export default function Staff(){
                                 </label>
                                 <input type="text" id="updateDesignation"
                                        className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="Enter designation"/>
+                                       placeholder="Enter designation"
+                                       onChange={(e) => setDesignation(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateGender" className="block text-sm font-medium text-gray-700">
                                     Gender
                                 </label>
                                 <select id="updateGender"
-                                        className="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        className="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        onChange={(e) => setGender(e.target.value)}
+                                >
                                     <option value="" disabled>Select gender</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
@@ -301,14 +330,18 @@ export default function Staff(){
                                     Joined Date
                                 </label>
                                 <input type="date" id="updateJoinedDate"
-                                       className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                                       className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                       onChange={(e) => setJoinedDate(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateDob" className="block text-sm font-medium text-gray-700">
                                     Date of Birth
                                 </label>
                                 <input type="date" id="updateDob"
-                                       className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                                       className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                       onChange={(e) => setDob(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateContact" className="block text-sm font-medium text-gray-700">
@@ -316,7 +349,9 @@ export default function Staff(){
                                 </label>
                                 <input type="text" id="updateContact"
                                        className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="Enter contact number"/>
+                                       placeholder="Enter contact number"
+                                       onChange={(e) => setContactNo(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateEmail" className="block text-sm font-medium text-gray-700">
@@ -324,7 +359,9 @@ export default function Staff(){
                                 </label>
                                 <input type="email" id="updateEmail"
                                        className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="Enter email"/>
+                                       placeholder="Enter email"
+                                       onChange={(e) => setStaffEmail(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateRole" className="block text-sm font-medium text-gray-700">
@@ -332,7 +369,9 @@ export default function Staff(){
                                 </label>
                                 <input type="text" id="updateRole"
                                        className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="Enter role"/>
+                                       placeholder="Enter role"
+                                       onChange={(e) => setRole(e.target.value)}
+                                />
                             </div>
                             <div>
                                 <label htmlFor="updateCity" className="block text-sm font-medium text-gray-700">
@@ -340,18 +379,22 @@ export default function Staff(){
                                 </label>
                                 <input type="text" id="updateCity"
                                        className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="Enter city"/>
+                                       placeholder="Enter city"
+                                       onChange={(e) => setCity(e.target.value)}
+                                />
                             </div>
                         </div>
                         <div className="flex justify-end gap-4 mt-6">
                             <button id="saveUpdatedStaff"
                                     className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
-                                    onClick={hideUpdateStaffModal}
+                                    onClick={handleUpdate}
                             >
                                 Update
                             </button>
                             <button id="closeUpdateStaffModalBtn"
-                                    className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-200">
+                                    className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-200"
+                                    onClick={hideUpdateStaffModal}
+                            >
                                 Cancel
                             </button>
                         </div>
