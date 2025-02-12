@@ -8,11 +8,12 @@ import Log from "./Pages/Log.tsx";
 import Staff from "./Pages/Staff.tsx";
 import Equipment from "./Pages/Equipment.tsx";
 import Vehicle from "./Pages/Vehicle.tsx";
-import SignIn from "./Pages/SignIn.tsx";
 import { Signup } from "./Pages/SignUp.tsx";
 import AuthLayout from "./Component/AuthLyout.tsx";
 import {Provider} from "react-redux";
 import {store} from "./Store/Store.ts";
+import WelcomePage from "./Pages/WelcomePage.tsx";
+import SignIn from "./Pages/SignIn.tsx";
 
 function App() {
     const routes = createBrowserRouter([
@@ -20,7 +21,8 @@ function App() {
             path: "",
             element: <AuthLayout />,
             children: [
-                { path: "/", element: <SignIn /> },
+                { path: "/", element: <WelcomePage /> },
+                { path: "/SignIn", element: <SignIn /> },
                 { path: "/signUp", element: <Signup /> },
             ],
         },

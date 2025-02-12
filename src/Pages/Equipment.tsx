@@ -5,7 +5,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../Store/Store.ts";
 import {deleteEquipment, getAllEquipment, saveEquipment, updateEquipment} from "../Reducer/EquipmentSlice.ts";
 import Swal from "sweetalert2";
-import {deleteField} from "../Reducer/FiledSlice.ts";
 
 export default function EquipmentForm() {
     const [eqId,setEquipmentId] = useState('')
