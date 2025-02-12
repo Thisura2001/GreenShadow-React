@@ -77,7 +77,7 @@ const FieldSlice = createSlice({
             }
         })
         builder.addCase(deleteField.fulfilled,(state,action)=>{
-            state.filter((field:Field)=>field.fieldId !== action.payload.fieldId)
+            return state.filter((field:Field)=>field.fieldId !== action.payload.fieldId)
         })
         builder.addCase(getAllFields.fulfilled,(state,action)=>{
             action.payload.map((field:Field)=>{

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Equipment from "../Model/Equipment.ts"; // Assuming you have an Equipment model
+import Equipment from "../Model/Equipment.ts";
 
 const initialState: Equipment[] = [];
 
@@ -75,7 +75,7 @@ const EquipmentSlice = createSlice({
             }
         });
         builder.addCase(deleteEquipment.fulfilled, (state, action) => {
-            return state.filter((equipment: Equipment) => equipment.eqId !== action.payload.equipmentId);
+            return state.filter((equipment: Equipment) => equipment.eqId !== action.payload.eqId);
         });
         builder.addCase(getAllEquipment.fulfilled, (_, action) => {
             return action.payload;

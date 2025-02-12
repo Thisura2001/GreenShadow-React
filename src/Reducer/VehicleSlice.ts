@@ -2,7 +2,7 @@ import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Vehicle from "../Model/Vehicle.ts";
 
-const initialState = [];
+const initialState:Vehicle[] = [];
 
 const api = axios.create({
     baseURL: "http://localhost:8080/vehicle",
@@ -75,9 +75,9 @@ const VehicleSlice = createSlice({
             }
         });
         builder.addCase(deleteVehicle.fulfilled, (state, action) => {
-            return state.filter((vehicle: Vehicle) => vehicle.vehicle_code !== action.payload.vehicleCode);
+            return state.filter((vehicle: Vehicle) => vehicle.vehicle_code !== action.payload.vehicle_code);
         });
-        builder.addCase(getAllVehicles.fulfilled, (state, action) => {
+        builder.addCase(getAllVehicles.fulfilled, (_, action) => {
             return [...action.payload];
         });
         builder.addCase(getOneVehicle.fulfilled, (state, action) => {

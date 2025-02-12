@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Crop from "../Model/Crop.ts"; // Assuming you have a Crop model
+import Crop from "../Model/Crop.ts";
 
 const initialState: Crop[] = [];
 

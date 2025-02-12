@@ -55,7 +55,7 @@ const LogSlice = createSlice({
             state.push(action.payload)
         })
         builder.addCase(deleteLog.fulfilled,(state,action)=>{
-            state.filter((log:Log)=>log.id !== action.payload.id)
+            return state.filter((log:Log)=>log.id !== action.payload.id)
         })
         builder.addCase(getAllLogs.fulfilled,(state,action)=>{
             action.payload.map((log:Log)=>{
