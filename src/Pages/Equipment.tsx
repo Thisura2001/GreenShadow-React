@@ -140,7 +140,6 @@ export default function EquipmentForm() {
                             text: "The Equipment has been successfully deleted.",
                             confirmButtonColor: "#3085d6",
                         });
-                        ResetForm();
                     })
                     .catch((error) => {
                         console.error("Error deleting field: ", error);
@@ -163,7 +162,6 @@ export default function EquipmentForm() {
                 text: 'The Equipment has been successfully updated.',
                 confirmButtonColor: '#3085d6',
             });
-            ResetForm()
         }).catch((error) => {
             console.error('Error updating Equipment: ', error);
             Swal.fire({
@@ -235,7 +233,7 @@ export default function EquipmentForm() {
                                         className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
                                         onChange={(e) => setStaff(e.target.value)}
                                 >
-                                    <option value="" disabled>Choose staff...</option>
+                                    <option selected disabled value="">Choose staff...</option>
                                     {staffList.map((staff) => (
                                         <option key={staff.id} value={staff.id}>
                                             {staff.name} {staff.id}
