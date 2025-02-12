@@ -13,7 +13,7 @@ export default function LogForm() {
 
     const [id, setId] = useState('')
     const [date, setDate] = useState('')
-    const [observationImg, setObservationImg] = useState('')
+    const [observed_image, setObservationImg] = useState('')
     const [logDetails, setLogDetails] = useState('')
 
     const handleImageChange1 = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +43,7 @@ export default function LogForm() {
     }, [dispatch,logs.length]);
 
     function handleSave() {
-        const newLog = new Log(Number(id),date,logDetails,observationImg)
+        const newLog = new Log(Number(id),date,logDetails,observed_image)
         dispatch(saveLog(newLog)).then(() => {
             Swal.fire({
                 icon: 'success',
@@ -190,8 +190,8 @@ export default function LogForm() {
                             <td className="py-3 px-6 border-b">{log.id}</td>
                             <td className="py-3 px-6 border-b">{log.log_date}</td>
                             <td className="py-3 px-6 border-b">
-                                {log.observationImg && (
-                                    <img src={log.observationImg} alt="log img" className="w-16 h-16 object-cover"/>
+                                {log.observed_image && (
+                                    <img src={log.observed_image} alt="log img" className="w-16 h-16 object-cover"/>
                                 )}
                             </td>
                             <td className="py-3 px-6 border-b">{log.log_details}</td>
