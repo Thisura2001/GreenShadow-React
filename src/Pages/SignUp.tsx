@@ -11,7 +11,7 @@ export function Signup() {
                     className="absolute top-5 left-5 text-white bg-blue-800 p-2 rounded-full shadow hover:bg-blue-900"
                 >
                     <Link
-                        to="/"
+                        to="/SignIn"
                         id="text"
                         className="flex items-center space-x-2 text-white hover:underline"
                     >
