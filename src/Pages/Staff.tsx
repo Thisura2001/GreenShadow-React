@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../Store/Store.ts";
 import Staff from "../Model/Staff.ts";
-import {getAllStaff, saveStaff} from "../Reducer/StaffSlice.ts";
+import {deleteStaff, getAllStaff, saveStaff, updateStaff} from "../Reducer/StaffSlice.ts";
 import Swal from "sweetalert2";
 
 export default function StaffForm(){
@@ -130,11 +130,56 @@ export default function StaffForm(){
     }
 
     function handleUpdate() {
-
+        const updated = new Staff(Number(id),staffFirstName, designation ,gender,joinedDate,dob,city,contactNo,staffEmail,role,Number(staffField));
+        dispatch(updateStaff(updated)).then(() => {
+            console.log(updated)
+            Swal.fire({
+                icon: 'success',
+                title: 'Staff updated!',
+                text: 'The Staff has been successfully updated.',
+                confirmButtonColor: '#3085d6',
+            });
+            resetForm();
+        }).catch((error) => {
+            console.error('Error updating Staff: ', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Update Failed',
+                text: 'An error occurred while updating the Staff. Please try again.',
+            });
+        });
     }
 
     function handleDelete(id: number) {
-        
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                dispatch(deleteStaff(id))
+                    .then(() => {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Staff Deleted!",
+                            text: "The Staff has been successfully deleted.",
+                            confirmButtonColor: "#3085d6",
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting Staff: ", error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Delete Failed",
+                            text: "An error occurred while deleting the Staff. Please try again.",
+                        });
+                    });
+            }
+        });
     }
 
     return(
@@ -176,9 +221,9 @@ export default function StaffForm(){
                             >
                                 <option selected disabled value="">Choose Designation...</option>
                                 <option value="MANAGER">MANAGER</option>
-                                <option value="ADMINISTRATIVE">ADMIN</option>
+                                <option value="ADMINISTRATIVE">ADMINISTRATIVE</option>
                                 <option value="SCIENTIST">SCIENTIST</option>
-                                <option value="FIELD_WORKER">FIELD WORKER</option>
+                                <option value="FIELD_WORKER">FIELD_WORKER</option>
                             </select>
                         </div>
                         <div>
@@ -364,11 +409,18 @@ export default function StaffForm(){
                                 <label htmlFor="updateDesignation" className="block text-sm font-medium text-gray-700">
                                     Designation
                                 </label>
-                                <input type="text" id="updateDesignation"
-                                       className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="Enter designation"
-                                       onChange={(e) => setDesignation(e.target.value)}
-                                />
+                                <select
+                                    id="updateDesignation"
+                                    className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                    required
+                                    onChange={(e) => setDesignation(e.target.value)}
+                                >
+                                    <option selected disabled value="">Choose Designation...</option>
+                                    <option value="MANAGER">MANAGER</option>
+                                    <option value="ADMINISTRATIVE">ADMINISTRATIVE</option>
+                                    <option value="SCIENTIST">SCIENTIST</option>
+                                    <option value="FIELD_WORKER">FIELD_WORKER</option>
+                                </select>
                             </div>
                             <div>
                                 <label htmlFor="updateGender" className="block text-sm font-medium text-gray-700">
@@ -380,9 +432,8 @@ export default function StaffForm(){
                                         value={gender}
                                 >
                                     <option value="" disabled>Select gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
+                                    <option value="Male">MALE</option>
+                                    <option value="Female">FEMALE</option>
                                 </select>
                             </div>
                             <div>
@@ -427,11 +478,17 @@ export default function StaffForm(){
                                 <label htmlFor="updateRole" className="block text-sm font-medium text-gray-700">
                                     Role
                                 </label>
-                                <input type="text" id="updateRole"
-                                       className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="Enter role"
-                                       onChange={(e) => setRole(e.target.value)}
-                                />
+                                <select
+                                    id="updateRole"
+                                    className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                    required
+                                    onChange={(e) => setRole(e.target.value)}
+                                >
+                                    <option selected disabled value="">Choose Role...</option>
+                                    <option value="MANAGER">MANAGER</option>
+                                    <option value="ADMIN">ADMIN</option>
+                                    <option value="SCIENTIST">SCIENTIST</option>
+                                </select>
                             </div>
                             <div>
                                 <label htmlFor="updateCity" className="block text-sm font-medium text-gray-700">

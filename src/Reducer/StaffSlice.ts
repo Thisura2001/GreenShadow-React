@@ -2,7 +2,7 @@ import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Staff from "../Model/Staff.ts";
 
-const initialState = [];
+const initialState:Staff[] = [];
 
 const api = axios.create({
     baseURL: "http://localhost:8080/staff",
