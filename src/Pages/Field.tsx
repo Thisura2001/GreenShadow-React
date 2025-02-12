@@ -198,11 +198,11 @@ export default function FieldForm() {
                     </button>
                 </HeaderComponent>
                 <div id="fieldFormCard" className="hidden max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
-                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                    <div className="flex justify-between items-center p-4 bg-green-600 text-white rounded-t-lg">
                         <h4 className="text-lg font-bold">Add Field Details</h4>
                         <button id="closeFieldForm" className="text-gray-500 hover:text-gray-700 text-xl" onClick={hideFieldForm}>X</button>
                     </div>
-                    <form id="FieldFormCard" className="space-y-4" onSubmit={handleAdd}>
+                    <form id="FieldFormCard" className="space-y-4 p-5" onSubmit={handleAdd}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label htmlFor="fieldName" className="block text-sm font-medium text-gray-700">Field

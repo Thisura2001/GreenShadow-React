@@ -1,152 +1,232 @@
 import "../Css/Staff.css"
-import {useEffect} from "react";
-import StaffHeading from "../Component/StaffComponents/StaffHeading.tsx";
+import {FaPlusCircle} from "react-icons/fa";
+import {useState} from "react";
 
 export default function Staff(){
-    useEffect(() => {
-        const addStaffBtn = document.getElementById('addStaffBtn') as HTMLButtonElement;
-        const staffFormCard = document.getElementById('staffFormCard') as HTMLElement;
-        const updateStaffModel = document.getElementById("updateStaffModal") as HTMLElement;
-        const closeUpdateStaffModalBtn = document.getElementById('closeUpdateStaffModalBtn') as HTMLButtonElement;
-        const closeAddStaffForm = document.getElementById('closeStaffForm') as HTMLButtonElement;
-
-        if (addStaffBtn) {
-            addStaffBtn.addEventListener('click', () => {
-                staffFormCard.style.display = 'block';
-
-            });
+    const [staffFirstName, setStaffFirstName] = useState("");
+    const [designation, setDesignation] = useState("");
+    const [staffField, setStaffField] = useState("");
+    const [gender, setGender] = useState("");
+    const [joinedDate, setJoinedDate] = useState("");
+    const [dob, setDob] = useState("");
+    const [contactNo, setContactNo] = useState("");
+    const [staffEmail, setStaffEmail] = useState("");
+    const [role, setRole] = useState("");
+    const [city, setCity] = useState("")
+    const [field,setField] = useState("");
+    const [fieldList, setFieldList] = useState<any[]>([]);
+    const showStaffForm = () => {
+        const staffFormCard = document.getElementById("staffFormCard") as HTMLElement;
+        if (staffFormCard) {
+            staffFormCard.style.display = "block";
         }
-        if (closeUpdateStaffModalBtn){
-            closeUpdateStaffModalBtn.addEventListener('click',()=>{
-                updateStaffModel.style.display = 'none';
-            })
+    };
+
+    const hideStaffForm = () => {
+        const staffFormCard = document.getElementById("staffFormCard") as HTMLElement;
+        if (staffFormCard) {
+            staffFormCard.style.display = "none";
         }
-        if (closeAddStaffForm){
-            closeAddStaffForm.addEventListener('click',()=>{
-                staffFormCard.style.display = 'none';
-            })
-        }
-        // Add event listeners to "Edit" buttons
-        const editButtons = document.querySelectorAll(".editStaffBtn");
-        editButtons.forEach((button) => {
-            button.addEventListener("click", (e) => {
-                const target = e.target as HTMLButtonElement;
-                const row = target.closest("tr") as HTMLTableRowElement;
+    };
 
-                // Get staff data from the table row
-                const staffId = row.cells[0].innerText;
-                const firstName = row.cells[1].innerText;
-                const designation = row.cells[2].innerText;
-                const gender = row.cells[3].innerText;
-                const joinedDate = row.cells[4].innerText;
-                const dob = row.cells[5].innerText;
-                const contactNo = row.cells[6].innerText;
-                const email = row.cells[7].innerText;
-                const role = row.cells[8].innerText;
-                const city = row.cells[9].innerText;
+    const showUpdateStaffModal = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const target = event.target as HTMLButtonElement;
+        const row = target.closest("tr") as HTMLTableRowElement;
 
-                // Prefill the modal form fields
-                (document.getElementById("updateStaffId") as HTMLInputElement).value = staffId;
-                (document.getElementById("updateFirstName") as HTMLInputElement).value = firstName;
-                (document.getElementById("updateDesignation") as HTMLInputElement).value = designation;
-                (document.getElementById("updateGender") as HTMLSelectElement).value = gender;
-                (document.getElementById("updateJoinedDate") as HTMLInputElement).value = joinedDate;
-                (document.getElementById("updateDob") as HTMLInputElement).value = dob;
-                (document.getElementById("updateContact") as HTMLInputElement).value = contactNo;
-                (document.getElementById("updateEmail") as HTMLInputElement).value = email;
-                (document.getElementById("updateRole") as HTMLInputElement).value = role;
-                (document.getElementById("updateCity") as HTMLInputElement).value = city;
+        if (row) {
+            const staffId = row.cells[0].innerText;
+            const firstName = row.cells[1].innerText;
+            const designation = row.cells[2].innerText;
+            const gender = row.cells[3].innerText;
+            const joinedDate = row.cells[4].innerText;
+            const dob = row.cells[5].innerText;
+            const contactNo = row.cells[6].innerText;
+            const email = row.cells[7].innerText;
+            const role = row.cells[8].innerText;
+            const city = row.cells[9].innerText;
 
-                // Show the modal
-                const updateStaffModal = document.getElementById("updateStaffModal") as HTMLDivElement;
+            (document.getElementById("updateStaffId") as HTMLInputElement).value = staffId;
+            (document.getElementById("updateFirstName") as HTMLInputElement).value = firstName;
+            (document.getElementById("updateDesignation") as HTMLInputElement).value = designation;
+            (document.getElementById("updateGender") as HTMLSelectElement).value = gender;
+            (document.getElementById("updateJoinedDate") as HTMLInputElement).value = joinedDate;
+            (document.getElementById("updateDob") as HTMLInputElement).value = dob;
+            (document.getElementById("updateContact") as HTMLInputElement).value = contactNo;
+            (document.getElementById("updateEmail") as HTMLInputElement).value = email;
+            (document.getElementById("updateRole") as HTMLInputElement).value = role;
+            (document.getElementById("updateCity") as HTMLInputElement).value = city;
+
+            const updateStaffModal = document.getElementById("updateStaffModal") as HTMLElement;
+            if (updateStaffModal) {
                 updateStaffModal.style.display = "flex";
-            });
-        });
+            }
+        }
+    };
 
-    }, []);
+    const hideUpdateStaffModal = () => {
+        const updateStaffModal = document.getElementById("updateStaffModal") as HTMLElement;
+        if (updateStaffModal) {
+            updateStaffModal.style.display = "none";
+        }
+    };
 
     return(
         <>
-            <StaffHeading/>
-            <div className="card mt-3" id="staffFormCard" style={{display: 'none'}}>
-                <div className="card-header">
-                    <h4>Add Staff Details</h4>
-                    <button className="btn-close" id="closeStaffForm">X</button>
+            <h2 className="staff-title">Staff Management...</h2>
+            <div className="d-flex justify-content-end mb-3">
+                <button className="btn btn-primary" id="addStaffBtn" onClick={showStaffForm}>Add New
+                    Staff <FaPlusCircle/></button>
+            </div>
+            <div id="staffFormCard" className="hidden max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
+                <div className="flex justify-between items-center p-4 bg-green-600 text-white rounded-t-lg">
+                    <h4 className="text-lg font-bold">Add Staff Details</h4>
+                    <button id="closeStaffForm" className="text-gray-500 hover:text-gray-700 text-xl"
+                            onClick={hideStaffForm}>X
+                    </button>
                 </div>
-                <div className="card-body">
-                    <form id="staffForm">
-                        <div className="row g-3">
-                            <div className="col-md-6">
-                                <label htmlFor="StaffFirstName" className="form-label">First Name</label>
-                                <input type="text" className="form-control" id="StaffFirstName"
-                                       placeholder="Enter first name" required/>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="designation" className="form-label">Designation</label>
-                                <select className="form-select" id="designation" required>
-                                    <option selected disabled value="">Choose Designation.</option>
-                                    <option value="MANAGER">MANAGER</option>
-                                    <option value="ADMINISTRATIVE">ADMIN</option>
-                                    <option value="SCIENTIST">SCIENTIST</option>
-                                    <option value="FIELD_WORKER">FIELD_WORKER</option>
-                                </select>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="staffField" className="form-label">Field</label>
-                                <select className="form-select" id="staffField" required>
-                                    <option selected disabled value="">Select field...</option>
-                                </select>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="gender" className="form-label">Gender</label>
-                                <select className="form-select" id="gender" required>
-                                    <option selected disabled value="">Choose Gender...</option>
-                                    <option value="MALE">MALE</option>
-                                    <option value="FEMALE">FEMALE</option>
-                                </select>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="joinedDate" className="form-label">Joined Date</label>
-                                <input type="date" className="form-control" id="joinedDate" required/>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="dob" className="form-label">Date of Birth</label>
-                                <input type="date" className="form-control" id="dob" required/>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="contactNo" className="form-label">Contact Number</label>
-                                <input type="text" className="form-control" id="contactNo"
-                                       placeholder="Enter contact number" required/>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="StaffEmail" className="form-label">Email</label>
-                                <input type="email" className="form-control" id="StaffEmail"
-                                       placeholder="Enter email address" required/>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="role" className="form-label">Staff Role</label>
-                                <select className="form-select" id="role" required>
-                                    <option selected disabled value="">Choose Role...</option>
-                                    <option value="MANAGER">MANAGER</option>
-                                    <option value="ADMIN">ADMIN</option>
-                                    <option value="SCIENTIST">SCIENTIST</option>
-                                </select>
-                            </div>
-                            <div className="col-md-6">
-                                <label htmlFor="addressLine3" className="form-label">City</label>
-                                <input type="text" className="form-control" id="addressLine3" placeholder="City"
-                                       required/>
-                            </div>
+                <form id="staffForm" className="space-y-6 p-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label htmlFor="StaffFirstName" className="block text-sm font-medium text-gray-700">First
+                                Name</label>
+                            <input
+                                type="text"
+                                id="StaffFirstName"
+                                className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Enter first name"
+                                required
+                                onChange={(e) => setStaffFirstName(e.target.value)}
+                            />
                         </div>
-
-                        <div className="flex space-x-2">
-                            <button type="submit" className="bg-blue-600 mt-3 text-white p-3 rounded-md "
-                                    id="btnStaffSave">Save
-                            </button>
+                        <div>
+                            <label htmlFor="designation"
+                                   className="block text-sm font-medium text-gray-700">Designation</label>
+                            <select
+                                id="designation"
+                                className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                required
+                                onChange={(e) => setDesignation(e.target.value)}
+                            >
+                                <option selected disabled value="">Choose Designation...</option>
+                                <option value="MANAGER">MANAGER</option>
+                                <option value="ADMINISTRATIVE">ADMIN</option>
+                                <option value="SCIENTIST">SCIENTIST</option>
+                                <option value="FIELD_WORKER">FIELD WORKER</option>
+                            </select>
                         </div>
-
-                    </form>
-                </div>
+                        <div>
+                            <label htmlFor="staffField"
+                                   className="block text-sm font-medium text-gray-700">Field</label>
+                            <select
+                                id="staffField"
+                                className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                required
+                                onChange={(e) => setStaffField(e.target.value)}
+                            >
+                                <option selected disabled value="">Select Field...</option>
+                                {fieldList.map((field) => (
+                                    <option key={field.fieldId} value={field.fieldId}>
+                                        {field.fieldId}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div>
+                            <label htmlFor="gender" className="block text-sm font-medium text-gray-700">Gender</label>
+                            <select
+                                id="gender"
+                                className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                required
+                                onChange={(e) => setGender(e.target.value)}
+                            >
+                                <option selected disabled value="">Choose Gender...</option>
+                                <option value="MALE">MALE</option>
+                                <option value="FEMALE">FEMALE</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label htmlFor="joinedDate" className="block text-sm font-medium text-gray-700">Joined
+                                Date</label>
+                            <input
+                                type="date"
+                                id="joinedDate"
+                                className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                required
+                                onChange={(e) => setJoinedDate(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="dob" className="block text-sm font-medium text-gray-700">Date of
+                                Birth</label>
+                            <input
+                                type="date"
+                                id="dob"
+                                className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                required
+                                onChange={(e) => setDob(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="contactNo" className="block text-sm font-medium text-gray-700">Contact
+                                Number</label>
+                            <input
+                                type="text"
+                                id="contactNo"
+                                className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Enter contact number"
+                                required
+                                onChange={(e) => setContactNo(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="StaffEmail"
+                                   className="block text-sm font-medium text-gray-700">Email</label>
+                            <input
+                                type="email"
+                                id="StaffEmail"
+                                className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Enter email address"
+                                required
+                                onChange={(e) => setStaffEmail(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="role" className="block text-sm font-medium text-gray-700">Staff Role</label>
+                            <select
+                                id="role"
+                                className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                required
+                                onChange={(e) => setRole(e.target.value)}
+                            >
+                                <option selected disabled value="">Choose Role...</option>
+                                <option value="MANAGER">MANAGER</option>
+                                <option value="ADMIN">ADMIN</option>
+                                <option value="SCIENTIST">SCIENTIST</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label htmlFor="addressLine3"
+                                   className="block text-sm font-medium text-gray-700">City</label>
+                            <input
+                                type="text"
+                                id="addressLine3"
+                                className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="City"
+                                required
+                                onChange={(e) => setCity(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex justify-end mt-6">
+                        <button
+                            type="submit"
+                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            id="btnStaffSave"
+                        >
+                            Save
+                        </button>
+                    </div>
+                </form>
             </div>
             <div className="table-responsive mt-4">
                 <table className="table table-bordered table-striped" id="tblStaff">
@@ -166,22 +246,7 @@ export default function Staff(){
                     </tr>
                     </thead>
                     <tbody id="staffTbody">
-                    <tr>
-                        <td>ST-001</td>
-                        <td>John</td>
-                        <td>Manager</td>
-                        <td>Male</td>
-                        <td>2020-05-01</td>
-                        <td>1985-03-15</td>
-                        <td>+1 234 567 890</td>
-                        <td>john@example.com</td>
-                        <td>Admin</td>
-                        <td>New York</td>
-                        <td>
-                            <button className="editStaffBtn text-blue-500 hover:underline mr-3">Edit</button>
-                            <button className="text-red-500 hover:underline">Delete</button>
-                        </td>
-                    </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -280,7 +345,9 @@ export default function Staff(){
                         </div>
                         <div className="flex justify-end gap-4 mt-6">
                             <button id="saveUpdatedStaff"
-                                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+                                    onClick={hideUpdateStaffModal}
+                            >
                                 Update
                             </button>
                             <button id="closeUpdateStaffModalBtn"

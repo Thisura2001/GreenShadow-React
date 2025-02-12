@@ -114,7 +114,7 @@ export default function LogForm() {
 
                 {isLogFormVisible && (
                     <div className="bg-white shadow-lg rounded-lg w-full max-w-xl mt-20" id="logFormCard">
-                        <div className="flex justify-between items-center p-4 border-b">
+                        <div className="flex justify-between items-center p-4 bg-green-600 text-white rounded-t-lg">
                             <h4 className="text-lg font-bold">Log Details</h4>
                             <button
                                 className="text-gray-500 text-2xl"

@@ -188,11 +188,11 @@ export default function EquipmentForm() {
                     </button>
                 </HeaderComponent>
                 <div id="equipmentFormCard" className="hidden max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
-                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                    <div className="flex justify-between items-center p-4 bg-green-600 text-white rounded-t-lg">
                         <h4 className="text-lg font-bold">Add Equipment Details</h4>
                         <button id="closeEquipmentForm" className="text-gray-500 hover:text-gray-700 text-xl" onClick={hideEquipmentForm}>X</button>
                     </div>
-                    <form id="equipmentForm" className="space-y-6">
+                    <form id="equipmentForm" className="space-y-6 p-5">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label htmlFor="equipmentName" className="block text-sm font-medium text-gray-700">Equipment

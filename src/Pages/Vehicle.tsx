@@ -7,6 +7,7 @@ import Vehicle from "../Model/Vehicle.ts";
 import { Status } from "../Enum/Status.ts";
 import {deleteVehicle, getAllVehicles, saveVehicle, updateVehicle} from "../Reducer/VehicleSlice.ts";
 import Swal from 'sweetalert2';
+
 export default function VehicleForm() {
     const [id, setId] = useState('');
     const [licensePlate, setLicensePlate] = useState('');
@@ -32,7 +33,6 @@ export default function VehicleForm() {
         fetchStaffData();
     }, []);
 
-    // Show vehicle form
     const showVehicleForm = () => {
         const vehicleFormCard = document.getElementById("vehicleFormCard") as HTMLElement;
         if (vehicleFormCard) {
@@ -40,7 +40,6 @@ export default function VehicleForm() {
         }
     };
 
-// Hide vehicle form
     const hideVehicleForm = () => {
         const vehicleFormCard = document.getElementById("vehicleFormCard") as HTMLElement;
         if (vehicleFormCard) {
@@ -48,7 +47,6 @@ export default function VehicleForm() {
         }
     };
 
-// Show update vehicle modal
     const showUpdateVehicleModal = (event: React.MouseEvent<HTMLButtonElement>) => {
         const target = event.target as HTMLButtonElement;
         const row = target.closest("tr") as HTMLTableRowElement;
@@ -75,7 +73,6 @@ export default function VehicleForm() {
         }
     };
 
-// Hide update vehicle modal
     const hideUpdateVehicleModal = () => {
         const updateVehicleModal = document.getElementById("updateVehicleModal") as HTMLElement;
         if (updateVehicleModal) {
@@ -148,7 +145,6 @@ export default function VehicleForm() {
     }, [dispatch, vehicles.length]);
 
     function handleUpdate() {
-        console.log("Vehicle ID before update:", id); // Debugging log
 
         if (!id || isNaN(Number(id))) {
             Swal.fire({
@@ -223,11 +219,11 @@ export default function VehicleForm() {
                     </button>
                 </HeaderComponent>
                 <div id="vehicleFormCard" className="hidden max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
-                    <div className="flex justify-between items-center border-b pb-3 mb-4">
-                        <h4 className="text-xl font-bold text-gray-800">Add Vehicle Details</h4>
+                    <div className="flex justify-between items-center p-4 bg-green-600 text-white rounded-t-lg">
+                        <h4 className="text-xl font-bold text-white">Add Vehicle Details</h4>
                         <button id="closeVehicleForm" className="text-gray-400 hover:text-red-500 text-xl" onClick={hideVehicleForm}>X</button>
                     </div>
-                    <form id="vehicleForm" className="space-y-4">
+                    <form id="vehicleForm" className="space-y-4 p-5">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label htmlFor="licensePlate" className="block text-sm font-medium text-gray-700">
