@@ -17,6 +17,10 @@ export default function CropForm() {
     const [season, setSeason] = useState("");
     const [field, setField] = useState("");
     const [fieldList, setFieldList] = useState<any[]>([]);
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+    const dispatch = useDispatch<AppDispatch>();
+    const crops = useSelector(state => state.crops);
 
     useEffect(() => {
         async function fetchFieldData() {
@@ -79,9 +83,6 @@ export default function CropForm() {
         }
     };
 
-    const dispatch = useDispatch<AppDispatch>();
-    const crops = useSelector(state => state.crops);
-
     const handleImageChange1 = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const file = e.target.files[0];
@@ -114,7 +115,6 @@ export default function CropForm() {
                 text: 'The Crop has been successfully added.',
                 confirmButtonColor: '#3085d6',
             });
-            resetForm();
         }).catch((error) => {
             console.error('Error adding field: ', error);
             Swal.fire({
@@ -134,7 +134,6 @@ export default function CropForm() {
                 text: 'The Crop has been successfully updated.',
                 confirmButtonColor: '#3085d6',
             });
-            resetForm();
         }).catch((error) => {
             console.error('Error updating Crop: ', error);
             Swal.fire({
@@ -176,22 +175,12 @@ export default function CropForm() {
             }
         });
     }
-    const resetForm = ()=>{
-        setCropId('')
-        setCommonName('')
-        setCategory('')
-        setField('')
-        setScientificName('')
-        setCropImg('')
-        setSeason('')
-    }
 
     return (
         <>
             <section id="corp" className="ml-60 p-10">
                 <HeaderComponent title={"Crop Management"}>
                     <button
-                        id="addCropBtn"
                         className="btn-primary font-bold text-base px-5 py-2 mr-5 bg-blue-600 text-white rounded-lg"
                         onClick={showCropForm}
                     >
@@ -200,11 +189,11 @@ export default function CropForm() {
                 </HeaderComponent>
                 <div id="cropFormCard" className="hidden max-w-3xl mx-auto rounded-lg shadow-lg mt-3 bg-white">
                     <div className="flex justify-between items-center p-4 bg-green-600 text-white rounded-t-lg">
-                        <h4 id="cropFormTitle">Crop Details</h4>
+                        <h4 >Crop Details</h4>
                         <button id="closeCropForm" className="text-white" onClick={hideCropForm}>X</button>
                     </div>
                     <div className="p-6">
-                        <form id="cropForm" className="grid gap-6 md:grid-cols-2">
+                        <form className="grid gap-6 md:grid-cols-2">
                             <div>
                                 <label htmlFor="cropCommonName" className="block text-sm font-medium text-purple-700">Crop
                                     Common Name</label>
@@ -212,7 +201,12 @@ export default function CropForm() {
                                        className="form-input"
                                        placeholder="Enter common name" required
                                        value={commonName}
-                                       onChange={(e) => setCommonName(e.target.value)}
+                                       pattern="^[A-Za-z\s]+$"
+                                       title="Common name should not contain numbers or special characters."
+                                       onChange={(e) => {
+                                           setCommonName(e.target.value);
+                                       }
+                                }
                                 />
                             </div>
                             <div>

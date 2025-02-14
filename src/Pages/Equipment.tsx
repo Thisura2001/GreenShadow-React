@@ -102,7 +102,6 @@ export default function EquipmentForm() {
                 text: 'The Equipment has been successfully added.',
                 confirmButtonColor: '#3085d6',
             });
-            ResetForm();
         }).catch((error) => {
             console.error('Error adding field: ', error);
             Swal.fire({
@@ -111,14 +110,6 @@ export default function EquipmentForm() {
                 text: 'An error occurred while saving the Equipment. Please try again.',
             });
         })
-    }
-    function ResetForm() {
-        setEquipmentId("");
-        setEquipmentName('')
-        setEquipmentType('')
-        setStatus("");
-        setStaff("");
-        setField("");
     }
 
     function handleDelete(eqId: number) {
