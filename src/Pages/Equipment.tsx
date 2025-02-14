@@ -94,23 +94,37 @@ export default function EquipmentForm() {
     }, [dispatch, Equipments.length]);
 
     function handleSave() {
-        const equipment = new Equipment(Number(eqId),name,equipmentType,status,Number(staff),Number(field));
-        dispatch(saveEquipment(equipment)).then(()=>{
+        if ( !name || !equipmentType || !status || !staff || !field) {
             Swal.fire({
-                icon: 'success',
-                title: 'Equipment Saved!',
-                text: 'The Equipment has been successfully added.',
+                icon: 'warning',
+                title: 'Validation Error',
+                text: 'All fields are required. Please fill in all the fields before saving.',
                 confirmButtonColor: '#3085d6',
             });
-        }).catch((error) => {
-            console.error('Error adding field: ', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Save Failed',
-                text: 'An error occurred while saving the Equipment. Please try again.',
+            return;
+        }
+
+        const equipment = new Equipment(Number(eqId), name, equipmentType, status, Number(staff), Number(field));
+
+        dispatch(saveEquipment(equipment))
+            .then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Equipment Saved!',
+                    text: 'The Equipment has been successfully added.',
+                    confirmButtonColor: '#3085d6',
+                });
+            })
+            .catch((error) => {
+                console.error('Error adding equipment: ', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Save Failed',
+                    text: 'An error occurred while saving the Equipment. Please try again.',
+                });
             });
-        })
     }
+
 
     function handleDelete(eqId: number) {
         Swal.fire({
@@ -187,7 +201,7 @@ export default function EquipmentForm() {
                                     Name</label>
                                 <input type="text" id="equipmentName"
                                        className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
-                                       placeholder="Enter equipment name" required
+                                       placeholder="Enter equipment name" required={true}
                                        onChange={(e) => setEquipmentName(e.target.value)}
                                 />
                             </div>
@@ -196,7 +210,7 @@ export default function EquipmentForm() {
                                        className="block text-sm font-medium text-gray-700">Type</label>
                                 <select id="equipmentType"
                                         className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
-                                        required
+                                        required={true}
                                         onChange={(e) => setEquipmentType(e.target.value)}
                                 >
                                     <option selected disabled value="">Choose type...</option>
@@ -209,7 +223,7 @@ export default function EquipmentForm() {
                                        className="block text-sm font-medium text-gray-700">Status</label>
                                 <select id="equipmentStatus"
                                         className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
-                                        required
+                                        required={true}
                                         onChange={(e) => setStatus(e.target.value)}
                                 >
                                     <option selected disabled value="">Choose status...</option>
@@ -310,6 +324,7 @@ export default function EquipmentForm() {
                                     id="updateEquipmentName"
                                     className="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                                     placeholder="Enter equipment name"
+                                    required={true}
                                     value={name}
                                     onChange={(e) => setEquipmentName(e.target.value)}
                                 />
@@ -323,6 +338,7 @@ export default function EquipmentForm() {
                                     id="updateEquipmentType"
                                     className="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                                     value={equipmentType}
+                                    required={true}
                                     onChange={(e) => setEquipmentType(e.target.value)}
                                 >
                                     <option value="ELECTRICAL">ELECTRICAL</option>
@@ -338,6 +354,7 @@ export default function EquipmentForm() {
                                     id="updateEquipmentStatus"
                                     className="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                                     value={status}
+                                    required={true}
                                     onChange={(e) => setStatus(e.target.value)}
                                 >
                                     <option value="AVAILABLE">AVAILABLE</option>

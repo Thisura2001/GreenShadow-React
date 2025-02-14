@@ -107,6 +107,15 @@ export default function CropForm() {
     }, [dispatch, crops.length]);
 
     function handleSave() {
+        if (!commonName || !scientificName || !cropImg || !category || !season || !field) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Validation Error',
+                text: 'All fields are required. Please fill in all the fields before saving.',
+                confirmButtonColor: '#3085d6',
+            });
+            return;
+        }
         const newCrop = new Crop(Number(cropId), commonName, scientificName, cropImg, category, season, Number(field));
         dispatch(saveCrop(newCrop)).then(() => {
             Swal.fire({
@@ -215,7 +224,7 @@ export default function CropForm() {
                                     Name</label>
                                 <input type="text" id="cropScientificName"
                                        className="form-input"
-                                       placeholder="Enter scientific name"
+                                       placeholder="Enter scientific name" required={true}
                                        value={scientificName}
                                        onChange={(e) => setScientificName(e.target.value)}
                                 />
@@ -223,7 +232,7 @@ export default function CropForm() {
                             <div>
                                 <label htmlFor="cropImageFile" className="block text-sm font-medium text-purple-700">Upload
                                     Crop Image</label>
-                                <input type="file" id="cropImageFile"
+                                <input type="file" id="cropImageFile" required={true}
                                        className="form-input"
                                        onChange={handleImageChange1}
                                 />
@@ -232,8 +241,7 @@ export default function CropForm() {
                                 <label htmlFor="cropCategory"
                                        className="block text-sm font-medium text-purple-700">Category</label>
                                 <input type="text" id="cropCategory"
-                                       className="form-input" placeholder="Enter category"
-                                       required
+                                       className="form-input" placeholder="Enter category" required={true}
                                        value={category}
                                        onChange={(e) => setCategory(e.target.value)}
                                 />
@@ -242,8 +250,7 @@ export default function CropForm() {
                                 <label htmlFor="cropSeason" className="block text-sm font-medium text-purple-700">Crop
                                     Season</label>
                                 <input type="text" id="cropSeason"
-                                       className="form-input" placeholder="Enter season"
-                                       required
+                                       className="form-input" placeholder="Enter season" required={true}
                                        value={season}
                                        onChange={(e) => setSeason(e.target.value)}
                                 />

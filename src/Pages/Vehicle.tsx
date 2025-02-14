@@ -85,23 +85,6 @@ export default function VehicleForm() {
 
     function handleSave(event: React.FormEvent) {
         event.preventDefault();
-        if (!statusEnumValue) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Invalid Status',
-                text: `Status "${status}" is not valid!`,
-            });
-            return;
-        }
-
-        if (!staffId) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Missing Staff ID',
-                text: 'Please select a staff member.',
-            });
-            return;
-        }
 
         const newVehicle = new Vehicle(Number(id), licensePlate, category, fuelType, statusEnumValue, Number(staffId));
         console.log(newVehicle);

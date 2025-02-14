@@ -105,6 +105,15 @@ export default function FieldForm() {
     }, [dispatch, fields.length]);
 
     function handleAdd() {
+        if ( !fieldName || !location || !extend || !fieldImg1) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Validation Error',
+                text: 'All required fields must be filled before saving.',
+                confirmButtonColor: '#3085d6',
+            });
+            return;
+        }
         const field = new Field(Number(fieldId), fieldName, location, extend, String(fieldImg1), String(fieldImg2))
         dispatch(saveField(field)).then(()=>{
             Swal.fire({

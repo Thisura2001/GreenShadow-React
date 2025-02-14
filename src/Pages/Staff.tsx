@@ -110,6 +110,15 @@ export default function StaffForm(){
         }
     }, [dispatch,staffs.length]);
     function handleSave() {
+        if ( !staffFirstName || !designation || !gender || !joinedDate || !dob || !city || !contactNo || !staffEmail || !role || !staffField) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Validation Error',
+                text: 'All required fields must be filled before saving.',
+                confirmButtonColor: '#3085d6',
+            });
+            return;
+        }
         const newStaff = new Staff(Number(id),staffFirstName,designation,gender,joinedDate,dob,city,contactNo,staffEmail,role,Number(staffField));
         dispatch(saveStaff(newStaff)).then(() => {
             Swal.fire({
