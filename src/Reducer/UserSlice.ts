@@ -25,10 +25,25 @@ export const registerUser =createAsyncThunk(
         }
     }
 )
+export const loginUser= createAsyncThunk(
+    'user/login',
+    async (user : User)=>{
+        try{
+            const response = await api.post('/auth/login', {user},{withCredentials: true});
+            return response.data;
+        }catch(err){
+            console.log(err);
+        }
+    }
+)
 const userSlice = createSlice({
     name:"users",
     initialState,
-    reducers:{},
+    reducers:{
+        logOutUser(state){
+            state.isAuthenticated = false;
+        }
+    },
     extraReducers(builder){
         builder
             .addCase(registerUser.pending,(state, action)=>{
@@ -40,6 +55,21 @@ const userSlice = createSlice({
             .addCase(registerUser.rejected,(state, action)=>{
                 state.error = action.payload as string;
             });
+        builder
+            .addCase(loginUser.rejected,(state, action)=>{
+                state.error = action.payload as string;
+                state.isAuthenticated = false;
+            })
+            .addCase(loginUser.fulfilled,(state, action)=>{
+                state.jwt_token = action.payload.accessToken;
+                state.refresh_token = action.payload.refreshToken;
+                state.isAuthenticated = true;
+            })
+            .addCase(loginUser.pending,(state, action)=>{
+                state.isAuthenticated = false;
+            })
+
     }
 })
+export const {logOutUser} = userSlice.actions;
 export default userSlice.reducer;

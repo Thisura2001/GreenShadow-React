@@ -1,6 +1,40 @@
-import { Link } from "react-router";
+import {Link, useNavigate} from "react-router";
+import {useState} from "react";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../Store/Store.ts";
+import {User} from "../Model/User.ts";
+import {loginUser} from "../Reducer/UserSlice.ts";
+import Swal from "sweetalert2";
 
 export default function SignIn() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [role, setRole] = useState('');
+
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+
+    function handleLogIn(e:React.FormEvent) {
+        e.preventDefault();
+        const user:User ={email:email, password:password, role:role};
+        dispatch(loginUser(user)).then(() => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Logging Success !',
+                text: 'You are successfully logged in!',
+                confirmButtonColor: '#3085d6',
+            }).then(() => {
+                navigate("/Dashboard");
+            });
+        }).catch((error) => {
+            console.error('Error Logging: ', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Logging Failed',
+                text: 'An error occurred while Logging. Please try again.',
+            });
+        });
+    }
 
     return (
         <>
@@ -28,6 +62,7 @@ export default function SignIn() {
                                         type="email"
                                         id="email"
                                         placeholder="Enter email"
+                                        onChange={(e) => setEmail(e.target.value)}
                                         required
                                         className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                                     />
@@ -46,20 +81,19 @@ export default function SignIn() {
                                         id="password"
                                         placeholder="Enter password"
                                         required
+                                        onChange={(e) => setPassword(e.target.value)}
                                         className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                                     />
                                     <i className="fa-solid fa-lock absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                                 </div>
                             </div>
 
-                            {/* Submit Button */}
-                            <Link
-                                to="/Dashboard"
-                                id="btnlogin"
-                                className="w-full bg-green-500 text-white py-2 rounded-md font-semibold hover:bg-green-600 transition duration-300 flex items-center justify-center"
+                            <button
+                                className={"w-full bg-green-500 text-white py-2 rounded-md font-semibold hover:bg-green-600 transition duration-300 flex items-center justify-center"}
+                                onClick={handleLogIn}
                             >
                                 Sign In
-                            </Link>
+                            </button>
 
                         </form>
 
