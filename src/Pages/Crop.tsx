@@ -1,7 +1,7 @@
 import "../Css/Crop.css";
 import { useEffect, useState } from "react";
 import HeaderComponent from "../Component/HeaderComponet.tsx";
-import { toBase64 } from "../Reducer/FiledSlice.ts";
+import { toBase64 } from "../Reducer/CropSlice.ts";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../Store/Store.ts";
 import Crop from "../Model/Crop.ts";

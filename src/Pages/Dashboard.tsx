@@ -32,33 +32,33 @@ export default function Dashboard(){
     })
     return(
         <>
-            <section id="dashboard">
-                <div className="currentTimeWrapper">
-                    <div id="currentTime">{currentTime}</div>
-                </div>
-                <div className="dashboard-cards">
-                    <DashBoardCardComponent title="Total Fields" count={10}>
-                        <FaTree/>
-                    </DashBoardCardComponent>
+        <section id="dashboard">
+            <div className="currentTimeWrapper">
+                <div id="currentTime">{currentTime}</div>
+            </div>
+            <div className="dashboard-cards grid grid-cols-4 gap-4">
+            <DashBoardCardComponent title="Total Fields" count={10} bgColor="bg-purple-600">
+                <FaTree/>
+            </DashBoardCardComponent>
 
-                    <DashBoardCardComponent title="Total Crops" count={25}>
-                        <FaLeaf/>
-                    </DashBoardCardComponent>
+            <DashBoardCardComponent title="Total Crops" count={25} bgColor="bg-yellow-500">
+                <FaLeaf/>
+            </DashBoardCardComponent>
 
-                    <DashBoardCardComponent title="Total Staff" count={15}>
-                        <FaUsers/>
-                    </DashBoardCardComponent>
+            <DashBoardCardComponent title="Total Staff" count={15} bgColor="bg-blue-500">
+                <FaUsers/>
+            </DashBoardCardComponent>
 
-                    <DashBoardCardComponent title="Vehicles" count={35}>
-                        <FaCar/>
-                    </DashBoardCardComponent>
-                </div>
-                <WeatherContainerComponent location={weather.location}
-                                           temperature={weather.temperature}
-                                           humidity={weather.humidity}
-                                           recommendation={weather.recommendation}>
-                </WeatherContainerComponent>
-            </section>
-        </>
-    )
+            <DashBoardCardComponent title="Vehicles" count={35} bgColor="bg-red-500">
+                <FaCar/>
+            </DashBoardCardComponent>
+        </div>
+        <WeatherContainerComponent location={weather.location}
+                                   temperature={weather.temperature}
+                                   humidity={weather.humidity}
+                                   recommendation={weather.recommendation}>
+        </WeatherContainerComponent>
+        </section>
+</>
+)
 }

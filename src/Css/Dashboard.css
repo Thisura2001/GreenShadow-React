@@ -3,6 +3,7 @@
     padding-left: 260px; /* Adjust to avoid overlap with sidebar */
     background-color: #f4f4f9;
     min-height: 100vh;
+    overflow: hidden;
 }
 
 .dashboard-stats {
@@ -42,7 +43,6 @@
 
 /* Base Card Style */
 .staticCard {
-    background-color: #f4f4f4; /* Neutral background */
     color: #000; /* Default text color */
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
