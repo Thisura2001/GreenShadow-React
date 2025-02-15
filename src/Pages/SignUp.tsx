@@ -6,6 +6,7 @@ import {useState} from "react";
 import {User} from "../Model/User.ts";
 import {registerUser} from "../Reducer/UserSlice.ts";
 import Swal from "sweetalert2";
+import * as React from "react";
 
 export function Signup() {
     const [email, setEmail] = useState('');
@@ -14,8 +15,18 @@ export function Signup() {
 
     const dispatch = useDispatch<AppDispatch>();
 
-    function handleRegister() {
-        console.log("Register button clicked")
+    function handleRegister(e:React.FormEvent) {
+        e.preventDefault();
+
+        if (!email|| !password|| !role){
+            Swal.fire({
+                icon: 'warning',
+                title: 'Validation Error',
+                text: 'All fields are required. Please fill in all the fields before saving.',
+                confirmButtonColor: '#3085d6',
+            });
+            return;
+        }
         const user:User ={email:email, password:password, role:role};
         dispatch(registerUser(user)).then(() => {
             Swal.fire({
