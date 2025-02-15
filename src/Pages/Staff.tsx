@@ -6,6 +6,7 @@ import {AppDispatch} from "../Store/Store.ts";
 import Staff from "../Model/Staff.ts";
 import {deleteStaff, getAllStaff, saveStaff, updateStaff} from "../Reducer/StaffSlice.ts";
 import Swal from "sweetalert2";
+import * as React from "react";
 
 export default function StaffForm(){
     const [id,setId] = useState("");
@@ -109,7 +110,8 @@ export default function StaffForm(){
             dispatch(getAllStaff())
         }
     }, [dispatch,staffs.length]);
-    function handleSave() {
+    function handleSave(e:React.FormEvent) {
+        e.preventDefault();
         if ( !staffFirstName || !designation || !gender || !joinedDate || !dob || !city || !contactNo || !staffEmail || !role || !staffField) {
             Swal.fire({
                 icon: 'warning',

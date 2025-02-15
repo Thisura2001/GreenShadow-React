@@ -7,6 +7,7 @@ import { AppDispatch } from "../Store/Store.ts";
 import Crop from "../Model/Crop.ts";
 import { deleteCrop, getAllCrops, saveCrop, updateCrop } from "../Reducer/CropSlice.ts";
 import Swal from "sweetalert2";
+import * as React from "react";
 
 export default function CropForm() {
     const [cropId, setCropId] = useState("");
@@ -106,7 +107,8 @@ export default function CropForm() {
         }
     }, [dispatch, crops.length]);
 
-    function handleSave() {
+    function handleSave(e:React.FormEvent) {
+        e.preventDefault();
         if (!commonName || !scientificName || !cropImg || !category || !season || !field) {
             Swal.fire({
                 icon: 'warning',

@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../Store/Store.ts";
 import {deleteEquipment, getAllEquipment, saveEquipment, updateEquipment} from "../Reducer/EquipmentSlice.ts";
 import Swal from "sweetalert2";
+import * as React from "react";
 
 export default function EquipmentForm() {
     const [eqId,setEquipmentId] = useState('')
@@ -93,7 +94,8 @@ export default function EquipmentForm() {
         }
     }, [dispatch, Equipments.length]);
 
-    function handleSave() {
+    function handleSave(e:React.FormEvent) {
+        e.preventDefault();
         if ( !name || !equipmentType || !status || !staff || !field) {
             Swal.fire({
                 icon: 'warning',

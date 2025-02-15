@@ -4,6 +4,7 @@ import {AppDispatch} from "../Store/Store.ts";
 import Log from "../Model/Log.ts";
 import {deleteLog, getAllLogs, saveLog, toBase64} from "../Reducer/LogSlice.ts";
 import Swal from "sweetalert2";
+import * as React from "react";
 
 export default function LogForm() {
     const [isLogFormVisible, setLogFormVisible] = useState(false);
@@ -42,7 +43,8 @@ export default function LogForm() {
         }
     }, [dispatch,logs.length]);
 
-    function handleSave() {
+    function handleSave(e:React.FormEvent) {
+        e.preventDefault();
         const newLog = new Log(Number(id),date,logDetails,observed_image)
         dispatch(saveLog(newLog)).then(() => {
             Swal.fire({

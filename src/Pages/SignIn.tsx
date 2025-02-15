@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 
 export default function SignIn() {
+
     return (
         <>
             <section id="signin" className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-400 to-yellow-300">

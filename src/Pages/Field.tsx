@@ -5,6 +5,7 @@ import { AppDispatch } from "../Store/Store.ts";
 import Field from "../Model/Field.ts";
 import Swal from 'sweetalert2';
 import {deleteField, getAllFields, saveField, toBase64, updateField} from "../Reducer/FiledSlice.ts";
+import * as React from "react";
 
 export default function FieldForm() {
     const [fieldId, setFieldId] = useState('');
@@ -104,7 +105,8 @@ export default function FieldForm() {
         }
     }, [dispatch, fields.length]);
 
-    function handleAdd() {
+    function handleAdd(e:React.FormEvent) {
+        e.preventDefault();
         if ( !fieldName || !location || !extend || !fieldImg1) {
             Swal.fire({
                 icon: 'warning',
