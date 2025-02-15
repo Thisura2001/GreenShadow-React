@@ -1,7 +1,39 @@
 import {FaBackward} from "react-icons/fa";
 import {Link} from "react-router";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../Store/Store.ts";
+import {useState} from "react";
+import {User} from "../Model/User.ts";
+import {registerUser} from "../Reducer/UserSlice.ts";
+import Swal from "sweetalert2";
 
 export function Signup() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [role, setRole] = useState('');
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    function handleRegister() {
+        console.log("Register button clicked")
+        const user:User ={email:email, password:password, role:role};
+        dispatch(registerUser(user)).then(() => {
+            Swal.fire({
+                icon: 'success',
+                title: 'User Registered !',
+                text: 'The User has been successfully Registered.',
+                confirmButtonColor: '#3085d6',
+            });
+        }).catch((error) => {
+            console.error('Error adding User: ', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Register Failed',
+                text: 'An error occurred while saving the User. Please try again.',
+            });
+        });
+    }
+
     return(
         <>
             <section id="signup"
@@ -30,16 +62,19 @@ export function Signup() {
                             <div>
                                 <label htmlFor="email1" className="block font-medium mb-1">Email</label>
                                 <input type="email" id="email1" placeholder="Enter email" required
+                                       onChange={(e) => setEmail(e.target.value)}
                                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"/>
                             </div>
                             <div>
                                 <label htmlFor="password1" className="block font-medium mb-1">Password</label>
                                 <input type="password" id="password1" placeholder="Enter password" required
+                                       onChange={(e) => setPassword(e.target.value)}
                                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"/>
                             </div>
                             <div>
                                 <label htmlFor="roleDropdown" className="block font-medium mb-1">Role</label>
                                 <select id="roleDropdown" required
+                                        onChange={(e) => setRole(e.target.value)}
                                         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black">
                                     <option selected disabled value="">Choose Your Role</option>
                                     <option value="ADMIN">ADMIN</option>
@@ -49,7 +84,9 @@ export function Signup() {
                             </div>
 
                             <button type="submit" id="btnSignUp"
-                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-lg transition duration-300">
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-lg transition duration-300"
+                                    onClick={handleRegister}
+                            >
                                 Sign Up
                             </button>
                         </form>

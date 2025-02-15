@@ -6,6 +6,7 @@ import LogSlice from "../Reducer/LogSlice.ts";
 import SignUpSlice from "../Reducer/SignUpSlice.ts";
 import StaffSlice from "../Reducer/StaffSlice.ts";
 import VehicleSlice from "../Reducer/VehicleSlice.ts";
+import UserSlice from "../Reducer/UserSlice.ts";
 
 export const store = configureStore({
     reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
         signUp:SignUpSlice,
         staffs:StaffSlice,
         vehicles:VehicleSlice,
+        users : UserSlice
     }
 });
 export type AppDispatch = typeof store.dispatch;
