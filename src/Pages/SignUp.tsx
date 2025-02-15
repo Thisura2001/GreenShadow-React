@@ -1,5 +1,5 @@
 import {FaBackward} from "react-icons/fa";
-import {Link} from "react-router";
+import {Link, useNavigate} from "react-router";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "../Store/Store.ts";
 import {useState} from "react";
@@ -14,6 +14,7 @@ export function Signup() {
     const [role, setRole] = useState('');
 
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     function handleRegister(e:React.FormEvent) {
         e.preventDefault();
@@ -34,6 +35,8 @@ export function Signup() {
                 title: 'User Registered !',
                 text: 'The User has been successfully Registered.',
                 confirmButtonColor: '#3085d6',
+            }).then(() => {
+                navigate("/SignIn");
             });
         }).catch((error) => {
             console.error('Error adding User: ', error);
