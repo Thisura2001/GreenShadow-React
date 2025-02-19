@@ -10,7 +10,6 @@ export default function Dashboard(){
         const updateCurrentTime = () => {
             const now = new Date();
 
-            // Format time as HH:MM:SS
             const hours = now.getHours().toString().padStart(2, "0");
             const minutes = now.getMinutes().toString().padStart(2, "0");
             const seconds = now.getSeconds().toString().padStart(2, "0");
@@ -18,7 +17,7 @@ export default function Dashboard(){
             setCurrentTime(`${hours}:${minutes}:${seconds}`);
         };
 
-        const intervalId = setInterval(updateCurrentTime, 1000); // Update every 1 second
+        const intervalId = setInterval(updateCurrentTime, 1000);
         updateCurrentTime();
 
         return () => clearInterval(intervalId);
