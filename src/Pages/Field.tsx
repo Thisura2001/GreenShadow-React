@@ -6,6 +6,7 @@ import Field from "../Model/Field.ts";
 import Swal from 'sweetalert2';
 import {deleteField, getAllFields, saveField, toBase64, updateField} from "../Reducer/FiledSlice.ts";
 import * as React from "react";
+import {closeModal, openModal} from "../Reducer/ModelSlice.ts";
 
 export default function FieldForm() {
     const [fieldId, setFieldId] = useState('');
@@ -14,27 +15,9 @@ export default function FieldForm() {
     const [extend, setExtend] = useState('');
     const [fieldImg1, setFieldImg1] = useState<string | null>(null);
     const [fieldImg2, setFieldImg2] = useState<string | null>(null);
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
-    const showFieldForm = () => {
-        const fieldFormCard = document.getElementById("fieldFormCard") as HTMLElement;
-        if (fieldFormCard) {
-            fieldFormCard.style.display = "block";
-        }
-    };
-
-    const hideFieldForm = () => {
-        const fieldFormCard = document.getElementById("fieldFormCard") as HTMLElement;
-        if (fieldFormCard) {
-            fieldFormCard.style.display = "none";
-        }
-    };
-
-    const hideUpdateFieldModal = () => {
-        const fieldUpdateFormCard = document.getElementById("updateFieldModal") as HTMLElement;
-        if (fieldUpdateFormCard) {
-            fieldUpdateFormCard.style.display = "none";
-        }
-    };
+    const isModalOpen = useSelector((state) => state.modal.isModalOpen);
 
     const handleFieldEditClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         const target = e.target as HTMLButtonElement;
@@ -54,11 +37,7 @@ export default function FieldForm() {
             setExtend(fieldExtent);
             setFieldImg1(fieldImg1);
             setFieldImg2(fieldImg2);
-
-            const fieldUpdateFormCard = document.getElementById("updateFieldModal") as HTMLElement;
-            if (fieldUpdateFormCard) {
-                fieldUpdateFormCard.style.display = "block";
-            }
+            setIsUpdateModalOpen(true); // Open the update modal
         }
     };
 
@@ -144,7 +123,8 @@ export default function FieldForm() {
                 text: 'The Field has been successfully updated.',
                 confirmButtonColor: '#3085d6',
             });
-            ResetForm()
+            ResetForm();
+            setIsUpdateModalOpen(false); // Close the update modal
         }).catch((error) => {
             console.error('Error updating field: ', error);
             Swal.fire({
@@ -201,67 +181,60 @@ export default function FieldForm() {
         <>
             <section id="field" className="ml-60 p-20">
                 <HeaderComponent title={"Field Management"}>
-                    <button id="addFieldBtn"
-                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                            onClick={showFieldForm}
+                    <button
+                        id="addFieldBtn"
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                        onClick={() => dispatch(openModal())}
                     >
                         Add New Field
                     </button>
                 </HeaderComponent>
-                <div id="fieldFormCard" className="hidden max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
-                    <div className="flex justify-between items-center p-4 bg-green-600 text-white rounded-t-lg">
-                        <h4 className="text-lg font-bold">Add Field Details</h4>
-                        <button id="closeFieldForm" className="text-gray-500 hover:text-gray-700 text-xl" onClick={hideFieldForm}>X</button>
-                    </div>
-                    <form id="FieldFormCard" className="space-y-4 p-5" onSubmit={handleAdd}>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label htmlFor="fieldName" className="block text-sm font-medium text-gray-700">Field
-                                    Name</label>
-                                <input type="text" id="fieldName"
-                                       className="mt-1 block w-full border rounded-md p-2"
-                                       placeholder="Enter Field name" required
-                                       value={fieldName}
-                                       onChange={(e) => setFieldName(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="location" className="block text-sm font-medium text-gray-700">Field
-                                    Location</label>
-                                <input type="text" id="location" className="mt-1 block w-full border rounded-md p-2"
-                                       placeholder="Enter Field Location" required
-                                       value={location}
-                                       onChange={(e) => setLocation(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="extent" className="block text-sm font-medium text-gray-700">Field
-                                    Extent</label>
-                                <input type="text" id="extent" className="mt-1 block w-full border rounded-md p-2"
-                                       placeholder="Enter Field Extent" required
-                                       value={extend}
-                                       onChange={(e) => setExtend(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="fieldImg01" className="block text-sm font-medium text-gray-700">Field
-                                    Image 01</label>
-                                <input type="file" onChange={handleImageChange1} id="fieldImg01"
-                                       className="mt-1 block w-full border rounded-md p-2"/>
-                            </div>
-                            <div>
-                                <label htmlFor="fieldImg02" className="block text-sm font-medium text-gray-700">Field
-                                    Image 02</label>
-                                <input type="file" onChange={handleImageChange2} id="fieldImg02"
-                                       className="mt-1 block w-full border rounded-md p-2"/>
-                            </div>
+
+                {/* Field Form Modal */}
+                {isModalOpen && (
+                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg rounded-lg p-6 z-50">
+                        <div className="flex justify-between items-center p-4 bg-green-600 text-white rounded-t-lg">
+                            <h4 className="text-lg font-bold">Add Field Details</h4>
+                            <button
+                                id="closeFieldForm"
+                                className="text-gray-500 hover:text-gray-700 text-xl"
+                                onClick={() => dispatch(closeModal())}
+                            >
+                                X
+                            </button>
                         </div>
-                        <button type="submit" id="fieldSaveBtn"
-                                className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-                            Save <i className="fa-regular fa-floppy-disk"></i>
-                        </button>
-                    </form>
-                </div>
+                        <form className="space-y-4 p-5" onSubmit={handleAdd}>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label htmlFor="fieldName" className="block text-sm font-medium text-gray-700">Field Name</label>
+                                    <input type="text" id="fieldName" className="mt-1 block w-full border rounded-md p-2"
+                                           placeholder="Enter Field name" required value={fieldName} onChange={(e) => setFieldName(e.target.value)} />
+                                </div>
+                                <div>
+                                    <label htmlFor="location" className="block text-sm font-medium text-gray-700">Field Location</label>
+                                    <input type="text" id="location" className="mt-1 block w-full border rounded-md p-2"
+                                           placeholder="Enter Field Location" required value={location} onChange={(e) => setLocation(e.target.value)} />
+                                </div>
+                                <div>
+                                    <label htmlFor="extent" className="block text-sm font-medium text-gray-700">Field Extent</label>
+                                    <input type="text" id="extent" className="mt-1 block w-full border rounded-md p-2"
+                                           placeholder="Enter Field Extent" required value={extend} onChange={(e) => setExtend(e.target.value)} />
+                                </div>
+                                <div>
+                                    <label htmlFor="fieldImg01" className="block text-sm font-medium text-gray-700">Field Image 01</label>
+                                    <input type="file" onChange={handleImageChange1} id="fieldImg01" className="mt-1 block w-full border rounded-md p-2" />
+                                </div>
+                                <div>
+                                    <label htmlFor="fieldImg02" className="block text-sm font-medium text-gray-700">Field Image 02</label>
+                                    <input type="file" onChange={handleImageChange2} id="fieldImg02" className="mt-1 block w-full border rounded-md p-2" />
+                                </div>
+                            </div>
+                            <button type="submit" className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                                Save <i className="fa-regular fa-floppy-disk"></i>
+                            </button>
+                        </form>
+                    </div>
+                )}
                 <div className="mt-10 overflow-x-auto">
                     <table className="min-w-full border border-gray-200 text-left">
                         <thead className="bg-gray-200">
@@ -303,67 +276,51 @@ export default function FieldForm() {
                         </tbody>
                     </table>
                 </div>
-                <div id="updateFieldModal"
-                     className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  rounded-lg  w-1/3 max-w-xl z-50 hidden">
-                    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-                        <h2 className="text-lg font-bold text-black mb-4 text-center">Update Field Details</h2>
-                        <form id="updateFieldForm" className="space-y-4">
-                            <div>
-                                <label htmlFor="updateName"
-                                       className="block text-sm font-medium text-gray-700">Name:</label>
-                                <input type="text" id="updateName"
-                                       className="mt-1 block w-full border rounded-md p-2"
-                                       value={fieldName}
-                                       onChange={(e) => setFieldName(e.target.value)}
-                                />
+                {/* Update Field Modal */}
+                {isUpdateModalOpen && (
+                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg rounded-lg p-6 z-50 w-2/3 max-w-xl">
+                        <div className="flex justify-between items-center p-4 bg-blue-600 text-white rounded-t-lg">
+                            <h4 className="text-lg font-bold">Update Field Details</h4>
+                            <button
+                                id="closeUpdateFieldForm"
+                                className="text-gray-500 hover:text-gray-700 text-xl"
+                                onClick={() => setIsUpdateModalOpen(false)}
+                            >
+                                X
+                            </button>
+                        </div>
+                        <form className="space-y-4 p-5">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label htmlFor="updateFieldName" className="block text-sm font-medium text-gray-700">Field Name</label>
+                                    <input type="text" id="updateFieldName" className="mt-1 block w-full border rounded-md p-2"
+                                           placeholder="Enter Field name" required value={fieldName} onChange={(e) => setFieldName(e.target.value)} />
+                                </div>
+                                <div>
+                                    <label htmlFor="updateLocation" className="block text-sm font-medium text-gray-700">Field Location</label>
+                                    <input type="text" id="updateLocation" className="mt-1 block w-full border rounded-md p-2"
+                                           placeholder="Enter Field Location" required value={location} onChange={(e) => setLocation(e.target.value)} />
+                                </div>
+                                <div>
+                                    <label htmlFor="updateExtent" className="block text-sm font-medium text-gray-700">Field Extent</label>
+                                    <input type="text" id="updateExtent" className="mt-1 block w-full border rounded-md p-2"
+                                           placeholder="Enter Field Extent" required value={extend} onChange={(e) => setExtend(e.target.value)} />
+                                </div>
+                                <div>
+                                    <label htmlFor="updateFieldImg01" className="block text-sm font-medium text-gray-700">Field Image 01</label>
+                                    <input type="file" onChange={handleImageChange1} id="updateFieldImg01" className="mt-1 block w-full border rounded-md p-2" />
+                                </div>
+                                <div>
+                                    <label htmlFor="updateFieldImg02" className="block text-sm font-medium text-gray-700">Field Image 02</label>
+                                    <input type="file" onChange={handleImageChange2} id="updateFieldImg02" className="mt-1 block w-full border rounded-md p-2" />
+                                </div>
                             </div>
-                            <div>
-                                <label htmlFor="updateLocation"
-                                       className="block text-sm font-medium text-gray-700">Location:</label>
-                                <input type="text" id="updateLocation"
-                                       className="mt-1 block w-full border rounded-md p-2"
-                                       value={location}
-                                       onChange={(e) => setLocation(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="updateExtent" className="block text-sm font-medium text-gray-700">Extent
-                                    Size:</label>
-                                <input type="text" id="updateExtent"
-                                       className="mt-1 block w-full border rounded-md p-2"
-                                       value={extend}
-                                       onChange={(e) => setExtend(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="updateFieldImg1"
-                                       className="block text-sm font-medium text-gray-700">Field
-                                    Image 1:</label>
-                                <input type="file" id="updateFieldImg1"
-                                       className="mt-1 block w-full border rounded-md p-2"
-                                       onChange={handleImageChange1}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="updateFieldImg2"
-                                       className="block text-sm font-medium text-gray-700">Field
-                                    Image 2:</label>
-                                <input type="file" id="updateFieldImg2"
-                                       className="mt-1 block w-full border rounded-md p-2"
-                                       onChange={handleImageChange2}
-                                />
-                            </div>
-                            <div className="flex justify-end space-x-4">
-                                <button type="button" id="saveUpdatedField"
-                                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded" onClick={handleUpdate}>Update
-                                </button>
-                                <button type="button" id="closeUpdateModalBtn"
-                                        className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded" onClick={hideUpdateFieldModal}>Cancel
-                                </button>
-                            </div>
+                            <button type="button" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onClick={handleUpdate}>
+                                Update <i className="fa-regular fa-floppy-disk"></i>
+                            </button>
                         </form>
                     </div>
-                </div>
+                )}
             </section>
         </>
     );
