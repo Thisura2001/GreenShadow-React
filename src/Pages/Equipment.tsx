@@ -17,6 +17,10 @@ export default function EquipmentForm() {
     const [field,setField] = useState('')
     const [fieldList,setFieldList] = useState<any[]>([]);
 
+
+    const dispatch = useDispatch<AppDispatch>();
+    const Equipments = useSelector(state => state.equipments)
+
     const showEquipmentForm = () => {
         const equipmentCard = document.getElementById("equipmentFormCard") as HTMLElement;
         if (equipmentCard) {
@@ -84,9 +88,6 @@ export default function EquipmentForm() {
         fetchFieldData();
         fetchStaffData();
     }, []);
-
-    const dispatch = useDispatch<AppDispatch>();
-    const Equipments = useSelector(state => state.equipments)
 
     useEffect(() => {
         if (Equipments.length === 0){

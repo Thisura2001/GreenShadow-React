@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import HeaderComponent from "../Component/HeaderComponet.tsx";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +19,8 @@ export default function FieldForm() {
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
     const isModalOpen = useSelector((state) => state.modal.isModalOpen);
+    const fields = useSelector(state => state.fields)
+    const dispatch = useDispatch<AppDispatch>();
 
     const handleFieldEditClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         const target = e.target as HTMLButtonElement;
@@ -74,10 +77,6 @@ export default function FieldForm() {
             }
         }
     };
-
-    const dispatch = useDispatch<AppDispatch>();
-    const fields = useSelector(state => state.fields)
-
     useEffect(() => {
         if (fields.length === 0) {
             dispatch(getAllFields())

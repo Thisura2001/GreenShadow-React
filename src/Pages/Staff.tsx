@@ -22,6 +22,9 @@ export default function StaffForm(){
     const [city, setCity] = useState("")
     const [fieldList, setFieldList] = useState<any[]>([]);
 
+    const dispatch = useDispatch<AppDispatch>();
+    const staffs = useSelector(state => state.staffs);
+
     const showStaffForm = () => {
         const staffFormCard = document.getElementById("staffFormCard") as HTMLElement;
         if (staffFormCard) {
@@ -87,9 +90,6 @@ export default function StaffForm(){
 
         fetchFieldData();
     }, []);
-
-    const dispatch = useDispatch<AppDispatch>();
-    const staffs = useSelector(state => state.staffs);
 
 
     function resetForm() {

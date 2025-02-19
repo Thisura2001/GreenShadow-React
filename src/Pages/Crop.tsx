@@ -18,7 +18,6 @@ export default function CropForm() {
     const [season, setSeason] = useState("");
     const [field, setField] = useState("");
     const [fieldList, setFieldList] = useState<any[]>([]);
-    const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const dispatch = useDispatch<AppDispatch>();
     const crops = useSelector(state => state.crops);
