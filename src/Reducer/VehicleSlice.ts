@@ -69,7 +69,7 @@ const VehicleSlice = createSlice({
             state.push(action.payload);
         });
         builder.addCase(updateVehicle.fulfilled, (state, action) => {
-            const index = state.findIndex((vehicle: Vehicle) => vehicle.vehicle_code === action.payload.vehicleCode);
+            const index = state.findIndex((vehicle: Vehicle) => vehicle.vehicle_code === action.payload.vehicle_code);
             if (index !== -1) {
                 state[index] = action.payload;
             }
